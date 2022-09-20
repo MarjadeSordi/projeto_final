@@ -7,9 +7,10 @@ const ClientRegistration = () => {
     const dispatch = useDispatch();
 
     function registerName() {
+      console.error('teste')
         dispatch({
           type: 'NEW_FIRST_NAME_REGISTER',
-          firsttName: firstName
+          firstName: firstName
         });
       }
     

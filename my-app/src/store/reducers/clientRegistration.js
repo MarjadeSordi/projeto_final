@@ -6,11 +6,14 @@ const INITIAL_STATE = {
   ],
 };
 
+
 export const form = INITIAL_STATE.form;
 
-export default function newTaskPersonal(state = INITIAL_STATE, action) {
+
+export default function clientRegistration(state = INITIAL_STATE, action) {
     switch (action.type) {
         case 'NEW_FIRST_NAME_REGISTER':{
+            console.error(action.firstName)
             return{
                 ...state,
                 form: [
