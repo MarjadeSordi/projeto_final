@@ -1,31 +1,57 @@
 const INITIAL_STATE = {
   form: [
     {
-      firstName: ''
-    },
+      firstName: '',
+      email: '',
+      pass: '', 
+      endereco: [
+        {
+          uf: '',
+          cep: '',
+          complemento: '',
+          logradouro: '',
+          cidade: '',
+          bairro: '',
+          numero: '',
+        }
+      ],
+      cliente: false, 
+  }
   ],
 };
 
-
 export const form = INITIAL_STATE.form;
-
 
 export default function clientRegistration(state = INITIAL_STATE, action) {
     switch (action.type) {
-        case 'NEW_FIRST_NAME_REGISTER':{
-            console.error(action.firstName)
+        case 'NEW_CLIENT_REGISTER':{
+          console.error(form)
+          console.error(action.cep)
             return{
                 ...state,
                 form: [
                     ...state.form,
                     {
-                        firstName: action.firstName
+                      firstName: action.firstName,
+                      email: action.email,
+                      pass: action.confirmPassword, 
+                      endereco: [
+                        {
+                          uf: action.uf,
+                          cep: action.cep,
+                          complemento: action.complemento,
+                          logradouro: action.logradouro,
+                          cidade: action.city,
+                          bairro: action.bairro,
+                          numero: action.number,
+                        }
+                      ],
+                      cliente: action.value,
                     }
-                ]
-            }
-
+                ],
            
-        } default:
-                return state || [];
+            } 
+        }
+         default : return state;
     }
 }
