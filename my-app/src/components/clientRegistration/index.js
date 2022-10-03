@@ -43,7 +43,7 @@ const ClientRegistration = () => {
         });
       }
     
-
+  // método para verificar se nome já existe?
     function handleFirstName(e) {
         e.preventDefault();
         setFirstName(e.target.value);
