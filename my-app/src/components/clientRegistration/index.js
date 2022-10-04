@@ -5,10 +5,12 @@ import { InputForText, InputForEmail, InputForPassWord, SelectedForState, Select
 const ClientRegistration = () => {
     const [firstName, setFirstName] = useState('');
     const [email, setEmail] = useState('');
+    const [userId, setUserId] = useState('');
     const [password, setPassWord] = useState('');
     const [confirmPassword, setConfirmPassWord] = useState('');
     const [error, setError] = useState(false);
     const [listState, setState] = useState([]);
+    const [exists, setExists] = useState(false);
     const [uf, setUf] = useState('')
     const [listCity, setListCity] = useState([]);
     const [city, setCity] = useState('');
@@ -22,6 +24,10 @@ const ClientRegistration = () => {
     function handleForm() {
       console.error('1')
       console.error(cep)
+    const dispatch = useDispatch();
+
+    function registerName() {
+      (save)
         dispatch({
           type: 'NEW_CLIENT_REGISTER',
           firstName: firstName,
@@ -48,11 +54,6 @@ const ClientRegistration = () => {
         e.preventDefault();
         setFirstName(e.target.value);
       }
-     
-    function handleEmail(e){
-      e.preventDefault();
-      setEmail(e.target.value);
-    }
 
     function handlePassWord(e){
       e.preventDefault();
@@ -138,6 +139,38 @@ const ClientRegistration = () => {
       setComplemento(e.target.value);
     }
 
+    function handleEmail(e) {
+      e.preventDefault();
+      setEmail(e.target.value);
+      fetch(`http://whm.joao1866.c41.integrator.host:9206/usuario?email=${email}`)
+      .then(res => res.json())
+      .then(
+        (result) => {
+          this.setExists(true);
+        },
+        (error) => {
+          log.error(error)
+          this.setError(error);
+        }
+      )
+    }
+
+    function handleUserId(e) {
+      e.preventDefault();
+      handleUserId(e.target.value);
+      fetch(`http://whm.joao1866.c41.integrator.host:9206/usuario?userId=${userId}`)
+      .then(res => res.json())
+      .then(
+        (result) => {
+          this.setExists(true);
+        },
+        (error) => {
+          log.error(error)
+          this.setError(error);
+        }
+      )
+    }
+
 
 
 
@@ -158,6 +191,7 @@ const ClientRegistration = () => {
         type="text"
         name="firstName"
         onChange={handleFirstName}
+        onBlur={registerName}
         placeholder="Nome"
         maxLength="100"
         />
@@ -168,6 +202,15 @@ const ClientRegistration = () => {
         name="email"
         onChange={handleEmail}
         placeholder="Email"
+        maxLength="100"
+        />
+
+      <InputForText
+        id='inputId'
+        type="text"
+        name="inputId"
+        onChange={setUserId}
+        placeholder="ID"
         maxLength="100"
         />
 
@@ -195,9 +238,7 @@ const ClientRegistration = () => {
         id='inputState'
         name="state"
         onChange={handleUf}
-        value={uf}
-    
-    >
+        value={uf}>
         {listState.map(listState => (
           <option key={listState.id} value={listState.sigla}>
             {listState.sigla}
@@ -283,5 +324,6 @@ const ClientRegistration = () => {
 
     </FormForClient>)
 }
+}
 
-export default ClientRegistration; 
+export default ClientRegistration;
