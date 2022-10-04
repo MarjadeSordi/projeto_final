@@ -21,13 +21,14 @@ const ClientRegistration = () => {
     const [complemento, setComplemento] = useState('');
     const dispatch = useDispatch();
 
+
     function handleForm() {
       console.error('1')
       console.error(cep)
-    const dispatch = useDispatch();
+    }
 
     function registerName() {
-      (save)
+      //(save)
         dispatch({
           type: 'NEW_CLIENT_REGISTER',
           firstName: firstName,
@@ -142,37 +143,36 @@ const ClientRegistration = () => {
     function handleEmail(e) {
       e.preventDefault();
       setEmail(e.target.value);
-      fetch(`http://whm.joao1866.c41.integrator.host:9206/usuario?email=${email}`)
-      .then(res => res.json())
+      if(email.indexOf('@') > 0) {
+      fetch(`http://whm.joao1866.c41.integrator.host:9206/usuario?email=${email}`,{ mode: 'no-cors'}) 
       .then(
         (result) => {
+          console.log(result);
           this.setExists(true);
         },
         (error) => {
-          log.error(error)
+          console.error(error)
           this.setError(error);
         }
       )
+    }
     }
 
     function handleUserId(e) {
       e.preventDefault();
       handleUserId(e.target.value);
-      fetch(`http://whm.joao1866.c41.integrator.host:9206/usuario?userId=${userId}`)
+      fetch(`http://whm.joao1866.c41.integrator.host:9206/usuario?userId=${userId}`,{ mode: 'no-cors'})
       .then(res => res.json())
       .then(
         (result) => {
           this.setExists(true);
         },
         (error) => {
-          log.error(error)
+          console.error(error)
           this.setError(error);
         }
       )
     }
-
-
-
 
     useEffect(() => {
       PopulateStates();
@@ -324,6 +324,6 @@ const ClientRegistration = () => {
 
     </FormForClient>)
 }
-}
+
 
 export default ClientRegistration;
