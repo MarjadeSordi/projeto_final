@@ -1,11 +1,11 @@
 import GlobalStyle from './theme/globalStyle';
-import ClientWelcome from './pages/clientWelcome';
+import Routess from './routes';
 
 function App() {
   return (
-    <>
+    <>    
     <GlobalStyle />
-    <ClientWelcome />
+    <Routess />
     </>
   );
 }

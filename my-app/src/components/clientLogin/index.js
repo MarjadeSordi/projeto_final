@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
+import {Route, Link} from 'react-router-dom'
 import { useDispatch } from 'react-redux';
-import { signInUser } from '../../context/userContext';
-import {  InputForEmail, InputForPassWord, FormForClient, InputButton } from './style';
+import {  InputForEmail, InputForPassWord, FormForClient, InputButton, CapsuleForLogin } from './style';
 
 const ClientLogin = () => {
     const [email, setEmail] = useState('');
     const [password, setPassWord] = useState('');
     const [error, setError] = useState(false);
     const [exists, setExists] = useState(false);
+
  
     const dispatch = useDispatch();
 
@@ -35,14 +36,11 @@ const ClientLogin = () => {
       }
 
 
-    function handleForm() {
-      if(exists)
-        signInUser(email,password)
-        else 
-    }
+
     
 
     return(
+      <CapsuleForLogin>
       <FormForClient>
 
         <InputForEmail
@@ -63,21 +61,10 @@ const ClientLogin = () => {
         maxLength="100"
         />
 
-<Route exact path="/">
-  {exists ?
-        <InputButton
-        type="button"
-        value="ENVIAR"
-        onClick={handleForm}> Button
-        </InputButton>
-         : <Redirect to="/dashboard" />
-    }
-</Route>
 
         
-        
 
-    </FormForClient>)
+    </FormForClient> </CapsuleForLogin>)
 }
 
 
