@@ -5,10 +5,12 @@ import { InputForText, InputForEmail, InputForPassWord, SelectedForState, Select
 const ClientRegistration = () => {
     const [firstName, setFirstName] = useState('');
     const [email, setEmail] = useState('');
+    const [userId, setUserId] = useState('');
     const [password, setPassWord] = useState('');
     const [confirmPassword, setConfirmPassWord] = useState('');
     const [error, setError] = useState(false);
     const [listState, setState] = useState([]);
+    const [exists, setExists] = useState(false);
     const [uf, setUf] = useState('')
     const [listCity, setListCity] = useState([]);
     const [city, setCity] = useState('');
@@ -19,9 +21,14 @@ const ClientRegistration = () => {
     const [complemento, setComplemento] = useState('');
     const dispatch = useDispatch();
 
+
     function handleForm() {
       console.error('1')
       console.error(cep)
+    }
+
+    function registerName() {
+      //(save)
         dispatch({
           type: 'NEW_CLIENT_REGISTER',
           firstName: firstName,
@@ -43,16 +50,11 @@ const ClientRegistration = () => {
         });
       }
     
-
+  // método para verificar se nome já existe?
     function handleFirstName(e) {
         e.preventDefault();
         setFirstName(e.target.value);
       }
-     
-    function handleEmail(e){
-      e.preventDefault();
-      setEmail(e.target.value);
-    }
 
     function handlePassWord(e){
       e.preventDefault();
@@ -138,8 +140,39 @@ const ClientRegistration = () => {
       setComplemento(e.target.value);
     }
 
+    function handleEmail(e) {
+      e.preventDefault();
+      setEmail(e.target.value);
+      if(email.indexOf('@') > 0) {
+      fetch(`http://whm.joao1866.c41.integrator.host:9206/usuario?email=${email}`,{ mode: 'no-cors'}) 
+      .then(
+        (result) => {
+          console.log(result);
+          this.setExists(true);
+        },
+        (error) => {
+          console.error(error)
+          this.setError(error);
+        }
+      )
+    }
+    }
 
-
+    function handleUserId(e) {
+      e.preventDefault();
+      handleUserId(e.target.value);
+      fetch(`http://whm.joao1866.c41.integrator.host:9206/usuario?userId=${userId}`,{ mode: 'no-cors'})
+      .then(res => res.json())
+      .then(
+        (result) => {
+          this.setExists(true);
+        },
+        (error) => {
+          console.error(error)
+          this.setError(error);
+        }
+      )
+    }
 
     useEffect(() => {
       PopulateStates();
@@ -158,6 +191,7 @@ const ClientRegistration = () => {
         type="text"
         name="firstName"
         onChange={handleFirstName}
+        onBlur={registerName}
         placeholder="Nome"
         maxLength="100"
         />
@@ -168,6 +202,15 @@ const ClientRegistration = () => {
         name="email"
         onChange={handleEmail}
         placeholder="Email"
+        maxLength="100"
+        />
+
+      <InputForText
+        id='inputId'
+        type="text"
+        name="inputId"
+        onChange={setUserId}
+        placeholder="ID"
         maxLength="100"
         />
 
@@ -195,9 +238,7 @@ const ClientRegistration = () => {
         id='inputState'
         name="state"
         onChange={handleUf}
-        value={uf}
-    
-    >
+        value={uf}>
         {listState.map(listState => (
           <option key={listState.id} value={listState.sigla}>
             {listState.sigla}
@@ -284,4 +325,5 @@ const ClientRegistration = () => {
     </FormForClient>)
 }
 
-export default ClientRegistration; 
+
+export default ClientRegistration;
