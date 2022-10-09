@@ -1,8 +1,11 @@
 import React from 'react';
+import Services from '../../components/services';
 
 const ClientDashboard = () =>{
     return(
-        <h1> Dashboard </h1>
+        <>
+        <h1> Serviços </h1>
+        <Services /></>
     )
 }
 
