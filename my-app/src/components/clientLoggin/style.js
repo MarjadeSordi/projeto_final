@@ -49,4 +49,8 @@ export const InputButton = styled.button`
   padding: 8px;
 `
 
+export const FormForClient = styled.form`
+ background-color: transparent; 
+`
+
 ;

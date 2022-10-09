@@ -1,11 +1,11 @@
 import GlobalStyle from './theme/globalStyle';
-import ClientWelcome from './pages/clientWelcome';
+import ClientLogin from './pages/clientLogin';
 
 function App() {
   return (
     <>
     <GlobalStyle />
-    <ClientWelcome />
+    <ClientLogin />
     </>
   );
 }
