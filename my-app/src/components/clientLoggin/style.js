@@ -1,4 +1,8 @@
-import styled , { css } from 'styled-components';
+import styled from 'styled-components';
+
+export const CapsuleForLogin = styled.div`
+
+`
 
 export const InputForText = styled.input`
   background-color: transparent;
@@ -53,4 +57,4 @@ export const FormForClient = styled.form`
  background-color: transparent; 
 `
 
-;
+  ;

@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import {Route, Link} from 'react-router-dom'
 import { useDispatch } from 'react-redux';
 import { useUserContext } from '../../context/userContext';
-import {  InputForEmail, InputForPassWord, FormForClient, InputButton } from './style';
-
+import {  InputForEmail, InputForPassWord, FormForClient, InputButton, CapsuleForLogin } from './style';
 const ClientLoggin = () => {
     const { signInUser, forgotPassword } = useUserContext();
     const [email, setEmail] = useState('');
     const [password, setPassWord] = useState('');
     const [errors, setError] = useState(false);
     const [exists, setExists] = useState(false);
+
  
     const dispatch = useDispatch();
 
@@ -47,6 +48,7 @@ const ClientLoggin = () => {
     
 
     return(
+      <CapsuleForLogin>
       <FormForClient>
 
         <InputForEmail
@@ -67,7 +69,6 @@ const ClientLoggin = () => {
         maxLength="100"
         />
 
-
         <InputButton
         type="button"
         value="ENVIAR"
@@ -76,9 +77,8 @@ const ClientLoggin = () => {
 
 
         
-        
 
-    </FormForClient>)
+    </FormForClient> </CapsuleForLogin>)
 }
 
 
