@@ -53,7 +53,8 @@ export const InputButton = styled.button`
   padding: 8px;
 `
 
-export const FormForClient = styled.div`
+export const FormForClient = styled.form`
+ background-color: transparent; 
 `
 
   ;

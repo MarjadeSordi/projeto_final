@@ -1,10 +1,10 @@
 import React from 'react';
 import { CapsuleForLogin } from './style';
-import ClientLogin  from '../../components/clientLogin'
+import ClientLoggin  from '../../components/clientLoggin'
 
 const ClientLoginPage = () =>{
     return(
-        <CapsuleForLogin> <ClientLogin /> </CapsuleForLogin>
+        <CapsuleForLogin> <ClientLoggin /> </CapsuleForLogin>
     )
 }
 

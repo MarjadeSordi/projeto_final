@@ -93,6 +93,7 @@ export const UserContextProvider = ({ children }) => {
 			.then((res) => {
 				console.log(res)
 				fetchUser(res.user.email)
+				window.location.href = '/dashboard';
 			})
 			.catch((err) => setError(err.message))
 			.finally(() => setLoading(false));
