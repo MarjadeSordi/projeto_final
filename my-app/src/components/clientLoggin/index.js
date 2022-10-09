@@ -43,7 +43,7 @@ const ClientLoggin = () => {
       console.log("handleForm " + exists);
       if(exists)
         signInUser(email,password)
-        else  window.location.href = '/welcome'
+        else  window.location.href = '/login';
     }
     
 
@@ -64,7 +64,7 @@ const ClientLoggin = () => {
         id='inputPassWord'
         type="password"
         name="senha"
-        onBeforeInput={handlePassWord}
+        onBlur={handlePassWord}
         placeholder="Senha"
         maxLength="100"
         />
@@ -78,7 +78,8 @@ const ClientLoggin = () => {
 
         
 
-    </FormForClient> </CapsuleForLogin>)
+    </FormForClient>
+    </CapsuleForLogin>)
 }
 
 

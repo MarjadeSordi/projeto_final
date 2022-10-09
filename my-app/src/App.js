@@ -6,7 +6,6 @@ function App() {
   return (
     <>    
     <GlobalStyle />
-    <ClientLogin />
     <Routess />
     </>
   );
