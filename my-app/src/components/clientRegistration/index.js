@@ -8,6 +8,7 @@ import {  ButtonModal, DivCapsule, InputForText, InputForEmail, InputForPassWord
 import Modal from 'react-modal';
 
 const ClientRegistration = () => {
+<<<<<<< HEAD
   const [firstName, setFirstName] = useState('');
   const [email, setEmail] = useState('');
   const [userId, setUserId] = useState('');
@@ -79,12 +80,26 @@ const ClientRegistration = () => {
     });
   }
 
+=======
+    const [firstName, setFirstName] = useState('');
+    const [email, setEmail] = useState('');
+    const dispatch = useDispatch();
+
+    function registerName() {
+        dispatch({
+          type: 'NEW_FIRST_NAME_REGISTER',
+          firstName: firstName
+        });
+      }
+    
+>>>>>>> c843181 (save)
   // método para verificar se nome já existe?
   function handleFirstName(e) {
     e.preventDefault();
     setFirstName(e.target.value);
   }
 
+<<<<<<< HEAD
   function handlePassWord(e) {
     e.preventDefault();
     setPassWord(e.target.value);
@@ -292,6 +307,31 @@ pode cancelar o serviço sem nenhum ônus. <br/> </DivModal>
     <FormForClient>
     
       <InputForText
+=======
+      function handleEmail(e) {
+        e.preventDefault();
+        setEmail(e.target.value);
+        fetch("http://whm.joao1866.c41.integrator.host:9206/usuario?email=" + this.email)
+        .then(res => res.json())
+        .then(
+          (result) => {
+            this.setState({
+              isLoaded: true,
+              exists: true
+            });
+          },
+          (error) => {
+            log.error(error)
+            this.setState({
+              isLoaded: true
+            });
+          }
+        )
+      }
+
+    return(
+        <InputForText 
+>>>>>>> c843181 (save)
         id='inputName'
         type="text"
         name="firstName"
@@ -299,7 +339,20 @@ pode cancelar o serviço sem nenhum ônus. <br/> </DivModal>
         onBlur={registerName}
         placeholder="Nome"
         maxLength="100"
+<<<<<<< HEAD
       />
+=======
+        />,
+        <InputForText 
+        id='inputEmail'
+        type="text"
+        name="inputEmail"
+        onChange={handleEmail}
+        onBlur={registerEmail}
+        placeholder="Email"
+        maxLength="100"
+        />
+>>>>>>> c843181 (save)
 
       <InputForEmail
         id='inputEmail'
