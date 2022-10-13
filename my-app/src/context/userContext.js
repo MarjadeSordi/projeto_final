@@ -71,23 +71,24 @@ export const UserContextProvider = ({ children }) => {
 		return unsubscribe;
 	}, []);
 
-	const registerUser = (email, firstName, lastName, password, role) => {
-		///
-		let fullName = firstName + " " + lastName
+	function registerUser (user) {
+		console.log(user);
 		setLoading(true);
-		createUserWithEmailAndPassword(auth, email, password)
+		createUserWithEmailAndPassword(auth, user.email, user.pass)
 			.then((res) => {
 				updateProfile(auth.currentUser, {
-					displayName: fullName,
+					displayName: user.firstName,
 				});
 				setUser(res.user);
-				doRegisterAWS(res.user.uid, res.user.email, firstName, lastName, role)
+				user.userId = res.user.uid;
+				doRegisterBackEnd(user)
 			})
 			.catch((err) => setError(err.message))
 			.finally(() => setLoading(false));
 	};
 
 	const signInUser = (email, password) => {
+		console.log("signInUser")
 		setLoading(true);
 		signInWithEmailAndPassword(auth, email, password)
 			.then((res) => {
@@ -112,8 +113,18 @@ export const UserContextProvider = ({ children }) => {
 		)
 	}
 
-	function doRegisterAWS(userRemoteId, email, firstName, lastName, role) {
-		console.log("registrar")
+	function doRegisterBackEnd(user) {
+		console.log("registrar " + user);
+		fetch(`http://whm.joao1866.c41.integrator.host:9206/usuario`,{ body: user,mode: 'no-cors'}) 
+		.then(
+		  (result) => {
+			console.log(result);
+			this.setUser(result);
+		  },
+		  (error) => {
+			console.error(error)
+		  }
+		)
 	}
 
 	const logoutUser = () => {

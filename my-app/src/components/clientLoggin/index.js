@@ -19,23 +19,18 @@ const ClientLoggin = () => {
         setPassWord(e.target.value);
       }
 
-    function handleEmail(e) {
+      async function handleEmail(e) {
         e.preventDefault();
         setEmail(e.target.value);
-        if(email.indexOf('@') > 0) {
-          console.log("handleEmail");
-        fetch(`http://whm.joao1866.c41.integrator.host:9206/usuario?email=${email}`,{ mode: 'no-cors'}) 
-        .then(
-          (result) => {
-            console.log(result);
-            this.setExists(true);
-          },
-          (error) => {
-            console.error(error)
-            this.setError(error);
-          }
-        )
-      }
+        if (email.indexOf('@') > 0) {
+         let result = await fetch(`http://whm.joao1866.c41.integrator.host:9206/usuario?email=${email}`, { mode: 'no-cors' })
+         .catch(error => console.error(error));
+                if (result.ok) {
+                  setExists(true);
+                } else {
+                  setExists(false);
+                }
+        }
       }
 
 
