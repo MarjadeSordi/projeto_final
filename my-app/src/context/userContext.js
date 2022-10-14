@@ -77,7 +77,7 @@ export const UserContextProvider = ({ children }) => {
 		createUserWithEmailAndPassword(auth, user.email, user.pass)
 			.then((res) => {
 				updateProfile(auth.currentUser, {
-					displayName: user.firstName,
+					displayName: user.nome,
 				});
 				setUser(res.user);
 				user.userId = res.user.uid;
@@ -92,39 +92,54 @@ export const UserContextProvider = ({ children }) => {
 		setLoading(true);
 		signInWithEmailAndPassword(auth, email, password)
 			.then((res) => {
-				console.log(res)
-				fetchUser(res.user.email)
-				window.location.href = '/dashboard';
+				console.log(res.user);
+				let userLogado = res.user;
+				fetchUser(userLogado.email).then((result)=>{
+					if(result==null) {
+					let userInsert = {nome: userLogado.displayName,
+						pass: 'nenhuma senha',
+						userId: userLogado.uid,
+						email: userLogado.email,
+						cliente: true};
+					doRegisterBackEnd(userInsert)
+										.then((result)=>
+										{
+											if(result != null)
+											setUser(result)
+										})
+										.catch((err)=>setError(err.message));
+									}
+					else setUser(result);
 			})
 			.catch((err) => setError(err.message))
-			.finally(() => setLoading(false));
+		}).catch((err) => setError(err.message))
+		.finally(() => setLoading(false));
 	};
 
-	function fetchUser(email) {
-		fetch(`http://whm.joao1866.c41.integrator.host:9206/usuario?email=${email}`,{ mode: 'no-cors'}) 
-		.then(
-		  (result) => {
-			console.log(result);
-			this.setUser(result);
-		  },
-		  (error) => {
-			console.error(error)
-		  }
-		)
-	}
+	async function fetchUser(email) {
+		console.log("fetchUser");
+		//http://whm.joao1866.c41.integrator.host:9206
+		let result = await fetch(`http://localhost:8080/usuario?email=${email}`, { mode: 'no-cors' })
+		.catch(error => console.error(error));
+			   if (result.ok)
+				 return result;
+			   else
+			   return null;
+	   }
 
-	function doRegisterBackEnd(user) {
-		console.log("registrar " + user);
-		fetch(`http://whm.joao1866.c41.integrator.host:9206/usuario`,{ body: user,mode: 'no-cors'}) 
-		.then(
-		  (result) => {
-			console.log(result);
-			this.setUser(result);
-		  },
-		  (error) => {
-			console.error(error)
-		  }
-		)
+	async function doRegisterBackEnd(user) {
+		console.log("registrar " + JSON.stringify(user));
+		const requestOptions = {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify(user)
+		};
+		//http://whm.joao1866.c41.integrator.host:9206
+		let result = await fetch(`http://localhost:8080/usuario`,requestOptions) 
+		.catch(error => console.error(error));
+			   if (result.ok)
+			return result;
+			else return null;
 	}
 
 	const logoutUser = () => {

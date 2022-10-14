@@ -36,9 +36,8 @@ const ClientLoggin = () => {
 
     function handleForm() {
       console.log("handleForm " + exists);
-      if(exists)
         signInUser(email,password)
-        else  window.location.href = '/login';
+        //else  window.location.href = '/login';
     }
     
 
