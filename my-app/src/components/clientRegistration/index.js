@@ -32,7 +32,7 @@ const ClientRegistration = () => {
     console.error('1')
     setEnterPageLogin(true);
     registerUser({
-      firstName: firstName,
+      nome: firstName,
       email: email,
       pass: confirmPassword,
       endereco:[
