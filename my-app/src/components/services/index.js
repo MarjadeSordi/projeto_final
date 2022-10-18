@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { BoxForService, ButtonSearch, CapsuleForService, CapsuleForBoxes, LabelSerchBoxService, SearchBoxService } from './style';
-import { AiOutlineSearch } from "react-icons/ai";
+import { BoxForService, ButtonSearch, CapsuleForService, 
+  CapsuleForBoxes, DivAlignItems, LabelSerchBoxService, SearchBoxService, TextForService ,TitleForService, TitleForServiceTop } from './style';
+import { AiOutlineSearch, AiOutlineWhatsApp } from "react-icons/ai";
 
 
 
@@ -45,6 +46,9 @@ const Services = () =>{
     return(
         <>
        <CapsuleForService>
+      <DivAlignItems>
+       <TitleForServiceTop > Serviços </TitleForServiceTop>
+       <br />
        <LabelSerchBoxService >
        <SearchBoxService 
        type='search'
@@ -52,26 +56,27 @@ const Services = () =>{
        placeholder='Buscar'/>
        <ButtonSearch ><AiOutlineSearch />  </ButtonSearch>
        </LabelSerchBoxService>
-      
+       </DivAlignItems>
+     
        <CapsuleForBoxes> 
         {serviceState.map((item) =>  
        <BoxForService>
         {(item.categorias).map((categoria) =><>
-        <span>
-            <br /> {TrataCategoria(categoria.categoria)} <br />
-            {categ}
-            
+        <TitleForService>
+            {TrataCategoria(categoria.categoria)} 
+            {categ}          
 
-         </span> <br />
-         <span> {`R$ ${(categoria.valor).toString().replace(".", ",")}0`} </span>
+         </TitleForService> 
+         <TextForService> Valor por hora: {`R$ ${(categoria.valor).toString().replace(".", ",")}0`} </TextForService>
+         <br /> 
          </>)}    
          <br />  
-         <span> Prestadora: {item.nome}</span>
+         <TextForService> Prestadora: {item.nome}</TextForService>
          {(item.enderecos).map((endereco) =><>
-        <span>
-            <br /> {endereco.cidade} - {endereco.uf} <br />
-         </span> <br />
-         <span> {endereco.bairro} </span>
+        <TextForService>
+            <br /> {endereco.cidade} | {endereco.uf} | {endereco.bairro}
+         </TextForService> 
+         <TextForService> <br /> <AiOutlineWhatsApp /> {item.phone} </TextForService>
          </>)}    
          <br />  
         
