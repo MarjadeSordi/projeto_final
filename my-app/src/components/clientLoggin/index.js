@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import {Route, Link} from 'react-router-dom'
+import { Outlet, Navigate } from "react-router-dom";
 import { useDispatch } from 'react-redux';
 import { useUserContext } from '../../context/userContext';
 import {  InputForEmail, InputForPassWord, FormForClient, InputButton, CapsuleForLogin } from './style';
 const ClientLoggin = () => {
-    const { signInUser, forgotPassword } = useUserContext();
+    const { signInUser, forgotPassword, user } = useUserContext();
     const [email, setEmail] = useState('');
     const [password, setPassWord] = useState('');
     const [errors, setError] = useState(false);
@@ -37,14 +37,12 @@ const ClientLoggin = () => {
     function handleForm() {
       console.log("handleForm " + exists);
         signInUser(email,password)
-        //else  window.location.href = '/login';
     }
     
 
     return(
       <CapsuleForLogin>
       <FormForClient>
-
         <InputForEmail
         id='inputEmail'
         type="email"

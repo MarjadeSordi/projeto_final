@@ -17,7 +17,7 @@ export const useUserContext = () => useContext(UserContext);
 
 export const UserContextProvider = ({ children }) => {
 	const [user, setUser] = useState(null);
-	const [awsUser, setAwsUser] = useState(null);
+	const [serverUser, setServerUser] = useState(null);
 	const [photo, setPhoto] = useState(null);
 	const [loading, setLoading] = useState(false);
 	const [photoURL, setPhotoURL] = useState(
@@ -51,7 +51,8 @@ export const UserContextProvider = ({ children }) => {
 	}
 
 	function handleClick() {
-		upload(photo, user, setLoading);
+		console.log("handleClick")
+		//upload(photo, user, setLoading);
 	}
 
 	useEffect(() => {
@@ -94,7 +95,9 @@ export const UserContextProvider = ({ children }) => {
 			.then((res) => {
 				console.log(res.user);
 				let userLogado = res.user;
-				fetchUser(userLogado.email).then((result)=>{
+				setUser(res.user);
+				const requestOptions = { mode: 'no-cors' };
+				fetchUser(userLogado.email,requestOptions).then((result)=>{
 					if(result==null) {
 					let userInsert = {nome: userLogado.displayName,
 						pass: 'nenhuma senha',
@@ -105,11 +108,11 @@ export const UserContextProvider = ({ children }) => {
 										.then((result)=>
 										{
 											if(result != null)
-											setUser(result)
+											setServerUser(result)
 										})
 										.catch((err)=>setError(err.message));
 									}
-					else setUser(result);
+					else setServerUser(result);
 			})
 			.catch((err) => setError(err.message))
 		}).catch((err) => setError(err.message))
@@ -119,7 +122,7 @@ export const UserContextProvider = ({ children }) => {
 	async function fetchUser(email) {
 		console.log("fetchUser");
 		//http://whm.joao1866.c41.integrator.host:9206
-		let result = await fetch(`http://localhost:8080/usuario?email=${email}`, { mode: 'no-cors' })
+		let result = await fetch(`http://whm.joao1866.c41.integrator.host:9206/usuario?email=${email}`, { mode: 'no-cors' })
 		.catch(error => console.error(error));
 			   if (result.ok)
 				 return result;
@@ -135,7 +138,7 @@ export const UserContextProvider = ({ children }) => {
 			body: JSON.stringify(user)
 		};
 		//http://whm.joao1866.c41.integrator.host:9206
-		let result = await fetch(`http://localhost:8080/usuario`,requestOptions) 
+		let result = await fetch(`http://whm.joao1866.c41.integrator.host:9206/usuario`,requestOptions) 
 		.catch(error => console.error(error));
 			   if (result.ok)
 			return result;
@@ -152,7 +155,7 @@ export const UserContextProvider = ({ children }) => {
 
 	const contextValue = {
 		user,
-		awsUser,
+		serverUser,
 		photoURL,
 		setPhoto,
 		fetchUser,
