@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const CapsuleForService = styled.div`
-background-color: #98937c;
+background-color:#DDCDB5;
 width: 100%;
 height: 100%;
 `
@@ -15,29 +15,52 @@ padding: 10px;
 
 
 export const BoxForService = styled.div`
-color: white;
+color: black;
 width: 30%;
-border: 1px solid #111111;
+border: 2px solid #111111;
 margin: 10px;
+padding: 5px;
+border-radius: 8px; 
+`
+
+export const TitleForService = styled.h2`
+font-weight: 600;
+`
+
+export const TitleForServiceTop = styled.h1`
+font-weight: 600;
+`
+
+export const DivAlignItems = styled.div`
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center`
+
+export const TextForService = styled.span`
+font-weight: 300;
 `
 
 
 export const SearchBoxService = styled.input`
-background-color:  #111111;
-color: white; 
+background-color: transparent;
+color: black; 
 height: 30px; 
 width:90%;
+border-radius: 4px;
 `
 export const LabelSerchBoxService = styled.div `
-background-color: #111111;
+background-color: transparent;
+color: black; 
 width: 50%;
 display:flex; 
+border-radius: 4px;
 align-items: center;`
 
 export const ButtonSearch = styled.button`
- background-color:  #111111;
-width: 10%;
+background-color: transparent;
+width: 8%;
 border: transparent; 
-color: white;
-font-size: 25px; 
+color:black; 
+font-size: 20px; 
 `

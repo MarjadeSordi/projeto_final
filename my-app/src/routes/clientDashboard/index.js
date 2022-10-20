@@ -14,7 +14,7 @@ const ClientDashboard = () =>{
         <>
         <h1> Serviços </h1>
         <h2>Nome: {user.displayName}</h2>
-		<h2>Email: {user.email}</h2>
+		    <h2>Email: {user.email}</h2>
         <Services /></>
     )
 }
