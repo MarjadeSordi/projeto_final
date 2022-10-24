@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import {Route, Link} from 'react-router-dom'
+import React, { useState } from 'react';
+import {Navigate} from 'react-router-dom'; 
 import { useDispatch } from 'react-redux';
 import { useUserContext } from '../../context/userContext';
 import {  InputForEmail, InputForPassWord, FormForClient, InputButton, CapsuleForLogin } from './style';
@@ -9,6 +9,7 @@ const ClientLoggin = () => {
     const [password, setPassWord] = useState('');
     const [errors, setError] = useState(false);
     const [exists, setExists] = useState(false);
+    const [login, setLogin] = useState(false); 
 
  
     const dispatch = useDispatch();
@@ -24,28 +25,44 @@ const ClientLoggin = () => {
         setEmail(e.target.value);
         if(email.indexOf('@') > 0) {
           console.log("handleEmail");
-        fetch(`http://whm.joao1866.c41.integrator.host:9206/usuario?email=${email}`,{ mode: 'no-cors'}) 
+        fetch(`http://whm.joao1866.c41.integrator.host:9206/usuarios?email=${email}`,{ mode: 'no-cors'}) 
         .then(
           (result) => {
-            console.log(result);
-            this.setExists(true);
+            setExists(true);
+            console.log('aqui', result)
           },
           (error) => {
             console.error(error)
-            this.setError(error);
+            setError(error);
           }
         )
       }
       }
 
+    const handleForm = () => {
+      let url = 'http://whm.joao1866.c41.integrator.host:9206/loggin';
 
-    function handleForm() {
-      console.log("handleForm " + exists);
-      if(exists)
-        signInUser(email,password)
-        else  window.location.href = '/login';
+        try {
+        fetch(url , {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: email,
+          senha: password
+        })}).then((response) => {
+          console.error(response.status)
+          if (response.status === 200){
+         setLogin(true);
+         }
+      });
     }
-    
+       catch (error) {
+        console.error(error);
+      }
+    };
 
     return(
       <CapsuleForLogin>
@@ -73,6 +90,7 @@ const ClientLoggin = () => {
         type="button"
         value="ENVIAR"
         onClick={handleForm}> Enviar
+        {login === true ? <Navigate to='/dashboard'/> : ''}
         </InputButton>
 
 
