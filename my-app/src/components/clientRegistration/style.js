@@ -2,14 +2,18 @@ import styled , { css } from 'styled-components';
 
 
 export const DivCapsule = styled.div`
+color: #f6f4e6;
 width: 100%;
 display: flex;
 flex-direction: column; 
 justify-content: center;
 align-items: center;
+background-color: #2d3436;
+background-image: linear-gradient(315deg, #2d3436 0%, #000000 74%);
 `
 
 export const DivText = styled.div`
+margin-top: 5%;
 width: 70%;
 display: flex;
 flex-direction: row; 
@@ -100,7 +104,6 @@ export const InputCheckbox = styled.input`
 export const FormForClient = styled.form`
  background-color: #363636; 
  width: 70%; 
- box-shadow: 10px 10px 5px lightgrey;
  margin-bottom: 30px; 
 `
 
