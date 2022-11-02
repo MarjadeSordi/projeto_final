@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
+import MenuPage from '../menu';
 import { DivCapsule, InputForText, InputForEmail, InputForPassWord, SelectedForState, SelectedForCity, FormForClient, InputButton, InputCheckbox, LabelForCheckbox, 
   SpanForTitle, DivText,
   SpanForLink} from './style';
@@ -194,8 +195,9 @@ const ClientRegistration = () => {
 
   return (
     <DivCapsule>
+      <MenuPage />
       <DivText>
-      <SpanForTitle> Bem vindas ao Evita! 
+      <SpanForTitle> <h2>Bem vindas ao Evita!  </h2>
         <br /> Somos um local seguro, por isso antes de conhecer as nossas fornecedoras, 
          você precisa estar cadastrada. 
         <br /> Caiu por aqui por engano? 
