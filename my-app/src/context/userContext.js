@@ -92,37 +92,36 @@ export const UserContextProvider = ({ children }) => {
 		console.log("signInUser")
 		setLoading(true);
 		signInWithEmailAndPassword(auth, email, password)
-			.then((res) => {
-				console.log(res.user);
-				let userLogado = res.user;
-				setUser(res.user);
-				const requestOptions = { mode: 'no-cors' };
-				fetchUser(userLogado.email,requestOptions).then((result)=>{
-					if(result==null) {
-					let userInsert = {nome: userLogado.displayName,
-						pass: 'nenhuma senha',
-						userId: userLogado.uid,
-						email: userLogado.email,
-						cliente: true};
-					doRegisterBackEnd(userInsert)
-										.then((result)=>
-										{
-											if(result != null)
-											setServerUser(result)
-										})
-										.catch((err)=>setError(err.message));
-									}
-					else setServerUser(result);
-			})
-			.catch((err) => setError(err.message))
-		}).catch((err) => setError(err.message))
-		.finally(() => setLoading(false));
+		.then(async (res) => {
+			console.log(res.user);
+			let userLogado = res.user;
+			setUser(res.user);
+			let result = await fetchUser(userLogado.email).catch(error => console.error(error));
+			if (result)
+				setServerUser(result);
+			 else {
+				let userInsert = {
+					nome: userLogado.displayName,
+					pass: 'nenhuma senha',
+					userId: userLogado.uid,
+					email: userLogado.email,
+					cliente: true
+				};
+					result = doRegisterBackEnd(userInsert)
+									.then((result)=>
+									{
+										if(result != null)
+										setServerUser(result)
+									})
+									.catch((err)=>setError(err.message));
+				}
+			}
+		).finally(() => setLoading(false));
 	};
 
 	async function fetchUser(email) {
 		console.log("fetchUser");
-		//http://whm.joao1866.c41.integrator.host:9206
-		let result = await fetch(`http://whm.joao1866.c41.integrator.host:9206/usuario?email=${email}`, { mode: 'no-cors' })
+		let result = await fetch(`http://whm.joao1866.c41.integrator.host:9206/usuario?email=${email}`)
 		.catch(error => console.error(error));
 			   if (result.ok)
 				 return result;
@@ -137,7 +136,6 @@ export const UserContextProvider = ({ children }) => {
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify(user)
 		};
-		//http://whm.joao1866.c41.integrator.host:9206
 		let result = await fetch(`http://whm.joao1866.c41.integrator.host:9206/usuario`,requestOptions) 
 		.catch(error => console.error(error));
 			   if (result.ok)
