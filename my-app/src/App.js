@@ -4,8 +4,8 @@ import Routess from './routes';
 function App() {
   return (
     <>    
-    <GlobalStyle />
-    <Routess />
+    <GlobalStyle />   
+    <Routess /> 
     </>
   );
 }
