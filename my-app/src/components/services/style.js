@@ -1,9 +1,10 @@
 import styled from 'styled-components';
 
 export const CapsuleForService = styled.div`
-background-color:#DDCDB5;
+background-color: #2d3436;
+background-image: linear-gradient(315deg, #2d3436 0%, #000000 74%)
 width: 100%;
-height: 100%;
+height: 100vh;
 `
 
 export const CapsuleForBoxes = styled.div`
@@ -15,20 +16,24 @@ padding: 10px;
 
 
 export const BoxForService = styled.div`
-color: black;
+color: #f6f4e6;
 width: 30%;
-border: 2px solid #111111;
+border: 2px solid rgb(216, 2, 134);
 margin: 10px;
 padding: 5px;
-border-radius: 8px; 
+border-radius: 0px; 
 `
 
 export const TitleForService = styled.h2`
 font-weight: 600;
+color: #f6f4e6;
 `
 
 export const TitleForServiceTop = styled.h1`
-font-weight: 600;
+margin-top: 4%; 
+color: #f6f4e6;
+text-transform: uppercase;
+font-weight: 500;
 `
 
 export const DivAlignItems = styled.div`

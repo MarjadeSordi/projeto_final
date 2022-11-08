@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { BoxForService, ButtonSearch, CapsuleForService, 
   CapsuleForBoxes, DivAlignItems, LabelSerchBoxService, SearchBoxService, TextForService ,TitleForService, TitleForServiceTop } from './style';
 import { AiOutlineSearch, AiOutlineWhatsApp } from "react-icons/ai";
+import MenuPage from '../menu';
 
 
 
@@ -10,10 +11,11 @@ const Services = () =>{
 
 
     const SetServices = async () => {
-        let url = 'http://whm.joao1866.c41.integrator.host:9206/usuarios';
+        let url = 'http://whm.joao1866.c41.integrator.host:9206/usuarios?tipo=PRESTADOR';
         try {
           const responseServices = await fetch(url);
           const jsonService= await responseServices.json();
+          jsonService.filter((item) => item.categorias)
           jsonService.sort((a, b) => a.nome.localeCompare(b.nome));
           setServiceState(jsonService);
           console.error(serviceState)
@@ -46,6 +48,7 @@ const Services = () =>{
     return(
         <>
        <CapsuleForService>
+        <MenuPage /> 
       <DivAlignItems>
        <TitleForServiceTop > Serviços </TitleForServiceTop>
        <br />
