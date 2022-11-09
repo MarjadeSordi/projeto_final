@@ -41,28 +41,7 @@ const ClientLoggin = () => {
       }
 
     const handleForm = () => {
-      let url = 'http://whm.joao1866.c41.integrator.host:9206/loggin';
-
-        try {
-        fetch(url , {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: email,
-          senha: password
-        })}).then((response) => {
-          console.error(response.status)
-          if (response.status === 200){
-         setLogin(true);
-         }
-      });
-    }
-       catch (error) {
-        console.error(error);
-      }
+      signInUser(email,password)
     };
 
     return(    
