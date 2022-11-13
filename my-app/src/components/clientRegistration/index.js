@@ -2,9 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import MenuPage from '../menu';
-import {  ButtonModal, DivCapsule, InputForText, InputForEmail, InputForPassWord, SelectedForState, SelectedForCity, FormForClient, InputButton, InputCheckbox, LabelForCheckbox, 
-  SpanForTitle, DivText, DivModal,
-  SpanForLink} from './style';
+import {
+  ButtonModal, DivCapsule, InputForText, InputForEmail, InputForPassWord, SelectedForState, SelectedForCity, FormForClient, InputButton, InputCheckbox, LabelForCheckbox,
+  SpanForTitle, DivText, DivModal,DivPrestadora,
+  SpanForLink,
+  Ptext
+} from './style';
 import Modal from 'react-modal';
 
 const ClientRegistration = () => {
@@ -25,13 +28,17 @@ const ClientRegistration = () => {
   const [number, setNumber] = useState('');
   const [complemento, setComplemento] = useState('');
   const [phone, setPhone] = useState('');
-  const [client, setClient] = useState(false); 
-  const [prestadora, setPrestadora] = useState(false); 
+  const [client, setClient] = useState(false);
+  const [prestadora, setPrestadora] = useState(false);
   const [enterPageLogin, setEnterPageLogin] = useState(false)
-  const [modalIsOpen, setIsOpen] = useState(false); 
-  const [terms, setTerms ] = useState(false); 
+  const [modalIsOpen, setIsOpen] = useState(false);
+  const [terms, setTerms] = useState(false);
+  const [moreCateg, setMoreCateg] = useState(false);  
   const dispatch = useDispatch();
 
+
+  const categorias= ['Babá',' Babá por turno', 'Costura', 'Diarista', 'Manutenção Elétrica',
+  'Manutenção Hidraulica', 'Pequenos Reparos','Pintora']
 
   const customStyles = {
     content: {
@@ -46,7 +53,7 @@ const ClientRegistration = () => {
       width: '60%'
     },
   };
-  
+
 
   function handleForm() {
     setEnterPageLogin(true);
@@ -63,16 +70,16 @@ const ClientRegistration = () => {
       firstName: firstName,
       email: email,
       pass: confirmPassword,
-      endereco:[
-      {
-        uf: uf,
-        cep: cep,
-        complemento: complemento,
-        logradouro: logradouro,
-        cidade: city,
-        bairro: bairro,
-        numero: number,
-      }]
+      endereco: [
+        {
+          uf: uf,
+          cep: cep,
+          complemento: complemento,
+          logradouro: logradouro,
+          cidade: city,
+          bairro: bairro,
+          numero: number,
+        }]
       ,
       cliente: true,
 
@@ -117,7 +124,7 @@ const ClientRegistration = () => {
   function handleUf(e) {
     e.preventDefault();
     setUf(e.target.value);
-   }
+  }
 
   useEffect(() => {
     PopulateStates();
@@ -173,7 +180,7 @@ const ClientRegistration = () => {
       fetch(`http://whm.joao1866.c41.integrator.host:9206/usuario?email=${email}`, { mode: 'no-cors' })
         .then(
           (result) => {
-               this.setExists(true);
+            this.setExists(true);
           },
           (error) => {
             console.error(error)
@@ -205,18 +212,23 @@ const ClientRegistration = () => {
     setPhone(e.target.value);
   }
 
-  function handleClientCheckBox(){
-    return(
-    setClient(!client))
+  function handleClientCheckBox() {
+    return (
+      setClient(!client))
   }
 
-  function handlePrestadoraCheckBox(){
-    return(
-    setPrestadora(!prestadora))
+  function handlePrestadoraCheckBox() {
+    return (
+      setPrestadora(!prestadora))
   }
 
-  function handleTermsCheckBox(){
-    return(
+  function handleMoreCategoria() {
+    return (
+      setMoreCateg(!moreCateg))
+  }
+
+  function handleTermsCheckBox() {
+    return (
       setTerms(!terms)
     )
   }
@@ -249,201 +261,274 @@ const ClientRegistration = () => {
         style={customStyles}
         contentLabel="Example Modal"
       >
-      <DivModal> 
-        <h2>Termos e condições. </h2>
-        <br/>
-* Ao realizar esse cadastro você confirma se identicar com o sexo feminino.<br/>
-* Nossas prestadoras tem orientação para não atender solicitações de serviços 
-quando a solicitante não for identificada como uma pessoa do sexo feminino. <br/>
-* Nossas clientes tem orientação para não aceitar serviços quando identificarem que 
-a prestadora não é do sexo feminino.<br/>
-* Em qualquer situação de constrangimento, a solicitante ou a prestadora 
-pode cancelar o serviço sem nenhum ônus. <br/>
-* Ao realizar esse cadastro você confirma se identicar com o sexo feminino. <br/>
-* Nossas prestadoras tem orientação para não atender solicitações de serviços 
-quando a solicitante não for identificada como uma pessoa do sexo feminino. <br/>
-* Nossas clientes tem orientação para não aceitar serviços quando identificarem que 
-a prestadora não é do sexo feminino.<br/>
-* Em qualquer situação de constrangimento, a solicitante ou a prestadora 
-pode cancelar o serviço sem nenhum ônus. <br/> </DivModal>
+        <DivModal>
+          <h2>Termos e condições. </h2>
+          <br />
+          * Ao realizar esse cadastro você confirma se identicar com o sexo feminino.<br />
+          * Nossas prestadoras tem orientação para não atender solicitações de serviços
+          quando a solicitante não for identificada como uma pessoa do sexo feminino. <br />
+          * Nossas clientes tem orientação para não aceitar serviços quando identificarem que
+          a prestadora não é do sexo feminino.<br />
+          * Em qualquer situação de constrangimento, a solicitante ou a prestadora
+          pode cancelar o serviço sem nenhum ônus. <br />
+          * Ao realizar esse cadastro você confirma se identicar com o sexo feminino. <br />
+          * Nossas prestadoras tem orientação para não atender solicitações de serviços
+          quando a solicitante não for identificada como uma pessoa do sexo feminino. <br />
+          * Nossas clientes tem orientação para não aceitar serviços quando identificarem que
+          a prestadora não é do sexo feminino.<br />
+          * Em qualquer situação de constrangimento, a solicitante ou a prestadora
+          pode cancelar o serviço sem nenhum ônus. <br /> </DivModal>
 
-<InputCheckbox
-         type='checkbox'
-         checked = {terms}
-         onChange={handleTermsCheckBox}
-      />
+        <InputCheckbox
+          type='checkbox'
+          checked={terms}
+          onChange={handleTermsCheckBox}
+        />
 
-<LabelForCheckbox> ACEITO OS TERMOS E CONDIÇÕES </LabelForCheckbox>
-<br /> 
+        <LabelForCheckbox> ACEITO OS TERMOS E CONDIÇÕES </LabelForCheckbox>
+        <br />
 
 
-{terms ? 
-< ButtonModal> CADASTRAR </ ButtonModal> : < ButtonModal onClick={closeModal}> SAIR </ ButtonModal>
-}
+        {terms ?
+          < ButtonModal> CADASTRAR </ ButtonModal> : < ButtonModal onClick={closeModal}> SAIR </ ButtonModal>
+        }
       </Modal>
       <DivText>
-      <SpanForTitle> <h2>Bem vindas ao Evita!  </h2>
-        <br /> Somos um local seguro, por isso antes de conhecer as nossas fornecedoras, 
-         você precisa estar cadastrada. 
-        <br /> Caiu por aqui por engano? 
-        <Link to='/login'> Quero fazer o meu login! </Link>
-      </SpanForTitle>
+        <SpanForTitle> <h2>Bem vindas ao Evita!  </h2>
+          <br /> Somos um local seguro, por isso antes de conhecer as nossas fornecedoras,
+          você precisa estar cadastrada.
+          <br /> Caiu por aqui por engano?
+          <Link to='/login'> Quero fazer o meu login! </Link>
+        </SpanForTitle>
       </DivText>
-    <FormForClient>
-    
-      <InputForText
+      <FormForClient>
 
-        id='inputName'
-        type="text"
-        name="firstName"
-        onChange={handleFirstName}
-        onBlur={registerName}
-        placeholder="Nome"
-        maxLength="100"
-
-      />
-
-      <InputForEmail
-        id='inputEmail'
-        type="email"
-        name="email"
-        onChange={handleEmail}
-        placeholder="Email"
-        maxLength="100"
-      />
-
-
-
-      <InputForPassWord
-        id='inputPassWord'
-        type="password"
-        name="senha"
-        onChange={handlePassWord}
-        placeholder="Senha"
-        maxLength="100"
-      />
-
-
-      <InputForPassWord
-        id='inputConfirmPassWord'
-        type="password"
-        name="confirmPassWord"
-        onChange={handleConfirmPassword}
-        placeholder="Confirme a Senha"
-        maxLength="100"
-        error={error}
-      />
-
-      <SelectedForState
-        id='inputState'
-        name="state"
-        onChange={handleUf}
-        value={uf}>
-        {listState.map(listState => (
-          <option key={listState.id} value={listState.sigla}>
-            {listState.sigla}
-          </option>
-        ))}
-      </SelectedForState>
-
-
-      <SelectedForCity
-        id='inputCity'
-        name="city"
-        value={city}
-        onChange={handleCity}
-      >
-        {listCity.map(listCity => (
-          <option key={listCity.id} value={listCity.nome}>
-            {listCity.nome}
-          </option>
-        ))}
-      </SelectedForCity>
-
-      <InputForText
-        id='inputBairro'
-        type="text"
-        name="bairro"
-        onChange={handleBairro}
-        placeholder="Bairro"
-        maxLength="100"
-      />
-
-      <InputForText
-        id='inputLogradouro'
-        type="text"
-        name="logradouro"
-        onChange={handleLogradouro}
-        placeholder="Rua"
-        maxLength="100"
-      />
-
-      <InputForText
-        id='inputCep'
-        type="number"
-        name="cep"
-        onChange={handleCep}
-        placeholder="CEP"
-        maxLength={8}
-        minLength={8}
-      />
-
-      <InputForText
-        id='inputNumber'
-        type="number"
-        name="number"
-        onChange={handleNumber}
-        placeholder="Número"
-        maxLength={5}
-        minLength={1}
-      />
-
-      <InputForText
-        id='inputComplemento'
-        type="text"
-        name="complemento"
-        onChange={handleComplemento}
-        placeholder="Complemento"
-        maxLength={100}
-      />
-       <InputForText
-        id='inputTel'
-        type="number"
-        name="telefone"
-        onChange={handlePhone}
-        placeholder="Telefone"
-        maxLength="100"
-      />
-      <br></br>
-      <InputCheckbox
-         type='checkbox'
-         checked = {client}
-         onChange={handleClientCheckBox}
-      />
-      <LabelForCheckbox> CLIENTE </LabelForCheckbox>
-      <InputCheckbox
-        type='checkbox'
-        checked = {prestadora}
-        onChange={handlePrestadoraCheckBox}
-       
-      />
-      <LabelForCheckbox> PRESTADORA </LabelForCheckbox>
-      <br></br>
- 
-      <InputButton
-        type="button"
-        value="ENVIAR"
-        onClick={openModal}
-      > Cadastre-se! </InputButton>
-
-<br /> 
-  {enterPageLogin ?
+        <InputForText
   
-  <><Link to='/login'> <SpanForLink> Quero fazer o meu login!</SpanForLink>  </Link></>
-         : ''
-    }
+        id='inputName'
+          type="text"
+          name="firstName"
+          onChange={handleFirstName}
+          onBlur={registerName}
+          placeholder="Nome"
+          maxLength="100"
+  
+      />
 
-    </FormForClient>
+        <InputForEmail
+          id='inputEmail'
+          type="email"
+          name="email"
+          onChange={handleEmail}
+          placeholder="Email"
+          maxLength="100"
+        />
+
+
+
+        <InputForPassWord
+          id='inputPassWord'
+          type="password"
+          name="senha"
+          onChange={handlePassWord}
+          placeholder="Senha"
+          maxLength="100"
+        />
+
+
+        <InputForPassWord
+          id='inputConfirmPassWord'
+          type="password"
+          name="confirmPassWord"
+          onChange={handleConfirmPassword}
+          placeholder="Confirme a Senha"
+          maxLength="100"
+          error={error}
+        />
+
+        <SelectedForState
+          id='inputState'
+          name="state"
+          onChange={handleUf}
+          value={uf}>
+          {listState.map(listState => (
+            <option key={listState.id} value={listState.sigla}>
+              {listState.sigla}
+            </option>
+          ))}
+        </SelectedForState>
+
+
+        <SelectedForCity
+          id='inputCity'
+          name="city"
+          value={city}
+          onChange={handleCity}
+        >
+          {listCity.map(listCity => (
+            <option key={listCity.id} value={listCity.nome}>
+              {listCity.nome}
+            </option>
+          ))}
+        </SelectedForCity>
+
+        <InputForText
+          id='inputBairro'
+          type="text"
+          name="bairro"
+          onChange={handleBairro}
+          placeholder="Bairro"
+          maxLength="100"
+        />
+
+        <InputForText
+          id='inputLogradouro'
+          type="text"
+          name="logradouro"
+          onChange={handleLogradouro}
+          placeholder="Rua"
+          maxLength="100"
+        />
+
+        <InputForText
+          id='inputCep'
+          type="number"
+          name="cep"
+          onChange={handleCep}
+          placeholder="CEP"
+          maxLength={8}
+          minLength={8}
+        />
+
+        <InputForText
+          id='inputNumber'
+          type="number"
+          name="number"
+          onChange={handleNumber}
+          placeholder="Número"
+          maxLength={5}
+          minLength={1}
+        />
+
+        <InputForText
+          id='inputComplemento'
+          type="text"
+          name="complemento"
+          onChange={handleComplemento}
+          placeholder="Complemento"
+          maxLength={100}
+        />
+        <InputForText
+          id='inputTel'
+          type="number"
+          name="telefone"
+          onChange={handlePhone}
+          placeholder="Telefone"
+          maxLength="100"
+        />
+        <br></br>
+        <InputCheckbox
+          type='checkbox'
+          checked={client}
+          onChange={handleClientCheckBox}
+        />
+        <LabelForCheckbox> CLIENTE </LabelForCheckbox>
+        <InputCheckbox
+          type='checkbox'
+          checked={prestadora}
+          onChange={handlePrestadoraCheckBox}
+
+        />
+        <LabelForCheckbox> PRESTADORA </LabelForCheckbox>
+        <br></br>
+        {prestadora?       
+       <>
+       <DivPrestadora> 
+       <Ptext>Selecione sua área de trabalho:   </Ptext> 
+       <SelectedForCity
+            id='inputCategoria'
+            name="categoria"
+            onChange={handleUf}
+            value={uf}>
+            {categorias.map(categoria => (
+              <option key={categoria} value={categoria}>
+                {categoria}
+              </option>
+            ))}       
+     </SelectedForCity>
+    <Ptext>  Preencha o valor por <b> hora </b> de trabalho:</Ptext>
+     <InputForText
+          id='inputPrice'
+          type="number"
+          name="telefone"
+          placeholder="R$"
+          maxLength="100"
+        />
+        
+    </DivPrestadora>
+        <LabelForCheckbox>     
+          <InputCheckbox
+          type='checkbox'
+          checked={moreCateg}
+          onChange={handleMoreCategoria}
+
+        />
+         Deseja cadastrar mais de uma atividade? </LabelForCheckbox>
+
+        {
+          moreCateg? 
+          <DivPrestadora> 
+
+<Ptext>Selecione sua área de trabalho:   </Ptext> 
+       <SelectedForCity
+            id='inputCategoria'
+            name="categoria"
+            onChange={handleUf}
+            value={uf}>
+            {categorias.map(categoria => (
+              <option key={categoria} value={categoria}>
+                {categoria}
+              </option>
+            ))}       
+     </SelectedForCity>
+    <Ptext>  Preencha o valor por <b> hora </b> de trabalho:</Ptext>
+     <InputForText
+          id='inputPrice'
+          type="number"
+          name="telefone"
+          placeholder="R$"
+          maxLength="100"
+        />       
+      
+ 
+          </DivPrestadora>
+          : ''
+        }
+      
+       
+       <Ptext>    O contato será feito pela cliente de acordo com o<b> telefone </b> informado no cadastro. </Ptext>
+      <br /> 
+       <Ptext>    Você pode oferecer até 2 atividades diferentes no cadastro inicial, mais categorias serão liberadas de acordo com o seu desempenho na plataforma.  </Ptext>
+
+      
+       </> :'' }
+      
+        
+
+        <InputButton
+          type="button"
+          value="ENVIAR"
+          onClick={openModal}
+        > Cadastre-se! </InputButton>
+
+        <br />
+        {enterPageLogin ?
+
+          <><Link to='/login'> <SpanForLink> Quero fazer o meu login!</SpanForLink>  </Link></>
+          : ''
+        }
+
+      </FormForClient>
     </DivCapsule>)
 }
 
