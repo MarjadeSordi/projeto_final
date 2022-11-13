@@ -46,7 +46,6 @@ const Services = () =>{
 
         console.log(auth);
         console.log(auth.currentUser);
-        console.log(auth.currentUser.toJSON())
         SetServices();
       }, []);
 
