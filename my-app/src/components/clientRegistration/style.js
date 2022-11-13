@@ -142,3 +142,12 @@ transition: ease-out 0.4s;
     box-shadow: inset 400px 0 0 0 #D80286;
 }
 `
+
+export const DivPrestadora = styled.div`
+display: flex;
+flex-direction: column; 
+`
+
+export const Ptext = styled.p`
+margin-left: 20px;
+`
