@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import MenuPage from '../menu';
-import { DivCapsule, InputForText, InputForEmail, InputForPassWord, SelectedForState, SelectedForCity, FormForClient, InputButton, InputCheckbox, LabelForCheckbox, 
-  SpanForTitle, DivText,
+import {  ButtonModal, DivCapsule, InputForText, InputForEmail, InputForPassWord, SelectedForState, SelectedForCity, FormForClient, InputButton, InputCheckbox, LabelForCheckbox, 
+  SpanForTitle, DivText, DivModal,
   SpanForLink} from './style';
+import Modal from 'react-modal';
 
 const ClientRegistration = () => {
   const [firstName, setFirstName] = useState('');
@@ -23,12 +24,31 @@ const ClientRegistration = () => {
   const [cep, setCep] = useState('');
   const [number, setNumber] = useState('');
   const [complemento, setComplemento] = useState('');
+  const [phone, setPhone] = useState('');
+  const [client, setClient] = useState(false); 
+  const [prestadora, setPrestadora] = useState(false); 
   const [enterPageLogin, setEnterPageLogin] = useState(false)
+  const [modalIsOpen, setIsOpen] = useState(false); 
+  const [terms, setTerms ] = useState(false); 
   const dispatch = useDispatch();
 
 
+  const customStyles = {
+    content: {
+      top: '50%',
+      left: '50%',
+      right: 'auto',
+      bottom: 'auto',
+      marginRight: '-50%',
+      transform: 'translate(-50%, -50%)',
+      backgroundColor: '#2d3436',
+      backgroundImage: 'linear-gradient(315deg, #2d3436 0%, #000000 74%)',
+      width: '60%'
+    },
+  };
+  
+
   function handleForm() {
-    console.error('1')
     setEnterPageLogin(true);
     dispatch({
       type: 'ENTER_PAGE_LOGIN',
@@ -89,7 +109,6 @@ const ClientRegistration = () => {
       const jsonState = await responseStates.json();
       jsonState.sort((a, b) => a.nome.localeCompare(b.nome));
       setState(jsonState);
-      console.error(listState)
     } catch (error) {
       console.error(error);
     }
@@ -98,9 +117,8 @@ const ClientRegistration = () => {
   function handleUf(e) {
     e.preventDefault();
     setUf(e.target.value);
-    console.error('AQUI', uf)
-  }
-  console.error('AQUI', uf)
+   }
+
   useEffect(() => {
     PopulateStates();
   }, []);
@@ -111,7 +129,6 @@ const ClientRegistration = () => {
     try {
       const responseCity = await fetch(url);
       const jsonCity = await responseCity.json();
-      console.error(jsonCity)
       jsonCity.sort((a, b) => a.nome.localeCompare(b.nome));
       setListCity(jsonCity);
     } catch (error) {
@@ -156,8 +173,7 @@ const ClientRegistration = () => {
       fetch(`http://whm.joao1866.c41.integrator.host:9206/usuario?email=${email}`, { mode: 'no-cors' })
         .then(
           (result) => {
-            console.log(result);
-            this.setExists(true);
+               this.setExists(true);
           },
           (error) => {
             console.error(error)
@@ -183,6 +199,37 @@ const ClientRegistration = () => {
       )
   }
 
+
+  function handlePhone(e) {
+    e.preventDefault();
+    setPhone(e.target.value);
+  }
+
+  function handleClientCheckBox(){
+    return(
+    setClient(!client))
+  }
+
+  function handlePrestadoraCheckBox(){
+    return(
+    setPrestadora(!prestadora))
+  }
+
+  function handleTermsCheckBox(){
+    return(
+      setTerms(!terms)
+    )
+  }
+
+  function openModal() {
+    setIsOpen(true);
+  }
+
+  function closeModal() {
+    setIsOpen(false);
+  }
+
+
   useEffect(() => {
     PopulateStates();
   }, []);
@@ -196,6 +243,44 @@ const ClientRegistration = () => {
   return (
     <DivCapsule>
       <MenuPage />
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        style={customStyles}
+        contentLabel="Example Modal"
+      >
+      <DivModal> 
+        <h2>Termos e condições. </h2>
+        <br/>
+* Ao realizar esse cadastro você confirma se identicar com o sexo feminino.<br/>
+* Nossas prestadoras tem orientação para não atender solicitações de serviços 
+quando a solicitante não for identificada como uma pessoa do sexo feminino. <br/>
+* Nossas clientes tem orientação para não aceitar serviços quando identificarem que 
+a prestadora não é do sexo feminino.<br/>
+* Em qualquer situação de constrangimento, a solicitante ou a prestadora 
+pode cancelar o serviço sem nenhum ônus. <br/>
+* Ao realizar esse cadastro você confirma se identicar com o sexo feminino. <br/>
+* Nossas prestadoras tem orientação para não atender solicitações de serviços 
+quando a solicitante não for identificada como uma pessoa do sexo feminino. <br/>
+* Nossas clientes tem orientação para não aceitar serviços quando identificarem que 
+a prestadora não é do sexo feminino.<br/>
+* Em qualquer situação de constrangimento, a solicitante ou a prestadora 
+pode cancelar o serviço sem nenhum ônus. <br/> </DivModal>
+
+<InputCheckbox
+         type='checkbox'
+         checked = {terms}
+         onChange={handleTermsCheckBox}
+      />
+
+<LabelForCheckbox> ACEITO OS TERMOS E CONDIÇÕES </LabelForCheckbox>
+<br /> 
+
+
+{terms ? 
+< ButtonModal> CADASTRAR </ ButtonModal> : < ButtonModal onClick={closeModal}> SAIR </ ButtonModal>
+}
+      </Modal>
       <DivText>
       <SpanForTitle> <h2>Bem vindas ao Evita!  </h2>
         <br /> Somos um local seguro, por isso antes de conhecer as nossas fornecedoras, 
@@ -319,13 +404,26 @@ const ClientRegistration = () => {
         placeholder="Complemento"
         maxLength={100}
       />
+       <InputForText
+        id='inputTel'
+        type="number"
+        name="telefone"
+        onChange={handlePhone}
+        placeholder="Telefone"
+        maxLength="100"
+      />
       <br></br>
       <InputCheckbox
-        type='checkbox'
+         type='checkbox'
+         checked = {client}
+         onChange={handleClientCheckBox}
       />
       <LabelForCheckbox> CLIENTE </LabelForCheckbox>
       <InputCheckbox
         type='checkbox'
+        checked = {prestadora}
+        onChange={handlePrestadoraCheckBox}
+       
       />
       <LabelForCheckbox> PRESTADORA </LabelForCheckbox>
       <br></br>
@@ -333,7 +431,7 @@ const ClientRegistration = () => {
       <InputButton
         type="button"
         value="ENVIAR"
-        onClick={handleForm}
+        onClick={openModal}
       > Cadastre-se! </InputButton>
 
 <br /> 
