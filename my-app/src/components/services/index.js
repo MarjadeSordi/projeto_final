@@ -43,7 +43,10 @@ const Services = () =>{
       
 
       useEffect(() => {
-        console.log(auth._currentUser.toJSON());
+
+        console.log(auth);
+        console.log(auth.currentUser);
+        console.log(auth.currentUser.toJSON())
         SetServices();
       }, []);
 
