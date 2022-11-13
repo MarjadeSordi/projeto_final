@@ -112,6 +112,7 @@ export const UserContextProvider = ({ children }) => {
 		)
 	}
 
+
 	function doRegisterAWS(userRemoteId, email, firstName, lastName, role) {
 		console.log("registrar")
 	}
@@ -123,6 +124,8 @@ export const UserContextProvider = ({ children }) => {
 	const forgotPassword = (email) => {
 		return sendPasswordResetEmail(auth, email);
 	};
+
+
 
 	const contextValue = {
 		user,

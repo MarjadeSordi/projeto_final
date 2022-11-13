@@ -304,14 +304,16 @@ const ClientRegistration = () => {
       <FormForClient>
 
         <InputForText
-          id='inputName'
+  
+        id='inputName'
           type="text"
           name="firstName"
           onChange={handleFirstName}
           onBlur={registerName}
           placeholder="Nome"
           maxLength="100"
-        />
+  
+      />
 
         <InputForEmail
           id='inputEmail'

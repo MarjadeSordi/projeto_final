@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { auth } from "../../context/firebase";
 import { BoxForService, ButtonSearch, CapsuleForService, 
   CapsuleForBoxes, DivAlignItems, LabelSerchBoxService, SearchBoxService, TextForService ,TitleForService, TitleForServiceTop } from './style';
 import { AiOutlineSearch, AiOutlineWhatsApp } from "react-icons/ai";
@@ -42,6 +43,9 @@ const Services = () =>{
       
 
       useEffect(() => {
+
+        console.log(auth);
+        console.log(auth.currentUser);
         SetServices();
       }, []);
 
