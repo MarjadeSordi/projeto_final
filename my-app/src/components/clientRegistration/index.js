@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import MenuPage from '../menu';
 import {
@@ -9,11 +8,13 @@ import {
   Ptext
 } from './style';
 import Modal from 'react-modal';
+import {Navigate} from 'react-router-dom'; 
 
 const ClientRegistration = () => {
   const [firstName, setFirstName] = useState('');
   const [email, setEmail] = useState('');
   const [userId, setUserId] = useState('');
+  const [logradouro, setLogradouro] = useState('');
   const [password, setPassWord] = useState('');
   const [confirmPassword, setConfirmPassWord] = useState('');
   const [error, setError] = useState(false);
@@ -23,7 +24,6 @@ const ClientRegistration = () => {
   const [listCity, setListCity] = useState([]);
   const [city, setCity] = useState('');
   const [bairro, setBairro] = useState('');
-  const [logradouro, setLogradouro] = useState('');
   const [cep, setCep] = useState('');
   const [number, setNumber] = useState('');
   const [complemento, setComplemento] = useState('');
@@ -34,11 +34,16 @@ const ClientRegistration = () => {
   const [modalIsOpen, setIsOpen] = useState(false);
   const [terms, setTerms] = useState(false);
   const [moreCateg, setMoreCateg] = useState(false);  
-  const dispatch = useDispatch();
+  const [cat1, setCat1]= useState('');  
+  const [cat2, setCat2]= useState(''); 
+  const [price1, setPrice1]=  useState('');
+  const [price2, setPrice2]=  useState(''); 
+  const [categ1, setTrataCate1] = useState('');
+  const [categ2, setTrataCate2] = useState('');
+const [newUser, setNewUser] = useState(false);
 
-
-  const categorias= ['Babá',' Babá por turno', 'Costura', 'Diarista', 'Manutenção Elétrica',
-  'Manutenção Hidraulica', 'Pequenos Reparos','Pintora']
+  const categorias= ['Babá','Babá por turno', 'Costura', 'Diarista', 'Manutenção Elétrica',
+  'Manutenção Hidraulica', 'Pequenos Reparos','Pintora', 'Higiene Pessoal']
 
   const customStyles = {
     content: {
@@ -57,33 +62,42 @@ const ClientRegistration = () => {
 
   function handleForm() {
     setEnterPageLogin(true);
-    dispatch({
-      type: 'ENTER_PAGE_LOGIN',
-      enterPageLogin
-    })
+   
   }
 
-  function registerName() {
-    //(save)
-    dispatch({
-      type: 'NEW_CLIENT_REGISTER',
-      firstName: firstName,
-      email: email,
-      pass: confirmPassword,
-      endereco: [
-        {
-          uf: uf,
-          cep: cep,
-          complemento: complemento,
-          logradouro: logradouro,
-          cidade: city,
-          bairro: bairro,
-          numero: number,
-        }]
-      ,
-      cliente: true,
+  let categ = ''
+  const TrataCategoria = (categoria) => {
+    switch(categoria){
+    case 'Manutenção Elétrica':
+       categ= 'MANUTENCAO_ELETRICA'
+       break
+      case 'Manutenção Hidraulica':
+        categ ='MANUTENCAO_HIDRAULICA'
+      break
+      case 'Diarista':
+        categ ='DIARISTA'
+      break
+      case 'Babá':
+        categ ='BABA'
+      break
+      case 'Babá por turno':
+        categ ='BABA_POR_TURNO'
+      break
+      case 'Pintora':
+        categ ='PINTORA'
+      break
+      case 'Costura':
+        categ ='COSTURA'
+      break
+      case 'Pequenos Reparos':
+        categ ='PEQUENOS_REPAROS'
+        break 
+      case 'Higiene Pessoal':
+        categ ='HIGIENE_PESSOAL'
+        break 
+      default: categ = ''; 
+    }
 
-    });
   }
 
   // método para verificar se nome já existe?
@@ -233,6 +247,31 @@ const ClientRegistration = () => {
     )
   }
 
+  function handleCategoria1(e) {
+    e.preventDefault();
+    TrataCategoria(e.target.value);
+    setCat1(e.target.value);
+    setTrataCate1(categ);
+  }
+
+  function handleCategoria2(e) {
+    e.preventDefault()
+    TrataCategoria(e.target.value)
+    setCat2(e.target.value);
+    setTrataCate2(categ);
+  }
+
+
+  function handlePrice1(e) {
+    e.preventDefault();
+    setPrice1(e.target.value);
+  }
+  function handlePrice2(e) {
+    e.preventDefault();
+    setPrice2(e.target.value);
+  }
+
+
   function openModal() {
     setIsOpen(true);
   }
@@ -240,6 +279,58 @@ const ClientRegistration = () => {
   function closeModal() {
     setIsOpen(false);
   }
+
+  function handleRegister() {
+    const body = {
+      nome: firstName,
+      userId: email,
+      pass: confirmPassword,
+      email: email,
+      telefone:phone,
+      enderecos: [
+        {
+          uf: uf,
+          cep:cep, 
+          complemento: complemento,
+          logradouro: bairro,
+          cidade: city,
+          bairro: bairro,
+          numero: Number(number)
+        }
+      ],
+      categorias : [{
+        categoria: categ1,
+        valor: Number(price1),
+        },
+        {
+        categoria:categ2,
+        valor: Number(price2),
+        }],
+        client: client   	
+
+  }
+  console.error(body);
+  const options = {
+    method: 'POST',
+    headers: {
+    'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(body),
+    }
+    fetch('http://whm.joao1866.c41.integrator.host:9206/usuario', options).
+      then(data => {
+        if (!data.ok) {
+          throw Error(data.status);
+         }
+         else (
+          setNewUser(true)
+         )
+         return console.error(data.json());         
+    }).catch(e => {
+      console.log(e);
+      });
+}
+
 
 
   useEffect(() => {
@@ -290,7 +381,16 @@ const ClientRegistration = () => {
 
 
         {terms ?
-          < ButtonModal> CADASTRAR </ ButtonModal> : < ButtonModal onClick={closeModal}> SAIR </ ButtonModal>
+          < ButtonModal onClick={handleRegister}> CADASTRAR </ ButtonModal> : < ButtonModal onClick={closeModal}> SAIR </ ButtonModal>
+        }
+        <br /> 
+        
+        {newUser?
+        <ButtonModal
+        type="button"
+        > Fazer meu login
+        {newUser === true ? <Navigate to='/login'/> : ''}
+        </ButtonModal>  : ''
         }
       </Modal>
       <DivText>
@@ -309,7 +409,6 @@ const ClientRegistration = () => {
           type="text"
           name="firstName"
           onChange={handleFirstName}
-          onBlur={registerName}
           placeholder="Nome"
           maxLength="100"
   
@@ -396,8 +495,8 @@ const ClientRegistration = () => {
           name="cep"
           onChange={handleCep}
           placeholder="CEP"
-          maxLength={8}
-          minLength={8}
+          maxLength={20}
+          minLength={20}
         />
 
         <InputForText
@@ -448,8 +547,8 @@ const ClientRegistration = () => {
        <SelectedForCity
             id='inputCategoria'
             name="categoria"
-            onChange={handleUf}
-            value={uf}>
+            onChange={handleCategoria1}
+            value={cat1}>
             {categorias.map(categoria => (
               <option key={categoria} value={categoria}>
                 {categoria}
@@ -463,6 +562,7 @@ const ClientRegistration = () => {
           name="telefone"
           placeholder="R$"
           maxLength="100"
+          onChange={handlePrice1}
         />
         
     </DivPrestadora>
@@ -483,8 +583,8 @@ const ClientRegistration = () => {
        <SelectedForCity
             id='inputCategoria'
             name="categoria"
-            onChange={handleUf}
-            value={uf}>
+            onChange={handleCategoria2}
+            value={cat2}>
             {categorias.map(categoria => (
               <option key={categoria} value={categoria}>
                 {categoria}
@@ -498,6 +598,7 @@ const ClientRegistration = () => {
           name="telefone"
           placeholder="R$"
           maxLength="100"
+          onChange={handlePrice2}
         />       
       
  
