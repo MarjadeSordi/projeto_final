@@ -30,7 +30,7 @@ color: #f6f4e6;
 `
 
 export const TitleForServiceTop = styled.h1`
-margin-top: 4%; 
+margin-top: 5%; 
 color: #f6f4e6;
 text-transform: uppercase;
 font-weight: 500;
@@ -68,4 +68,19 @@ width: 8%;
 border: transparent; 
 color:black; 
 font-size: 20px; 
+`
+
+
+export const DivText= styled.div`
+color: #f6f4e6;
+font-size: 1.2em;
+text-transform: uppercase;
+font-weight: 500;
+
+
+`
+
+export const ImgNot = styled.img`
+margin-top: 10%; 
+width: 10%; 
 `
