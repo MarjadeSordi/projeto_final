@@ -1,11 +1,11 @@
 import React from 'react';
 import ServicesWithoutLogin from '../../components/servicesWithoutLogin';
 
-const ClientDashboardWithoutEmail = () =>{
+const ClientDashboardWithoutLogin = () =>{
     return(
         <>
         <ServicesWithoutLogin /></>
     )
 }
 
-export default ClientDashboardWithoutEmail; 
+export default ClientDashboardWithoutLogin; 
