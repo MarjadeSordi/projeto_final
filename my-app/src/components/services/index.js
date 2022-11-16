@@ -9,21 +9,26 @@ import MenuPage from '../menu';
 
 const Services = () =>{
     const [serviceState, setServiceState] = useState([]);
+    const [value, setValue] =  useState()
 
+    function setFilter(e) {
+      e.preventDefault();
+      setValue(e.target.value);
+    }
 
-    const SetServices = async () => {
-        let url = 'http://whm.joao1866.c41.integrator.host:9206/usuarios?tipo=PRESTADOR';
-        try {
-          const responseServices = await fetch(url);
-          const jsonService= await responseServices.json();
-          jsonService.filter((item) => item.categorias)
-          jsonService.sort((a, b) => a.nome.localeCompare(b.nome));
-          setServiceState(jsonService);
-          console.error(serviceState)
-        } catch (error) {
-          console.error(error);
-        }
-      };
+    async function SetServices() {
+    let url = 'http://whm.joao1866.c41.integrator.host:9206/usuarios?tipo=PRESTADOR';
+    try {
+      const responseServices = await fetch(url);
+      const jsonService = await responseServices.json();
+      jsonService.filter((item) => item.categorias);
+      jsonService.sort((a, b) => a.nome.localeCompare(b.nome));
+      setServiceState(jsonService);
+      console.error(serviceState);
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
 
       let categ = ''
@@ -60,7 +65,10 @@ const Services = () =>{
        <SearchBoxService 
        type='search'
        name='serch-service'
-       placeholder='Buscar'/>
+       placeholder='Buscar'
+       value={value}
+       onChange={setFilter}
+       />
        <ButtonSearch ><AiOutlineSearch />  </ButtonSearch>
        </LabelSerchBoxService>
        </DivAlignItems>
