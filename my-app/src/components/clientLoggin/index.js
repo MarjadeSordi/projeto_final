@@ -4,8 +4,9 @@ import { useDispatch } from 'react-redux';
 import { useUserContext } from '../../context/userContext';
 import {  InputForEmail, InputForPassWord, FormForClient, InputButton, DivCapsule, DivText } from './style';
 import MenuPage from '../menu';
+
 const ClientLoggin = () => {
-    const { signInUser, forgotPassword } = useUserContext();
+    const { signInUser, forgotPassword, logoutUser} = useUserContext();
     const [email, setEmail] = useState('');
     const [password, setPassWord] = useState('');
     const [errors, setError] = useState(false);
@@ -41,8 +42,12 @@ const ClientLoggin = () => {
       }
 
     const handleForm = () => {
-      signInUser(email,password)
+      signInUser(email,password)    
     };
+
+    const handleFormtwo = () => {
+      logoutUser();
+    }
 
     return(    
 <DivCapsule>
@@ -77,7 +82,13 @@ const ClientLoggin = () => {
         value="ENVIAR"
         onClick={handleForm}> Enviar
         {login === true ? <Navigate to='/dashboard'/> : ''}
-        </InputButton>    
+        </InputButton>   
+
+          <InputButton
+        type="button"
+        value="LOGOUT"
+        onClick={handleFormtwo}> LOGOUT
+           </InputButton>  
 
     </FormForClient> 
     </DivCapsule>
