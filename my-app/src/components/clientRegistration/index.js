@@ -281,6 +281,20 @@ const [newUser, setNewUser] = useState(false);
   }
 
   function handleRegister() {
+    const cat2 = [{
+      categoria: categ1,
+      valor: Number(price1),
+    },{
+      categoria: categ2,
+      valor: Number(price2),
+    }]
+    
+    const cat1 =[ {
+      categoria: categ1,
+      valor: Number(price1),
+    }]
+
+    const categorias = categ2 !== '' ? cat2 : cat1;
     const body = {
       nome: firstName,
       userId: email,
@@ -298,14 +312,7 @@ const [newUser, setNewUser] = useState(false);
           numero: Number(number)
         }
       ],
-      categorias : [{
-        categoria: categ1,
-        valor: Number(price1),
-        },
-        {
-        categoria:categ2,
-        valor: Number(price2),
-        }],
+      categorias,
         client: client   	
 
   }

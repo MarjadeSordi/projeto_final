@@ -12,6 +12,8 @@ display: flex;
 margin-top: 20px;
 flex-direction: row;
 padding: 10px; 
+width: 100%; 
+flex-wrap: wrap;
 `
 
 
@@ -22,6 +24,7 @@ border: 2px solid rgb(216, 2, 134);
 margin: 10px;
 padding: 5px;
 border-radius: 0px; 
+
 `
 
 export const TitleForService = styled.h2`
