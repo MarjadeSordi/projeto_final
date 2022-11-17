@@ -11,7 +11,8 @@ const GlobalStyle = createGlobalStyle`
     font-family: 'Roboto Condensed', sans-serif;
     font-weight: 300px;
     text-rendering: optimizeLegibility;
-}
+    background-color: #363636;
+  },
 `;
 
 export default GlobalStyle;
