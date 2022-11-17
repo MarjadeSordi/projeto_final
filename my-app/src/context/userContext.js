@@ -17,7 +17,7 @@ export const useUserContext = () => useContext(UserContext);
 
 export const UserContextProvider = ({ children }) => {
 	const [user, setUser] = useState(null);
-	const [serverUser, setServerUser] = useState(null);
+	const [awsUser, setAwsUser] = useState(null);
 	const [photo, setPhoto] = useState(null);
 	const [loading, setLoading] = useState(false);
 	const [photoURL, setPhotoURL] = useState(
@@ -51,8 +51,7 @@ export const UserContextProvider = ({ children }) => {
 	}
 
 	function handleClick() {
-		console.log("handleClick")
-		//upload(photo, user, setLoading);
+		upload(photo, user, setLoading);
 	}
 
 	useEffect(() => {
@@ -72,75 +71,50 @@ export const UserContextProvider = ({ children }) => {
 		return unsubscribe;
 	}, []);
 
-	function registerUser (user) {
-		console.log(user);
+	const registerUser = (email, firstName, lastName, password, role) => {
+		///
+		let fullName = firstName + " " + lastName
 		setLoading(true);
-		createUserWithEmailAndPassword(auth, user.email, user.pass)
+		createUserWithEmailAndPassword(auth, email, password)
 			.then((res) => {
 				updateProfile(auth.currentUser, {
-					displayName: user.nome,
+					displayName: fullName,
 				});
 				setUser(res.user);
-				user.userId = res.user.uid;
-				doRegisterBackEnd(user)
+				doRegisterAWS(res.user.uid, res.user.email, firstName, lastName, role)
 			})
 			.catch((err) => setError(err.message))
 			.finally(() => setLoading(false));
 	};
 
 	const signInUser = (email, password) => {
-		console.log("signInUser")
 		setLoading(true);
 		signInWithEmailAndPassword(auth, email, password)
-		.then(async (res) => {
-			console.log(res.user);
-			let userLogado = res.user;
-			setUser(res.user);
-			let result = await fetchUser(userLogado.email).catch(error => console.error(error));
-			if (result)
-				setServerUser(result);
-			 else {
-				let userInsert = {
-					nome: userLogado.displayName,
-					pass: 'nenhuma senha',
-					userId: userLogado.uid,
-					email: userLogado.email,
-					cliente: true
-				};
-					result = doRegisterBackEnd(userInsert)
-									.then((result)=>
-									{
-										if(result != null)
-										setServerUser(result)
-									})
-									.catch((err)=>setError(err.message));
-				}
-			}
-		).finally(() => setLoading(false));
+			.then((res) => {
+				console.log(res)
+				fetchUser(res.user.email)
+				window.location.href = '/dashboard';
+			})
+			.catch((err) => setError(err.message))
+			.finally(() => setLoading(false));
 	};
 
-	async function fetchUser(email) {
-		console.log("fetchUser");
-		let result = await fetch(`http://whm.joao1866.c41.integrator.host:9206/usuario?email=${email}`)
-		.catch(error => console.error(error));
-			   if (result.ok)
-				 return result;
-			   else
-			   return null;
-	   }
+	function fetchUser(email) {
+		fetch(`http://whm.joao1866.c41.integrator.host:9206/usuario?email=${email}`,{ mode: 'no-cors'}) 
+		.then(
+		  (result) => {
+			console.log(result);
+			this.setUser(result);
+		  },
+		  (error) => {
+			console.error(error)
+		  }
+		)
+	}
 
-	async function doRegisterBackEnd(user) {
-		console.log("registrar " + JSON.stringify(user));
-		const requestOptions = {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify(user)
-		};
-		let result = await fetch(`http://whm.joao1866.c41.integrator.host:9206/usuario`,requestOptions) 
-		.catch(error => console.error(error));
-			   if (result.ok)
-			return result;
-			else return null;
+
+	function doRegisterAWS(userRemoteId, email, firstName, lastName, role) {
+		console.log("registrar")
 	}
 
 	const logoutUser = () => {
@@ -155,7 +129,7 @@ export const UserContextProvider = ({ children }) => {
 
 	const contextValue = {
 		user,
-		serverUser,
+		awsUser,
 		photoURL,
 		setPhoto,
 		fetchUser,
@@ -172,4 +146,3 @@ export const UserContextProvider = ({ children }) => {
 		<UserContext.Provider value={contextValue}>{children}</UserContext.Provider>
 	);
 };
-

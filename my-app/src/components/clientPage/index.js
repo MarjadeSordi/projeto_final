@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {ImgFirstPageStyle,Container, CalendarContainer } from './style';
+import {DivCapsule} from './style';
 import WeekCalendar from "react-week-calendar";
 import { useLocation } from "react-router-dom";
 import { auth } from "../../context/firebase";
@@ -17,59 +17,59 @@ const ClientPage = () =>{
     let [uid, setUid] = useState(0);
 
     useEffect(() => {
-        console.log(auth);
-        console.log(auth._currentUser);
+        console.log(auth._currentUser.uid);
         const queryParams = new URLSearchParams(location.search);
         console.log(queryParams);
         const userId = queryParams.get("id");
         const servicoId = queryParams.get("servico");
         setUserId(userId);
         setServico(servicoId);
-        getUserByUid(auth._currentUser.toJSON().uuid);
+        getUserByEmail(auth._currentUser.email);
     }, []);
 
 
     
     useEffect(() => {
-        if (userId) {
+        if (userId && user == null) {
             getUserById(userId);
             getRequisicoesByUserId(userId);
         }
     }, [user, userId]);
 
-    const getUserByUid = (userId) => {
-		console.log("getUserByUid " + userId);
-		fetch("http://whm.joao1866.c41.integrator.host:9206/usuario?userId=" + userId,{ mode: 'no-cors'})
-			.then(({ data }) => {
-				setUserRequisitante(data);
-				console.log(data);
-			})
-			.catch((error) => {
-				console.error("error", error);
-			});
+    const getUserByEmail = async (userId) => {
+		console.log("getUserByEmail " + userId);
+        let url = "http://whm.joao1866.c41.integrator.host:9206/usuario?email=" + userId;
+		try {
+            const responseServices = await fetch(url);
+            const jsonService = await responseServices.json();
+				setUserRequisitante(jsonService);
+            } catch (error) {
+                console.error(error);
+              }
 	};
 
-    const getUserById = (userId) => {
+    const getUserById = async (userId) => {
 		console.log("getUserById " + userId);
-		fetch("http://whm.joao1866.c41.integrator.host:9206/usuario?id=" + userId,{ mode: 'no-cors'})
-			.then(({ data }) => {
-				setUser(data);
-				console.log(data);
-			})
-			.catch((error) => {
-				console.error("error", error);
-			});
+        let url = "http://whm.joao1866.c41.integrator.host:9206/usuario?id=" + userId;
+        try {
+            const responseServices = await fetch(url);
+            const jsonService = await responseServices.json();
+				setUser(jsonService);
+            } catch (error) {
+                console.error(error);
+              }
 	};
 
-	const getRequisicoesByUserId = (userId) => {
-		fetch("http://whm.joao1866.c41.integrator.host:9206/solicitacao?userRequisitadoId=" + userId,{ mode: 'no-cors'})
-			.then((res) => {
-				console.log("getRequisicoesByUserId " + userId);
-				parseService(res);
-			})
-			.catch((e) => {
-				console.error(e);
-			});
+	const getRequisicoesByUserId = async (userId) => {
+        console.log("getRequisicoesByUserId " + userId);
+        let url = "http://whm.joao1866.c41.integrator.host:9206/solicitacao?userRequisitadoId=" + userId;
+        try {
+            const responseServices = await fetch(url);
+            const jsonService = await responseServices.json();
+				parseService(jsonService);
+            } catch (error) {
+                console.error(error);
+              }
 	};
 
 	const parseService = (requisicoes = []) => {
@@ -185,15 +185,42 @@ const ClientPage = () =>{
 					console.error("error", error);
 				});
 		};
+        render() {
+			const { value, start, end } = this.props;
+			return (
+				<div className="customModal">
+					<div className="customModal__text">
+						{`Das ${start.format("HH:mm")} {as ${end.format("HH:mm")}`}
+					</div>
+					<input
+						ref={(el) => {
+							this.input = el;
+						}}
+						className="customModal__input"
+						type="text"
+						placeholder="Observação (Opcional)"
+						defaultValue={value}
+						size="90"
+						width="50%"
+						height="30%"
+					/>
+					<button
+						className="customModal__button customModal__button_float_right"
+						onClick={this.handleSave}
+					>
+						Enviar Solicitação
+					</button>
+				</div>
+			);
+		}
+	
     }
     return (
 		<>
 			{}
-			<Container>
-				{}
 				<h3>Consulte os horários disponível para o usuário</h3>
-				<CalendarContainer>
-					<WeekCalendar
+                <DivCapsule>
+                    <WeekCalendar
 						numberOfDays={7}
 						dayFormat={"DD/MM"}
 						scaleUnit={60}
@@ -201,8 +228,7 @@ const ClientPage = () =>{
 						selectedIntervals={requisicoes}
 						modalComponent={ModalCalendar}
 					></WeekCalendar>
-				</CalendarContainer>
-			</Container>
+                    </DivCapsule>
 		</>
 	);
 }
