@@ -5,13 +5,10 @@ import ClientDashboard from './routes/clientDashboard';
 import ClientRequisicao from './routes/clientRequisicao';
 import { UserContextProvider } from "./context/userContext";
 import ClientLoginPage from "./routes/clientLogin";
-<<<<<<< HEAD
 import { PrivateRouter } from "./context/privateRouter";
-=======
 import ClientRegister from "./routes/clientCadastro";
 import { auth } from "./context/firebase";
 import ClientDashboardWithoutLogin from './routes/clientDashboardWithoutLogin';
->>>>>>> main
 
 export default function Routess() {
 	const [user, setUser] = useState('');
@@ -35,19 +32,6 @@ export default function Routess() {
 	  }, []);
 
 	return (
-<<<<<<< HEAD
-<UserContextProvider>
-	<BrowserRouter>
-    	<Routes>
- 	    	<Route path="/" element={<ClientWelcome/>} />
-			 <Route path="/dashboard"  element={<PrivateRouter />}>
-						<Route path="/dashboard" element={<ClientDashboard />} />
-			</Route>
-   			<Route path="/login" element={<ClientLoginPage/>} />
-    	</Routes>
-	</BrowserRouter>
-</UserContextProvider>
-=======
 		<UserContextProvider>
 			<BrowserRouter>
 				<Routes>
@@ -59,6 +43,5 @@ export default function Routess() {
 				</Routes>
 			</BrowserRouter>
 		</UserContextProvider>
->>>>>>> main
 	);
 }
