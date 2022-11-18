@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {DivCapsule} from './style';
+import ClientEndereco from '../clientEndereco'
 import WeekCalendar from "react-week-calendar";
 import { useLocation } from "react-router-dom";
 import { auth } from "../../context/firebase";
@@ -10,6 +11,7 @@ const ClientPage = () =>{
     const location = useLocation();
     let [userId, setUserId] = useState(null);
 	let [user, setUser] = useState(null);
+    let [selecionado, setSelecionado] = useState(null);
     let [servico, setServico] = useState(null);
     let [userRequisitante, setUserRequisitante] = useState(null);
 	let [requisicoes, setRequisicoes] = useState([]);
@@ -35,6 +37,11 @@ const ClientPage = () =>{
             getRequisicoesByUserId(userId);
         }
     }, [user, userId]);
+
+    const handleChange = (value) => {
+        console.log(value);
+        setSelecionado(value);
+    }
 
     const getUserByEmail = async (userId) => {
 		console.log("getUserByEmail " + userId);
@@ -134,6 +141,8 @@ const ClientPage = () =>{
 			});
 		};
 
+        
+
 		render() {
 			return (
 				<WeekCalendar
@@ -152,6 +161,7 @@ const ClientPage = () =>{
 	}
 
 	class ModalCalendar extends React.Component {
+
 		handleSave = () => {
 			console.log(this);
 			let { value } = this.input;
@@ -168,6 +178,7 @@ const ClientPage = () =>{
 				inicio: formattedStart,
 				fim: formatedEnd,
 				categoria: servico,
+                status: 'AGENDADO'
 			};
             const options = {
                 method: 'POST',
@@ -187,23 +198,27 @@ const ClientPage = () =>{
 		};
         render() {
 			const { value, start, end } = this.props;
+
 			return (
 				<div className="customModal">
 					<div className="customModal__text">
-						{`Das ${start.format("HH:mm")} {as ${end.format("HH:mm")}`}
+						{`Das ${start.format("HH:mm")} as ${end.format("HH:mm")}`}
 					</div>
-					<input
-						ref={(el) => {
+					{ userRequisitante.enderecos.length > 0 &&
+                            <select name={"selecione"} value={""} onChange={handleChange}>
+                                    { (userRequisitante.enderecos).map((endereco) =><>
+                                        <option value={endereco.id}>{endereco.cidade} - {endereco.bairro} - {endereco.endereco}</option>
+                                    </>)
+                                    }
+                                </select>
+                                }
+                    {
+                        userRequisitante.enderecos.length == 0 && <ClientEndereco usuario={userRequisitante} ></ClientEndereco>
+                    }
+                    <input ref={(el) => {
 							this.input = el;
 						}}
-						className="customModal__input"
-						type="text"
-						placeholder="Observação (Opcional)"
-						defaultValue={value}
-						size="90"
-						width="50%"
-						height="30%"
-					/>
+                        type="hidden"  value={userRequisitante.nome}/>
 					<button
 						className="customModal__button customModal__button_float_right"
 						onClick={this.handleSave}
