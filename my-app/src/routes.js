@@ -7,6 +7,8 @@ import ClientLoginPage from "./routes/clientLogin";
 import ClientRegister from "./routes/clientCadastro";
 import { auth } from "./context/firebase";
 import ClientDashboardWithoutLogin from './routes/clientDashboardWithoutLogin';
+import ProviderDetails from './components/providerDetails';
+
 
 export default function Routess() {
 	const [user, setUser] = useState('');
@@ -33,9 +35,11 @@ export default function Routess() {
 		<UserContextProvider>
 			<BrowserRouter>
 				<Routes>
+			
 					<Route path="/" element={<ClientWelcome />} />				
 					<Route path="/login" element={<ClientLoginPage />} />
 					{logado ?<Route path="/dashboard" element={<ClientDashboard />} /> : <Route path="/dashboard" element={<ClientDashboardWithoutLogin />} />}
+					<Route path="/prestadora/:id" element={<ProviderDetails />} />
 					<Route path="/cadastro" element={<ClientRegister />} />
 				</Routes>
 			</BrowserRouter>

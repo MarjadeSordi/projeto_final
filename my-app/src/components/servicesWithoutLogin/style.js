@@ -52,7 +52,6 @@ background-color: transparent;
 color: black; 
 height: 30px; 
 width:90%;
-border-radius: 4px;
 `
 export const LabelSerchBoxService = styled.div `
 background-color: transparent;
