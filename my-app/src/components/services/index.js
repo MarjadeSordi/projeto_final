@@ -4,12 +4,12 @@ import { BoxForService, ButtonSearch, CapsuleForService,
   CapsuleForBoxes, DivAlignItems, LabelSerchBoxService, SearchBoxService, TextForService ,TitleForService, TitleForServiceTop } from './style';
 import { AiOutlineSearch, AiOutlineWhatsApp } from "react-icons/ai";
 import MenuPage from '../menu';
-
+import { Link } from 'react-router-dom';
 
 
 const Services = () =>{
     const [serviceState, setServiceState] = useState([]);
-    const [value, setValue] =  useState()
+    const [value, setValue] =  useState();
 
     function setFilter(e) {
       e.preventDefault();
@@ -69,9 +69,6 @@ const Services = () =>{
       
 
       useEffect(() => {
-
-        console.log(auth);
-        console.log(auth.currentUser);
         SetServices();
       }, []);
 
@@ -96,7 +93,7 @@ const Services = () =>{
      
        <CapsuleForBoxes> 
         {serviceState.map((item) =>  
-       <BoxForService>
+       <BoxForService key={item.id} >
         {(item.categorias).map((categoria) =><>
         <TitleForService>
             {TrataCategoria(categoria.categoria)} 
@@ -113,6 +110,7 @@ const Services = () =>{
             <br /> {endereco.cidade} | {endereco.uf} | {endereco.bairro}
          </TextForService> 
          <TextForService> <br /> <AiOutlineWhatsApp /> {item.phone} </TextForService>
+         <TextForService> <Link to={`/prestadora/${item.id}`}> Saiba mais + </Link></TextForService>
          </>)}    
          <br />  
         

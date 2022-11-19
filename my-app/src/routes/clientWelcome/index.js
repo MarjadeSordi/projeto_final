@@ -24,9 +24,9 @@ const ClientWelcome = () =>{
         </Link>
         </DivTextIntro>
         <ImagemFirstPage /> 
-      
-        </BodyPage>  
-        @Copyright Marja de Sordi
+         
+         </BodyPage>  
+     
           </>
     )
 }

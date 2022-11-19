@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const BodyPage = styled.body` 
+export const BodyPage = styled.div` 
 background-color: #2d3436;
 background-image: linear-gradient(315deg, #2d3436 0%, #000000 74%);
 `

@@ -3,13 +3,13 @@ import styled from 'styled-components';
 export const DivCapsule = styled.div`
 color: #f6f4e6;
 width: 100%;
-height: 100vh;
 display: flex;
 flex-direction: column; 
 justify-content: center;
 align-items: center;
 background-color: #2d3436;
 background-image: linear-gradient(315deg, #2d3436 0%, #000000 74%);
+height: 100vh;
 `
 
 export const InputForText = styled.input`
