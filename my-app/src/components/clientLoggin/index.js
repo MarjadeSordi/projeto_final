@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import {Route, Link} from 'react-router-dom'
+import React, { useState } from 'react';
+import {Navigate} from 'react-router-dom'; 
 import { useDispatch } from 'react-redux';
 import { useUserContext } from '../../context/userContext';
 import {  InputForEmail, InputForPassWord, FormForClient, InputButton, DivCapsule, DivText } from './style';
 import MenuPage from '../menu';
 
 const ClientLoggin = () => {
-    const { signInUser, forgotPassword } = useUserContext();
+    const { signInUser, forgotPassword, logoutUser} = useUserContext();
     const [email, setEmail] = useState('');
     const [password, setPassWord] = useState('');
     const [errors, setError] = useState(false);
@@ -22,7 +22,7 @@ const ClientLoggin = () => {
         setPassWord(e.target.value);
       }
 
-      async function handleEmail(e) {
+    function handleEmail(e) {
         e.preventDefault();
         setEmail(e.target.value);
         if (email.indexOf('@') > 0) {

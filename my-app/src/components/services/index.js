@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { auth } from "../../context/firebase";
 import { BoxForService, ButtonSearch, CapsuleForService, 
   CapsuleForBoxes, DivAlignItems, LabelSerchBoxService, SearchBoxService, TextForService ,TitleForService, TitleForServiceTop } from './style';
@@ -102,6 +103,7 @@ const Services = () =>{
          </TitleForService> 
          <TextForService> Valor por hora: {`R$ ${(categoria.valor).toString().replace(".", ",")}0`} </TextForService>
          <br /> 
+         <Link to={`/requisicao?id=${item.id}&servico=${categoria.categoria}`} style={{ textDecoration: 'none', color: '#FFF' }} > Requisitar! </Link>
          </>)}    
          <br />  
          <TextForService> Prestadora: {item.nome}</TextForService>
@@ -113,7 +115,6 @@ const Services = () =>{
          <TextForService> <Link to={`/prestadora/${item.id}`}> Saiba mais + </Link></TextForService>
          </>)}    
          <br />  
-        
          </BoxForService>)}
     
 

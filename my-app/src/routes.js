@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route, Redirect } from "react-router-dom";
 import ClientWelcome from './routes/clientWelcome';
 import ClientDashboard from './routes/clientDashboard';
+import ClientRequisicao from './routes/clientRequisicao';
 import { UserContextProvider } from "./context/userContext";
 import ClientLoginPage from "./routes/clientLogin";
 import ClientRegister from "./routes/clientCadastro";

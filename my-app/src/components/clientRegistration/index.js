@@ -208,7 +208,7 @@ const [newUser, setNewUser] = useState(false);
     setComplemento(e.target.value);
   }
 
-  async function handleEmail(e) {
+  function handleEmail(e) {
     e.preventDefault();
     setEmail(e.target.value);
     if (email.indexOf('@') > 0) {
@@ -238,6 +238,21 @@ const [newUser, setNewUser] = useState(false);
       )
   }
 
+  function handleUserId(e) {
+    e.preventDefault();
+    handleUserId(e.target.value);
+    fetch(`http://whm.joao1866.c41.integrator.host:9206/usuario?userId=${userId}`, { mode: 'no-cors' })
+      .then(res => res.json())
+      .then(
+        (result) => {
+          this.setExists(true);
+        },
+        (error) => {
+          console.error(error)
+          this.setError(error);
+        }
+      )
+  }
 
   function handlePhone(e) {
     e.preventDefault();
