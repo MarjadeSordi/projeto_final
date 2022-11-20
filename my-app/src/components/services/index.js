@@ -1,26 +1,34 @@
 import React, { useState, useEffect } from 'react';
+import { auth } from "../../context/firebase";
 import { BoxForService, ButtonSearch, CapsuleForService, 
   CapsuleForBoxes, DivAlignItems, LabelSerchBoxService, SearchBoxService, TextForService ,TitleForService, TitleForServiceTop } from './style';
 import { AiOutlineSearch, AiOutlineWhatsApp } from "react-icons/ai";
-
+import MenuPage from '../menu';
+import { Link } from 'react-router-dom';
 
 
 const Services = () =>{
     const [serviceState, setServiceState] = useState([]);
+    const [value, setValue] =  useState();
 
+    function setFilter(e) {
+      e.preventDefault();
+      setValue(e.target.value);
+    }
 
-    const SetServices = async () => {
-        let url = 'http://whm.joao1866.c41.integrator.host:9206/usuarios';
-        try {
-          const responseServices = await fetch(url);
-          const jsonService= await responseServices.json();
-          jsonService.sort((a, b) => a.nome.localeCompare(b.nome));
-          setServiceState(jsonService);
-          console.error(serviceState)
-        } catch (error) {
-          console.error(error);
-        }
-      };
+    async function SetServices() {
+    let url = 'http://whm.joao1866.c41.integrator.host:9206/usuarios?tipo=PRESTADOR';
+    try {
+      const responseServices = await fetch(url);
+      const jsonService = await responseServices.json();
+      jsonService.filter((item) => item.categorias);
+      jsonService.sort((a, b) => a.nome.localeCompare(b.nome));
+      setServiceState(jsonService);
+      console.error(serviceState);
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
 
       let categ = ''
@@ -31,6 +39,27 @@ const Services = () =>{
            break
           case 'MANUTENCAO_HIDRAULICA':
             categ ='Manutenção Hidraúlica'
+          break
+          case  'DIARISTA':
+            categ ='Diarista'
+          break
+          case 'BABA':
+            categ ='Babá'
+          break
+          case 'BABA_POR_TURNO':
+            categ ='Babá por turno'
+          break
+          case 'PINTORA':
+            categ ='Pintora'
+          break
+          case 'PEQUENOS_REPAROS':
+            categ ='Pequenos reparos'
+          break
+          case 'COSTURA':
+            categ ='Costura'
+          break
+          case 'HIGIENE_PESSOAL':
+            categ ='Higiene Pessoal'
           break
           default: categ = ''; 
         }
@@ -46,6 +75,7 @@ const Services = () =>{
     return(
         <>
        <CapsuleForService>
+        <MenuPage /> 
       <DivAlignItems>
        <TitleForServiceTop > Serviços </TitleForServiceTop>
        <br />
@@ -53,14 +83,17 @@ const Services = () =>{
        <SearchBoxService 
        type='search'
        name='serch-service'
-       placeholder='Buscar'/>
+       placeholder='Buscar'
+       value={value}
+       onChange={setFilter}
+       />
        <ButtonSearch ><AiOutlineSearch />  </ButtonSearch>
        </LabelSerchBoxService>
        </DivAlignItems>
      
        <CapsuleForBoxes> 
         {serviceState.map((item) =>  
-       <BoxForService>
+       <BoxForService key={item.id} >
         {(item.categorias).map((categoria) =><>
         <TitleForService>
             {TrataCategoria(categoria.categoria)} 
@@ -77,6 +110,7 @@ const Services = () =>{
             <br /> {endereco.cidade} | {endereco.uf} | {endereco.bairro}
          </TextForService> 
          <TextForService> <br /> <AiOutlineWhatsApp /> {item.phone} </TextForService>
+         <TextForService> <Link to={`/prestadora/${item.id}`}> Saiba mais + </Link></TextForService>
          </>)}    
          <br />  
         

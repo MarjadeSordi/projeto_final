@@ -4,6 +4,7 @@ export const CapsuleForService = styled.div`
 background-color: #2d3436;
 background-image: linear-gradient(315deg, #2d3436 0%, #000000 74%)
 width: 100%;
+height: 100vh;
 `
 
 export const CapsuleForBoxes = styled.div`
@@ -11,8 +12,6 @@ display: flex;
 margin-top: 20px;
 flex-direction: row;
 padding: 10px; 
-width: 100%; 
-flex-wrap: wrap;
 `
 
 
@@ -23,7 +22,6 @@ border: 2px solid rgb(216, 2, 134);
 margin: 10px;
 padding: 5px;
 border-radius: 0px; 
-
 `
 
 export const TitleForService = styled.h2`
@@ -32,7 +30,7 @@ color: #f6f4e6;
 `
 
 export const TitleForServiceTop = styled.h1`
-margin-top: 4%; 
+margin-top: 5%; 
 color: #f6f4e6;
 text-transform: uppercase;
 font-weight: 500;
@@ -54,7 +52,6 @@ background-color: transparent;
 color: black; 
 height: 30px; 
 width:90%;
-border-radius: 4px;
 `
 export const LabelSerchBoxService = styled.div `
 background-color: transparent;
@@ -70,4 +67,19 @@ width: 8%;
 border: transparent; 
 color:black; 
 font-size: 20px; 
+`
+
+
+export const DivText= styled.div`
+color: #f6f4e6;
+font-size: 1.2em;
+text-transform: uppercase;
+font-weight: 500;
+
+
+`
+
+export const ImgNot = styled.img`
+margin-top: 10%; 
+width: 10%; 
 `

@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { Outlet, Navigate } from "react-router-dom";
+import {Route, Link} from 'react-router-dom'
 import { useDispatch } from 'react-redux';
 import { useUserContext } from '../../context/userContext';
-import {  InputForEmail, InputForPassWord, FormForClient, InputButton, CapsuleForLogin } from './style';
+import {  InputForEmail, InputForPassWord, FormForClient, InputButton, DivCapsule, DivText } from './style';
+import MenuPage from '../menu';
+
 const ClientLoggin = () => {
-    const { signInUser, forgotPassword, user } = useUserContext();
+    const { signInUser, forgotPassword } = useUserContext();
     const [email, setEmail] = useState('');
     const [password, setPassWord] = useState('');
     const [errors, setError] = useState(false);
     const [exists, setExists] = useState(false);
+    const [login, setLogin] = useState(false); 
 
  
     const dispatch = useDispatch();
@@ -33,16 +36,24 @@ const ClientLoggin = () => {
         }
       }
 
+    const handleForm = () => {
+      signInUser(email,password)    
+    };
 
-    function handleForm() {
-      console.log("handleForm " + exists);
-        signInUser(email,password)
+    const handleFormtwo = () => {
+      logoutUser();
     }
-    
 
-    return(
-      <CapsuleForLogin>
+    return(    
+<DivCapsule>
+        <MenuPage />  
       <FormForClient>
+        <DivText> 
+          Obrigada por usar o Evita!
+          <br/> 
+          Faça seu login e utilize o nosso serviço de forma segura. 
+        </DivText>
+
         <InputForEmail
         id='inputEmail'
         type="email"
@@ -65,13 +76,19 @@ const ClientLoggin = () => {
         type="button"
         value="ENVIAR"
         onClick={handleForm}> Enviar
-        </InputButton>
+        {login === true ? <Navigate to='/dashboard'/> : ''}
+        </InputButton>   
 
+          <InputButton
+        type="button"
+        value="LOGOUT"
+        onClick={handleFormtwo}> LOGOUT
+           </InputButton>  
 
-        
+    </FormForClient> 
+    </DivCapsule>
 
-    </FormForClient>
-    </CapsuleForLogin>)
+    )
 }
 
 

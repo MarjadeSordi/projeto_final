@@ -2,14 +2,18 @@ import styled , { css } from 'styled-components';
 
 
 export const DivCapsule = styled.div`
+color: #f6f4e6;
 width: 100%;
 display: flex;
 flex-direction: column; 
 justify-content: center;
 align-items: center;
+background-color: #2d3436;
+background-image: linear-gradient(315deg, #2d3436 0%, #000000 74%);
 `
 
 export const DivText = styled.div`
+margin-top: 5%;
 width: 70%;
 display: flex;
 flex-direction: row; 
@@ -100,7 +104,6 @@ export const InputCheckbox = styled.input`
 export const FormForClient = styled.form`
  background-color: #363636; 
  width: 70%; 
- box-shadow: 10px 10px 5px lightgrey;
  margin-bottom: 30px; 
 `
 
@@ -112,3 +115,39 @@ color: white
 margin: 20%`
 
 ;
+
+export const DivModal = styled.div`
+color: #fff;
+width: 100%; 
+
+`
+
+export const ButtonModal = styled.button`
+width: 20%; 
+margin-top: 10px; 
+background-color: transparent; 
+color: #FFF;
+border: 2px solid rgb(216, 2, 134);
+border-radius: 0px;
+padding: 10px 10px;
+display: inline-block;
+font-size: 14px;
+letter-spacing: 1px;
+cursor: pointer;
+box-shadow: inset 0 0 0 0 #D80286;
+-webkit-transition: ease-out 0.4s;
+-moz-transition: ease-out 0.4s;
+transition: ease-out 0.4s;
+&:hover {
+    box-shadow: inset 400px 0 0 0 #D80286;
+}
+`
+
+export const DivPrestadora = styled.div`
+display: flex;
+flex-direction: column; 
+`
+
+export const Ptext = styled.p`
+margin-left: 20px;
+`
