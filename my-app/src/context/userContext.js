@@ -112,9 +112,18 @@ export const UserContextProvider = ({ children }) => {
 		)
 	}
 
-
-	function doRegisterAWS(userRemoteId, email, firstName, lastName, role) {
-		console.log("registrar")
+	async function doRegisterBackEnd(user) {
+		console.log("registrar " + JSON.stringify(user));
+		const requestOptions = {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify(user)
+		};
+		let result = await fetch(`http://whm.joao1866.c41.integrator.host:9206/usuario`,requestOptions) 
+		.catch(error => console.error(error));
+			   if (result.ok)
+			return result;
+			else return null;
 	}
 
 	const logoutUser = () => {
@@ -146,4 +155,3 @@ export const UserContextProvider = ({ children }) => {
 		<UserContext.Provider value={contextValue}>{children}</UserContext.Provider>
 	);
 };
-

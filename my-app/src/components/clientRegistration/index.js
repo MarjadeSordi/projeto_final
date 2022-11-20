@@ -62,7 +62,28 @@ const [newUser, setNewUser] = useState(false);
 
   function handleForm() {
     setEnterPageLogin(true);
-   
+    registerUser({
+      nome: firstName,
+      email: email,
+      pass: confirmPassword,
+      endereco:[
+      {
+        uf: uf,
+        cep: cep,
+        complemento: complemento,
+        logradouro: logradouro,
+        cidade: city,
+        bairro: bairro,
+        numero: number,
+      }]
+      ,
+      cliente: true,
+
+    });
+    dispatch({
+      type: 'ENTER_PAGE_LOGIN',
+      enterPageLogin
+    })
   }
 
   let categ = ''
@@ -191,16 +212,13 @@ const [newUser, setNewUser] = useState(false);
     e.preventDefault();
     setEmail(e.target.value);
     if (email.indexOf('@') > 0) {
-      fetch(`http://whm.joao1866.c41.integrator.host:9206/usuario?email=${email}`, { mode: 'no-cors' })
-        .then(
-          (result) => {
-            this.setExists(true);
-          },
-          (error) => {
-            console.error(error)
-            this.setError(error);
-          }
-        )
+     let result = await fetch(`http://whm.joao1866.c41.integrator.host:9206/usuario?email=${email}`, { mode: 'no-cors' })
+     .catch(error => console.error(error));
+            if (result.ok) {
+              setExists(true);
+            } else {
+              setExists(false);
+            }
     }
   }
 
@@ -220,6 +238,21 @@ const [newUser, setNewUser] = useState(false);
       )
   }
 
+  function handleUserId(e) {
+    e.preventDefault();
+    handleUserId(e.target.value);
+    fetch(`http://whm.joao1866.c41.integrator.host:9206/usuario?userId=${userId}`, { mode: 'no-cors' })
+      .then(res => res.json())
+      .then(
+        (result) => {
+          this.setExists(true);
+        },
+        (error) => {
+          console.error(error)
+          this.setError(error);
+        }
+      )
+  }
 
   function handlePhone(e) {
     e.preventDefault();
@@ -421,14 +454,14 @@ const [newUser, setNewUser] = useState(false);
   
       />
 
-        <InputForEmail
-          id='inputEmail'
-          type="email"
-          name="email"
-          onChange={handleEmail}
-          placeholder="Email"
-          maxLength="100"
-        />
+      <InputForEmail
+        id='inputEmail'
+        type="email"
+        name="email"
+        onBlur={handleEmail}
+        placeholder="Email"
+        maxLength="100"
+      />
 
 
 
