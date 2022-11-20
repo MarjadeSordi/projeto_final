@@ -1,13 +1,15 @@
 import React, {useState, useEffect} from 'react';
 import { DivCapsule, DivText } from '../clientLoggin/style';
 import MenuPage from '../menu';
-import { ImageSelfie, ProfileBox, ProfileCapsule, ProfileProvider, ProfileText } from './style';
+import { ButtonModal, ImageSelfie, InputForComent, InputForText, ModalText, ProfileBox, ProfileCapsule, ProfileProvider, ProfileText } from './style';
 import selfie from '../../assets/selfie.jpg'
+import Modal from 'react-modal';
 
 const ProviderDetails = (props) =>{ 
     const [serviceProvider, setServiceProvider] = useState([]);
     const [enderecos, setEndereco] = useState([])
     const [categoria, setCategoria] = useState()
+    const [modal, setModal] = useState(false);
     const urlParams = window.location.href;
     const urlSplit = urlParams.split('/')
     const findId= Number(urlSplit[urlSplit.length - 1]);
@@ -27,6 +29,24 @@ const ProviderDetails = (props) =>{
       console.log(error);
     }
   };
+
+  const customStyles = {
+    content: {
+      top: '50%',
+      left: '50%',
+      right: 'auto',
+      bottom: 'auto',
+      marginRight: '-50%',
+      transform: 'translate(-50%, -50%)',
+      backgroundColor: '#2d3436',
+      backgroundImage: 'linear-gradient(315deg, #2d3436 0%, #000000 74%)',
+      width: '60%'
+    },
+  };
+
+  function closeModal() {
+    setModal(false);
+  }
 
 
 
@@ -69,7 +89,7 @@ const ProviderDetails = (props) =>{
           }
 
           useEffect(() => {
-            ServiceProvider();
+            ServiceProvider();       
             console.log("Isso será executado uma vez!");
           }, []);
      
@@ -77,6 +97,37 @@ const ProviderDetails = (props) =>{
  return(
  <>
 <DivCapsule>
+<Modal
+        isOpen={modal}
+        onRequestClose={closeModal}
+        style={customStyles}
+        contentLabel="Example Modal"
+      >
+        <ModalText> Olá! Fique a vontade para avaliar a {serviceProvider.nome} </ModalText>
+        <ModalText> Vamos lá, de 1 a 10 como você avalia que foi o atendimento? </ModalText>
+        <InputForText
+          id='inputNota'
+          type="number"
+          name="nota"
+    
+          placeholder="Nota"
+          maxLength={10}
+   
+        />
+
+<ModalText> Gostaria de deixar um comentário? </ModalText>
+<InputForComent
+          id='inputText'
+          type="textarea"
+          name="comentario"
+    
+          placeholder="Comentário"
+          
+   
+        />
+        <br />
+        <ButtonModal> Enviar </ButtonModal>
+      </Modal>
     <MenuPage/>
     <ProfileBox>
      <ImageSelfie src={selfie} />  
@@ -85,8 +136,16 @@ const ProviderDetails = (props) =>{
 <br/>
 Endereço: {enderecos.bairro ? enderecos.bairro : '' } | {enderecos.logradouro ? enderecos.logradouro : '' }  
 <br/>
-Serviços oferecidos:  {TrataCategoria(categoria[0].categoria)} {categ},
-{TrataCategoria(categoria[0].categoria)} {categ} <br />
+Categorias: {/*categoria.map((item) => {
+    <p> {TrataCategoria(item.categoria)} 
+      </p>
+})}{categ*/} <br />
+Contato: {serviceProvider.email}
+<br/>
+Avaliações: 
+<br/>
+
+<ButtonModal onClick={() => setModal(true)}> Avaliar </ButtonModal>
 
 
      </ProfileText> 
