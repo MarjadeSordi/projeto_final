@@ -14,5 +14,14 @@ font-size: 1.2em;
 text-transform: uppercase;
 font-weight: 500;
 display: inline-block;
-width: 200px;
+width: 15%;
+`
+
+
+export const MenuOla= styled.span`
+color: rgb(216, 2, 134);
+font-size: 1.2em;
+font-weight: 500;
+display: inline-block;
+width: 20%;
 `

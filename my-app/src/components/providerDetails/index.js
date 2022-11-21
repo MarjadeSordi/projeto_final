@@ -4,20 +4,23 @@ import MenuPage from '../menu';
 import { ButtonModal, ImageSelfie, InputForComent, InputForText, ModalText, ProfileBox, ProfileCapsule, ProfileProvider, ProfileText } from './style';
 import selfie from '../../assets/selfie.jpg'
 import Modal from 'react-modal';
+import Loading from 'react-fullscreen-loading';
 
-const ProviderDetails = (props) =>{ 
+const ProviderDetails = () =>{ 
     const [serviceProvider, setServiceProvider] = useState([]);
     const [enderecos, setEndereco] = useState([])
     const [categoria, setCategoria] = useState()
+    const [categoria2, setCategoria2] = useState()
     const [modal, setModal] = useState(false);
+    const [loading, setLoading] = useState(false);
     const urlParams = window.location.href;
     const urlSplit = urlParams.split('/')
     const findId= Number(urlSplit[urlSplit.length - 1]);
 
-   console.error(findId)
-    
+
    const ServiceProvider = async () => {
     try {
+      setLoading(true);
       const response = await fetch(`http://whm.joao1866.c41.integrator.host:9206/usuario?id=${findId}`);
       const json = await response.json();
       setServiceProvider(json);   
@@ -25,6 +28,7 @@ const ProviderDetails = (props) =>{
       const categorias = json.categorias;
       setCategoria(categorias);
       setEndereco(endereco);
+      setLoading(false);
     } catch (error) {
       console.log(error);
     }
@@ -48,10 +52,6 @@ const ProviderDetails = (props) =>{
     setModal(false);
   }
 
-
-
-      console.error(serviceProvider, 'aaah')
-      console.error(enderecos, 'INFERNOOO')
       console.error(categoria, 'INFERNOOO')
     
           let categ = ''
@@ -88,15 +88,17 @@ const ProviderDetails = (props) =>{
             }
           }
 
+      
+
           useEffect(() => {
-            ServiceProvider();       
-            console.log("Isso será executado uma vez!");
+            ServiceProvider();
           }, []);
      
           
  return(
- <>
-<DivCapsule>
+
+<>
+{loading === false? <DivCapsule>
 <Modal
         isOpen={modal}
         onRequestClose={closeModal}
@@ -108,8 +110,7 @@ const ProviderDetails = (props) =>{
         <InputForText
           id='inputNota'
           type="number"
-          name="nota"
-    
+          name="nota"    
           placeholder="Nota"
           maxLength={10}
    
@@ -119,12 +120,9 @@ const ProviderDetails = (props) =>{
 <InputForComent
           id='inputText'
           type="textarea"
-          name="comentario"
-    
-          placeholder="Comentário"
-          
-   
-        />
+          name="comentario"    
+          placeholder="Comentário"          
+           />
         <br />
         <ButtonModal> Enviar </ButtonModal>
       </Modal>
@@ -136,10 +134,13 @@ const ProviderDetails = (props) =>{
 <br/>
 Endereço: {enderecos.bairro ? enderecos.bairro : '' } | {enderecos.logradouro ? enderecos.logradouro : '' }  
 <br/>
-Categorias: {/*categoria.map((item) => {
-    <p> {TrataCategoria(item.categoria)} 
-      </p>
-})}{categ*/} <br />
+Categoria: {categoria? TrataCategoria(categoria[0].categoria) : ''} {categ} <br/> 
+Valor por hora: {categoria? `R$ ${(categoria[0].valor).toString().replace(".", ",")}0,00` : ''} <br />
+
+{categoria && categoria.length > 1 ? TrataCategoria(categoria[1].categoria) : ''} 
+Categoria: {categ} <br/> 
+Valor por hora: {categoria && categoria.length > 1 ? `R$ ${(categoria[1].valor).toString().replace(".", ",")}0,00` : ''} <br />
+
 Contato: {serviceProvider.email}
 <br/>
 Avaliações: 
@@ -151,8 +152,8 @@ Avaliações:
      </ProfileText> 
      
      </ProfileBox> 
-</DivCapsule>
-    </>
+</DivCapsule> : <Loading loading={loading} background="#2d3436" loaderColor= "rgb(216, 2, 134)"/> }
+</>
  )   
 }
 

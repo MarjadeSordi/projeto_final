@@ -60,31 +60,6 @@ const [newUser, setNewUser] = useState(false);
   };
 
 
-  function handleForm() {
-    setEnterPageLogin(true);
-    registerUser({
-      nome: firstName,
-      email: email,
-      pass: confirmPassword,
-      endereco:[
-      {
-        uf: uf,
-        cep: cep,
-        complemento: complemento,
-        logradouro: logradouro,
-        cidade: city,
-        bairro: bairro,
-        numero: number,
-      }]
-      ,
-      cliente: true,
-
-    });
-    dispatch({
-      type: 'ENTER_PAGE_LOGIN',
-      enterPageLogin
-    })
-  }
 
   let categ = ''
   const TrataCategoria = (categoria) => {
@@ -212,7 +187,7 @@ const [newUser, setNewUser] = useState(false);
     e.preventDefault();
     setEmail(e.target.value);
     if (email.indexOf('@') > 0) {
-     let result = await fetch(`http://whm.joao1866.c41.integrator.host:9206/usuario?email=${email}`, { mode: 'no-cors' })
+     let result = fetch(`http://whm.joao1866.c41.integrator.host:9206/usuario?email=${email}`, { mode: 'no-cors' })
      .catch(error => console.error(error));
             if (result.ok) {
               setExists(true);

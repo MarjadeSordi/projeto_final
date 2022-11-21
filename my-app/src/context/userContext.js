@@ -81,7 +81,7 @@ export const UserContextProvider = ({ children }) => {
 					displayName: fullName,
 				});
 				setUser(res.user);
-				doRegisterAWS(res.user.uid, res.user.email, firstName, lastName, role)
+				/*doRegisterAWS(res.user.uid, res.user.email, firstName, lastName, role)*/
 			})
 			.catch((err) => setError(err.message))
 			.finally(() => setLoading(false));
