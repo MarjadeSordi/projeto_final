@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { auth } from "../../context/firebase";
 import { BoxForService, ButtonSearch, CapsuleForService, 
   CapsuleForBoxes, DivAlignItems, LabelSerchBoxService, SearchBoxService, TextForService ,TitleForService, TitleForServiceTop } from './style';
 import { AiOutlineSearch, AiOutlineWhatsApp } from "react-icons/ai";
 import MenuPage from '../menu';
 import { Link } from 'react-router-dom';
-
+import Loading from 'react-fullscreen-loading';
 
 const Services = () =>{
+  const [loading, setLoading] = useState(false);
     const [serviceState, setServiceState] = useState([]);
     const [value, setValue] =  useState();
 
@@ -20,12 +20,13 @@ const Services = () =>{
     async function SetServices() {
     let url = 'http://whm.joao1866.c41.integrator.host:9206/usuarios?tipo=PRESTADOR';
     try {
+      setLoading(true);
       const responseServices = await fetch(url);
       const jsonService = await responseServices.json();
       jsonService.filter((item) => item.categorias);
       jsonService.sort((a, b) => a.nome.localeCompare(b.nome));
       setServiceState(jsonService);
-      console.error(serviceState);
+      setLoading(false);
     } catch (error) {
       console.error(error);
     }
@@ -75,7 +76,8 @@ const Services = () =>{
 
     return(
         <>
-       <CapsuleForService>
+
+        {loading === false? <CapsuleForService>
         <MenuPage /> 
       <DivAlignItems>
        <TitleForServiceTop > Serviços </TitleForServiceTop>
@@ -120,8 +122,8 @@ const Services = () =>{
 
     
        </CapsuleForBoxes>       
-       </CapsuleForService>
-       </>
+       </CapsuleForService> :  <Loading loading={loading} background="#2d3436" loaderColor= "rgb(216, 2, 134)"/>}
+         </>
     )
 }
 
