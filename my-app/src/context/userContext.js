@@ -71,20 +71,9 @@ export const UserContextProvider = ({ children }) => {
 		return unsubscribe;
 	}, []);
 
-	const registerUser = (email, firstName, lastName, password, role) => {
-		///
-		let fullName = firstName + " " + lastName
+	const registerUser = (email, fullName, password) => {
 		setLoading(true);
-		createUserWithEmailAndPassword(auth, email, password)
-			.then((res) => {
-				updateProfile(auth.currentUser, {
-					displayName: fullName,
-				});
-				setUser(res.user);
-				/*doRegisterAWS(res.user.uid, res.user.email, firstName, lastName, role)*/
-			})
-			.catch((err) => setError(err.message))
-			.finally(() => setLoading(false));
+		return createUserWithEmailAndPassword(auth, email, password)
 	};
 
 	const signInUser = (email, password) => {

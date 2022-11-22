@@ -8,6 +8,7 @@ import {
   Ptext
 } from './style';
 import Modal from 'react-modal';
+import { useUserContext } from '../../context/userContext';
 import {Navigate} from 'react-router-dom'; 
 
 const ClientRegistration = () => {
@@ -41,6 +42,7 @@ const ClientRegistration = () => {
   const [categ1, setTrataCate1] = useState('');
   const [categ2, setTrataCate2] = useState('');
 const [newUser, setNewUser] = useState(false);
+const { registerUser} = useUserContext();
 
   const categorias= ['Babá','Babá por turno', 'Costura', 'Diarista', 'Manutenção Elétrica',
   'Manutenção Hidraulica', 'Pequenos Reparos','Pintora', 'Higiene Pessoal']
@@ -289,63 +291,65 @@ const [newUser, setNewUser] = useState(false);
   }
 
   function handleRegister() {
-    const cat2 = [{
-      categoria: categ1,
-      valor: Number(price1),
-    },{
-      categoria: categ2,
-      valor: Number(price2),
-    }]
-    
-    const cat1 =[ {
-      categoria: categ1,
-      valor: Number(price1),
-    }]
-
-    const categorias = categ2 !== '' ? cat2 : cat1;
-    const body = {
-      nome: firstName,
-      userId: email,
-      pass: confirmPassword,
-      email: email,
-      telefone:phone,
-      enderecos: [
-        {
-          uf: uf,
-          cep:cep, 
-          complemento: complemento,
-          logradouro: bairro,
-          cidade: city,
-          bairro: bairro,
-          numero: Number(number)
-        }
-      ],
-      categorias,
-        client: client   	
-
-  }
-  console.error(body);
-  const options = {
-    method: 'POST',
-    headers: {
-    'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(body),
+    registerUser(email,firstName, confirmPassword).then(res => {
+      console.log(res);
+      const cat2 = [{
+        categoria: categ1,
+        valor: Number(price1),
+      },{
+        categoria: categ2,
+        valor: Number(price2),
+      }]
+      
+      const cat1 =[ {
+        categoria: categ1,
+        valor: Number(price1),
+      }]
+  
+      const categorias = categ2 !== '' ? cat2 : cat1;
+      const body = {
+        nome: firstName,
+        userId: res.user.uid,
+        pass: confirmPassword,
+        email: email,
+        telefone:phone,
+        enderecos: [
+          {
+            uf: uf,
+            cep:cep, 
+            complemento: complemento,
+            logradouro: bairro,
+            cidade: city,
+            bairro: bairro,
+            numero: Number(number)
+          }
+        ],
+        categorias,
+          client: client   	
+  
     }
-    fetch('http://whm.joao1866.c41.integrator.host:9206/usuario', options).
-      then(data => {
-        if (!data.ok) {
-          throw Error(data.status);
-         }
-         else (
-          setNewUser(true)
-         )
-         return console.error(data.json());         
-    }).catch(e => {
-      console.log(e);
-      });
-}
-
+    const options = {
+      method: 'POST',
+      headers: {
+      'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+      }
+      fetch('http://whm.joao1866.c41.integrator.host:9206/usuario', options).
+        then(data => {
+          if (!data.ok) {
+            throw Error(data.status);
+           }
+           else (
+            setNewUser(true)
+           )
+           return console.error(data.json());         
+      }).catch(e => {
+        console.log(e);
+        });
+  })
+    .catch((err) => setError(err.message));
+  }
 
 
   useEffect(() => {
