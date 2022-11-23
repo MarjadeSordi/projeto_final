@@ -25,7 +25,8 @@ text-transform: uppercase;
 font-weight: 300;`
 
 export const ImageSelfie = styled.img`
-width: 30%; `
+width: 30%;
+  `
 
 export const ButtonModal = styled.button`
 width: 30%; 

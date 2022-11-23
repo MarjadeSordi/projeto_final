@@ -369,8 +369,7 @@ const { registerUser} = useUserContext();
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
         style={customStyles}
-        contentLabel="Example Modal"
-      >
+          >
         <DivModal>
           <h2>Termos e condições. </h2>
           <br />

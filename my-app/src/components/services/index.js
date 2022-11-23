@@ -105,7 +105,6 @@ const Services = () =>{
          </TitleForService> 
          <TextForService> Valor por hora: {`R$ ${(categoria.valor).toString().replace(".", ",")}0`} </TextForService>
          <br /> 
-         <Link to={`/requisicao/${item.id}/servico/${categoria.categoria}`} style={{ textDecoration: 'none', color: '#FFF' }} > Requisitar! </Link>
          </>)}    
          <br />  
          <TextForService> Prestadora: {item.nome}</TextForService>
