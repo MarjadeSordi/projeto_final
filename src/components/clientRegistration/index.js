@@ -13,14 +13,13 @@ import {Navigate} from 'react-router-dom';
 
 const ClientRegistration = () => {
   const [firstName, setFirstName] = useState('');
-  const [email, setEmail] = useState('');
-  const [userId, setUserId] = useState('');
+  const [email, setEmail] = useState(null);
   const [logradouro, setLogradouro] = useState('');
   const [password, setPassWord] = useState('');
   const [confirmPassword, setConfirmPassWord] = useState('');
   const [error, setError] = useState(false);
   const [listState, setState] = useState([]);
-  const [exists, setExists] = useState(false);
+  const [exists, setExists] = useState(null);
   const [uf, setUf] = useState('')
   const [listCity, setListCity] = useState([]);
   const [city, setCity] = useState('');
@@ -42,7 +41,7 @@ const ClientRegistration = () => {
   const [categ1, setTrataCate1] = useState('');
   const [categ2, setTrataCate2] = useState('');
 const [newUser, setNewUser] = useState(false);
-const { registerUser} = useUserContext();
+const { user, registerUser} = useUserContext();
 
   const categorias= ['Babá','Babá por turno', 'Costura', 'Diarista', 'Manutenção Elétrica',
   'Manutenção Hidraulica', 'Pequenos Reparos','Pintora', 'Higiene Pessoal']
@@ -191,44 +190,9 @@ const { registerUser} = useUserContext();
     if (email.indexOf('@') > 0) {
      let result = fetch(`http://whm.joao1866.c41.integrator.host:9206/usuario?email=${email}`, { mode: 'no-cors' })
      .catch(error => console.error(error));
-            if (result.ok) {
-              setExists(true);
-            } else {
-              setExists(false);
-            }
+            if (result.ok)
+              window.location.href = '/loggin';
     }
-  }
-
-  function handleUserId(e) {
-    e.preventDefault();
-    handleUserId(e.target.value);
-    fetch(`http://whm.joao1866.c41.integrator.host:9206/usuario?userId=${userId}`, { mode: 'no-cors' })
-      .then(res => res.json())
-      .then(
-        (result) => {
-          this.setExists(true);
-        },
-        (error) => {
-          console.error(error)
-          this.setError(error);
-        }
-      )
-  }
-
-  function handleUserId(e) {
-    e.preventDefault();
-    handleUserId(e.target.value);
-    fetch(`http://whm.joao1866.c41.integrator.host:9206/usuario?userId=${userId}`, { mode: 'no-cors' })
-      .then(res => res.json())
-      .then(
-        (result) => {
-          this.setExists(true);
-        },
-        (error) => {
-          console.error(error)
-          this.setError(error);
-        }
-      )
   }
 
   function handlePhone(e) {
@@ -292,63 +256,98 @@ const { registerUser} = useUserContext();
 
   function handleRegister() {
     registerUser(email,firstName, confirmPassword).then(res => {
-      console.log(res);
-      const cat2 = [{
-        categoria: categ1,
-        valor: Number(price1),
-      },{
-        categoria: categ2,
-        valor: Number(price2),
-      }]
-      
-      const cat1 =[ {
-        categoria: categ1,
-        valor: Number(price1),
-      }]
-  
-      const categorias = categ2 !== '' ? cat2 : cat1;
-      const body = {
-        nome: firstName,
-        userId: res.user.uid,
-        pass: confirmPassword,
-        email: email,
-        telefone:phone,
-        enderecos: [
-          {
-            uf: uf,
-            cep:cep, 
-            complemento: complemento,
-            logradouro: bairro,
-            cidade: city,
-            bairro: bairro,
-            numero: Number(number)
-          }
-        ],
-        categorias,
-          client: client   	
-  
-    }
-    const options = {
-      method: 'POST',
-      headers: {
-      'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(body),
-      }
-      fetch('http://whm.joao1866.c41.integrator.host:9206/usuario', options).
-        then(data => {
-          if (!data.ok) {
-            throw Error(data.status);
-           }
-           else (
-            setNewUser(true)
-           )
-           return console.error(data.json());         
-      }).catch(e => {
-        console.log(e);
-        });
+      registerBackEnd(res);
   })
     .catch((err) => setError(err.message));
+  }
+
+  async function getUser(email) {
+    let result = await fetch(`http://whm.joao1866.c41.integrator.host:9206/usuario?email=${email}`);
+    let jsonResult = await result.json();
+    console.log(jsonResult);
+    setExists(jsonResult);
+    setPhone(jsonResult.telefone);
+    setFirstName(jsonResult.nome);
+    if(jsonResult.enderecos && jsonResult.enderecos.length > 0) {
+      let endereco = jsonResult.enderecos[0];
+      setUf(endereco.uf);
+      setNumber(endereco.numero);
+      setCity(endereco.cidade);
+      setCep(endereco.cep);
+      setLogradouro(endereco.logradouro);
+      setComplemento(endereco.complemento);
+    }
+    if(jsonResult.categorias && jsonResult.categorias.length > 0) {
+      let cat = jsonResult.categorias[0];
+      setTrataCate1(cat.categoria);
+      setPrice1(cat.valor);
+    }
+    if(jsonResult.categorias && jsonResult.categorias.length > 1) {
+      let cat = jsonResult.categorias[1];
+      setTrataCate1(cat.categoria);
+      setPrice2(cat.valor);
+    }
+
+  }
+
+  function registerBackEnd(res) {
+    console.log(res);
+    const cat2 = [{
+      categoria: categ1,
+      valor: Number(price1),
+    },{
+      categoria: categ2,
+      valor: Number(price2),
+    }]
+    
+    const cat1 =[ {
+      categoria: categ1,
+      valor: Number(price1),
+    }]
+
+    const categorias = categ2 !== '' ? cat2 : cat1;
+    const body = {
+      nome: firstName,
+      userId: res.user.uid,
+      pass: confirmPassword,
+      email: email,
+      telefone:phone,
+      enderecos: [
+        {
+          uf: uf,
+          cep:cep, 
+          complemento: complemento,
+          logradouro: logradouro,
+          cidade: city,
+          bairro: bairro,
+          numero: Number(number)
+        }
+      ],
+      categorias,
+        client: client   	
+
+  }
+  if(exists && exists.id)
+    body.id = exists.id;
+  const options = {
+    method: exists? 'PUT' : 'POST',
+    headers: {
+    'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(body),
+    }
+    fetch('http://whm.joao1866.c41.integrator.host:9206/usuario', options).
+      then(data => {
+        if (!data.ok) {
+          throw Error(data.status);
+         }
+         else (
+          setNewUser(true)
+         )
+         return console.error(data.json());         
+    }).catch(e => {
+      console.log(e);
+      });
   }
 
 
@@ -356,11 +355,27 @@ const { registerUser} = useUserContext();
     PopulateStates();
   }, []);
 
+  useEffect(()=>{
+    console.log(email);
+    if(!exists && email != null)
+    {
+      getUser(email);
+  }
+},[email])
+
+
   useEffect(() => {
     if (uf) {
       PopulateCity(uf);
     }
   }, [uf]);
+
+  useEffect(() => {
+    if (!email && user && user.email) {
+        setEmail(user.email);
+    }
+      else (console.log('error'))
+  }, [user]);
 
   return (
     <DivCapsule>
@@ -638,8 +653,8 @@ const { registerUser} = useUserContext();
         <InputButton
           type="button"
           value="ENVIAR"
-          onClick={openModal}
-        > Cadastre-se! </InputButton>
+          onClick={exists? handleRegister : openModal}
+        > {exists? 'Cadastre-se!' : 'Salvar' }</InputButton>
 
         <br />
         {enterPageLogin ?

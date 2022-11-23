@@ -9,8 +9,9 @@ const MenuPage = () =>{
 
   useEffect(() => {
       if (user && user.displayName) {
-        console.log("useEffect user" + user.displayName);
-      } else (console.log('error'))
+        console.log("useEffect user " + user.email);
+      }
+        else (console.log('error'))
     }, [user]);
 
     return(
