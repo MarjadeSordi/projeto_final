@@ -26,7 +26,7 @@ export const UserContextProvider = ({ children }) => {
 
 	const [error, setError] = useState("");
 
-	async function upload(file, user, setLoading) {
+	async function upload(file, user) {
 		if (photo == null) return;
 		const fileRef = ref(storage, "images/users/" + user.uid);
 
@@ -45,13 +45,14 @@ export const UserContextProvider = ({ children }) => {
 	}
 
 	function handleChange(e) {
+		console.log("handleChange");
 		if (e.target.files[0]) {
 			setPhoto(e.target.files[0]);
 		}
 	}
 
 	function handleClick() {
-		upload(photo, user, setLoading);
+		upload(photo, user);
 	}
 
 	useEffect(() => {

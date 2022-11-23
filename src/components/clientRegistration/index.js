@@ -3,9 +3,8 @@ import { Link } from 'react-router-dom';
 import MenuPage from '../menu';
 import {
   ButtonModal, DivCapsule, InputForText, InputForEmail, InputForPassWord, SelectedForState, SelectedForCity, FormForClient, InputButton, InputCheckbox, LabelForCheckbox,
-  SpanForTitle, DivText, DivModal,DivPrestadora,
-  SpanForLink,
-  Ptext
+  SpanForTitle, DivText, DivModal,DivPrestadora,IoCamera,Image,Logo,InputImage,LabelImage,HireMe,
+  SpanForLink,Buttons, Ptext
 } from './style';
 import Modal from 'react-modal';
 import { useUserContext } from '../../context/userContext';
@@ -40,8 +39,9 @@ const ClientRegistration = () => {
   const [price2, setPrice2]=  useState(''); 
   const [categ1, setTrataCate1] = useState('');
   const [categ2, setTrataCate2] = useState('');
-const [newUser, setNewUser] = useState(false);
-const { user, registerUser} = useUserContext();
+  const [newUser, setNewUser] = useState(false);
+  const [open, setOpen] = useState(false);
+  const { user, setPhoto, photoURL, handleChange, registerUser,handleClick} = useUserContext();
 
   const categorias= ['Babá','Babá por turno', 'Costura', 'Diarista', 'Manutenção Elétrica',
   'Manutenção Hidraulica', 'Pequenos Reparos','Pintora', 'Higiene Pessoal']
@@ -96,6 +96,14 @@ const { user, registerUser} = useUserContext();
     }
 
   }
+
+  function handleOpen() {
+		if (open == false) {
+			setOpen(true);
+		} else {
+			setOpen(false);
+		}
+	}
 
   // método para verificar se nome já existe?
   function handleFirstName(e) {
@@ -436,6 +444,26 @@ const { user, registerUser} = useUserContext();
         </SpanForTitle>
       </DivText>
       <FormForClient>
+
+              <Image>
+								<Logo src={photoURL} />
+								<InputImage
+									type="file"
+									id="file"
+									name="image"
+									acceppt="image/*, png, jpeg, jpg"
+									onChange={handleChange}
+								/>
+								<LabelImage
+									htmlFor="file"
+									
+								>
+									<IoCamera></IoCamera>
+								</LabelImage>
+							</Image>
+              <Buttons
+								onClick={handleOpen}
+							/>
 
         <InputForText
   
