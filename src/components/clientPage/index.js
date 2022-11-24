@@ -12,6 +12,9 @@ const ClientPage = () =>{
     let [userId, setUserId] = useState(null);
 	let [user, setUser] = useState(null);
     let [selecionado, setSelecionado] = useState([]);
+	let [enderecoSelecionado, setEnderecoSelecionado] = useState(null);
+	let [statusSelecionado, setStatusSelecionado] = useState(null);
+	let [avaliacaoSelecionada, setAvaliacaoSelecionada] = useState(null);
     let [servico, setServico] = useState(null);
     let [userRequisitante, setUserRequisitante] = useState(null);
     let [uid, setUid] = useState(0);
@@ -36,9 +39,14 @@ const ClientPage = () =>{
         }
     }, [user, userId]);
 
-    const handleChange = (value) => {
-        console.log(value);
-        setSelecionado(value);
+    const handleChangeEndereco = (e) => {
+		e.preventDefault();
+        setEnderecoSelecionado(e.target.value);
+    }
+
+	const handleChangeStatus = (e) => {
+        e.preventDefault();
+        setStatusSelecionado(e.target.value);
     }
 
     const getUserByEmail = async (userId) => {
@@ -89,7 +97,11 @@ const ClientPage = () =>{
 				lastUid: lastUid,
 				start: moment(service.inicio,"DD/MM/YYYY hh:mm"),
 				end: moment(service.fim,"DD/MM/YYYY hh:mm"),
-				value: "XXXX",
+				value: service.status,
+				enderecoId : service.enderecoRequisitante.id,
+				serviceId : service.id,
+				categoria : service.categoria,
+				userRequisitado : service.userRequisitado
 			};
 			console.log(includeService);
 			lastUid++;
@@ -112,7 +124,7 @@ const ClientPage = () =>{
 	};
 
 	const handleSelect = (newIntervals) => {
-		console.log(newIntervals);
+		console.log("handleSelect" + newIntervals);
 		const { lastUid, selectedIntervals } = this.state;
 		const intervals = newIntervals.map((interval, index) => {
 			return {
@@ -151,26 +163,53 @@ const ClientPage = () =>{
 			};
 		}
 
+	trataCategoria = (categoria) => {
+	let categ = '';
+	console.log("trataCategoria" + categoria);
+    switch(categoria){
+    case 'MANUTENCAO_ELETRICA' : return 'Manutenção Elétrica'
+	case 'MANUTENCAO_HIDRAULICA' : return 'Manutenção Hidraulica'
+	case 'DIARISTA' : return 'Diarista'
+	case 'BABA' : return 'Babá'
+	case 'BABA_POR_TURNO' : return 'Babá por turno'
+	case 'PINTORA' : return 'Pintora'
+	case 'COSTURA' : return 'Costura'
+	case 'PEQUENOS_REPAROS' : return 'Pequenos Reparos'
+	case 'HIGIENE_PESSOAL' : return 'Higiene Pessoal'
+	default : return ''
+    }
+
+  }
+
 		handleSave = () => {
 			console.log("handleSave: " + this);
 			let { value } = this.input;
 			let { start, end } = this.props;
 			let formattedStart = start.format("DD-MM-YYYY HH:mm");
 			let formatedEnd = end.format("DD-MM-YYYY HH:mm");
-			let postData = {
-				enderecoRequisitante: {
-                    id: userRequisitante.enderecos[0].id
-                },
-				userRequisitado:  {
-                    id: user.id
-                },
-				inicio: formattedStart,
-				fim: formatedEnd,
-				categoria: servico,
-                status: 'AGENDADO'
-			};
+			let postData = value == 'CONCLUIDO' ? {
+				solicitacao : 
+					{id: this.props.serviceId},
+				nota: avaliacaoSelecionada,
+				comentario: value,
+			} :
+				{
+					enderecoRequisitante: {
+						id: userRequisitante.enderecos.length > 0 ? enderecoSelecionado : userRequisitante.enderecos[0].id
+
+					},
+					userRequisitado:  {
+						id: user.id
+					},
+					inicio: formattedStart,
+					fim: formatedEnd,
+					categoria: servico,
+					status: statusSelecionado ? statusSelecionado : 'AGENDADO'
+				};
+			if(this.props.serviceId)
+				postData.id = this.props.serviceId;
             const options = {
-                method: 'POST',
+                method: this.props.serviceId ? 'PUT' : 'POST',
                 headers: {
                 'Content-Type': 'application/json',
                 },
@@ -197,8 +236,10 @@ const ClientPage = () =>{
 					<div className="customModal__text">
 						{`Das ${start.format("HH:mm")} as ${end.format("HH:mm")}`}
 					</div>
-					{ userRequisitante.enderecos.length > 0 &&
-                            <select name={"selecione"} value={""} onChange={handleChange}>
+					{
+					/* tratamento para caso o usuário tenha mais de um endereço */
+					userRequisitante.enderecos.length > 0 &&
+                            <select name={"selecione"} value={""} onChange={handleChangeEndereco}>
                                     { (userRequisitante.enderecos).map((endereco) =><>
                                         <option value={endereco.id}>{endereco.cidade} - {endereco.bairro} - {endereco.endereco}</option>
                                     </>)
@@ -206,17 +247,35 @@ const ClientPage = () =>{
                                 </select>
                                 }
                     {
+						/* tratamento para caso o usuário não tenha um endereço cadastradao */
                         userRequisitante.enderecos.length == 0 && <Link to='/cadastro'>  <MenuText> Inserir Endereço </MenuText> </Link>
                     }
-                    <input ref={(el) => {
-							this.input = el;
-						}}
-                        type="hidden"  value={userRequisitante.nome}/>
+					
+					<h2>
+						{
+						this.props.categoria ? this.trataCategoria(this.props.categoria) : ''	}
+					</h2>
+						{
+							/* tratamento para solicitação prestada pelo usuário logado */
+						this.props.userRequisitado.id ==  userRequisitante.id &&
+										<select name={"selecione"} value={""} onChange={handleChangeStatus}>
+											<option value="INICIADO">Iniciado</option>
+											<option value="CANCELADO">Cancelado</option>
+											<option value="CONCLUIDO">Concluído</option>
+  										</select>
+						}
+						
+						{ /* tratamento para solicitação do usuário logado e concluída */
+							user.enderecos[0].id == this.props.enderecoId && <div>
+							<label for="comentario">Comentário</label>
+							<input type="text" id="comentario"/>
+							</div>
+					  	}
 					<button
 						className="customModal__button customModal__button_float_right"
 						onClick={this.handleSave}
 					>
-						Enviar Solicitação
+					{ this.props.serviceId > 0 ? 'Salvar' : 'Enviar Solicitação'}
 					</button>
 				</div>
 			);
