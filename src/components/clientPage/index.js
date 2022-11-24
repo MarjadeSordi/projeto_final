@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import {DivCapsule} from './style';
-import ClientEndereco from '../clientEndereco'
+import {DivCapsule,MenuText} from './style';
+import { Link } from 'react-router-dom';
 import WeekCalendar from "react-week-calendar";
 import { useLocation } from "react-router-dom";
 import { auth } from "../../context/firebase";
@@ -11,11 +11,9 @@ const ClientPage = () =>{
     const location = useLocation();
     let [userId, setUserId] = useState(null);
 	let [user, setUser] = useState(null);
-    let [selecionado, setSelecionado] = useState(null);
+    let [selecionado, setSelecionado] = useState([]);
     let [servico, setServico] = useState(null);
     let [userRequisitante, setUserRequisitante] = useState(null);
-	let [requisicoes, setRequisicoes] = useState([]);
-    let [enderecos, setEnderecos] = useState([]);
     let [uid, setUid] = useState(0);
 
     useEffect(() => {
@@ -73,7 +71,8 @@ const ClientPage = () =>{
         try {
             const responseServices = await fetch(url);
             const jsonService = await responseServices.json();
-				parseService(jsonService);
+			console.log(jsonService)
+			parseService(jsonService);
             } catch (error) {
                 console.error(error);
               }
@@ -81,89 +80,79 @@ const ClientPage = () =>{
 
 	const parseService = (requisicoes = []) => {
 		console.log("parseRequisicoes");
-		console.log(requisicoes);
+		console.log(selecionado);
+		let lastUid = 0;
 		let parseRequisicoes = [];
 		requisicoes.forEach((service) => {
+			console.log(service);
 			let includeService = {
-				lastUid: service.id,
-				start: moment(service.inicio),
-				end: moment(service.fim),
+				lastUid: lastUid,
+				start: moment(service.inicio,"DD/MM/YYYY hh:mm"),
+				end: moment(service.fim,"DD/MM/YYYY hh:mm"),
 				value: "XXXX",
 			};
+			console.log(includeService);
+			lastUid++;
 			parseRequisicoes.push(includeService);
 		});
-		setRequisicoes(parseRequisicoes);
+		setUid(lastUid);
+		setSelecionado(parseRequisicoes);
 	};
 
-	class StandardCalendar extends React.Component {
-		constructor(props) {
-			super(props);
-			this.state = {
-				lastUid: userRequisitante.id,
-				selectedIntervals: requisicoes,
+	const handleEventRemove = (event) => {
+		const { selectedIntervals } = this.state;
+		console.log("handleEventRemove: " + selectedIntervals)
+		const index = selectedIntervals.findIndex(
+			(interval) => interval.uid === event.uid
+		);
+		if (index > -1) {
+			selectedIntervals.splice(index, 1);
+			this.setState({ selectedIntervals });
+		}
+	};
+
+	const handleSelect = (newIntervals) => {
+		console.log(newIntervals);
+		const { lastUid, selectedIntervals } = this.state;
+		const intervals = newIntervals.map((interval, index) => {
+			return {
+				...interval,
+				uid: lastUid + index,
 			};
+		});
+
+		this.setState({
+			selectedIntervals: selectedIntervals.concat(intervals),
+			lastUid: lastUid + newIntervals.length,
+		});
+	};
+
+	const handleEventUpdate = (event) => {
+		const { selectedIntervals } = this.state;
+		console.log("handleEventUpdate: " + selectedIntervals)
+		const index = selectedIntervals.findIndex(
+			(interval) => interval.uid === event.uid
+		);
+		if (index > -1) {
+			selectedIntervals[index] = event;
+			this.setState({ selectedIntervals });
 		}
+	};
 
-		handleEventRemove = (event) => {
-			const { selectedIntervals } = this.state;
-			const index = selectedIntervals.findIndex(
-				(interval) => interval.uid === event.uid
-			);
-			if (index > -1) {
-				selectedIntervals.splice(index, 1);
-				this.setState({ selectedIntervals });
-			}
-		};
-
-		handleEventUpdate = (event) => {
-			const { selectedIntervals } = this.state;
-			const index = selectedIntervals.findIndex(
-				(interval) => interval.uid === event.uid
-			);
-			if (index > -1) {
-				selectedIntervals[index] = event;
-				this.setState({ selectedIntervals });
-			}
-		};
-
-		handleSelect = (newIntervals) => {
-			const { lastUid, selectedIntervals } = this.state;
-			const intervals = newIntervals.map((interval, index) => {
-				return {
-					...interval,
-					uid: lastUid + index,
-				};
-			});
-
-			this.setState({
-				selectedIntervals: selectedIntervals.concat(intervals),
-				lastUid: lastUid + newIntervals.length,
-			});
-		};
-
-        
-
-		render() {
-			return (
-				<WeekCalendar
-					numberOfDays={7}
-					dayFormat={"DD/MM"}
-					scaleUnit={60}
-					scaleFormat={"HH"}
-					modalComponent={ModalCalendar}
-					selectedIntervals={this.state.selectedIntervals}
-					onIntervalSelect={this.handleSelect}
-					onIntervalUpdate={this.handleEventUpdate}
-					onIntervalRemove={this.handleEventRemove}
-				/>
-			);
-		}
-	}
 
 	class ModalCalendar extends React.Component {
 
+		constructor(props) {
+			super(props);
+			console.log("StandardCalendar: " + props);
+			this.state = {
+				lastUid: uid,
+				selectedIntervals: selecionado,
+			};
+		}
+
 		handleSave = () => {
-			console.log(this);
+			console.log("handleSave: " + this);
 			let { value } = this.input;
 			let { start, end } = this.props;
 			let formattedStart = start.format("DD-MM-YYYY HH:mm");
@@ -191,11 +180,15 @@ const ClientPage = () =>{
 			fetch("http://whm.joao1866.c41.integrator.host:9206/solicitacao", options)
 				.then(({ data }) => {
 					console.log(data);
+					let requisicoesAtuais = selecionado;
+					requisicoesAtuais.push(data);
 				})
 				.catch((error) => {
 					console.error("error", error);
 				});
 		};
+
+
         render() {
 			const { value, start, end } = this.props;
 
@@ -213,7 +206,7 @@ const ClientPage = () =>{
                                 </select>
                                 }
                     {
-                        userRequisitante.enderecos.length == 0 && <ClientEndereco usuario={userRequisitante} ></ClientEndereco>
+                        userRequisitante.enderecos.length == 0 && <Link to='/cadastro'>  <MenuText> Inserir Endereço </MenuText> </Link>
                     }
                     <input ref={(el) => {
 							this.input = el;
@@ -240,7 +233,10 @@ const ClientPage = () =>{
 						dayFormat={"DD/MM"}
 						scaleUnit={60}
 						scaleFormat={"HH"}
-						selectedIntervals={requisicoes}
+						selectedIntervals={selecionado}
+						onIntervalSelect={handleSelect}
+						onIntervalUpdate={handleEventUpdate}
+						onIntervalRemove={handleEventRemove}
 						modalComponent={ModalCalendar}
 					></WeekCalendar>
                     </DivCapsule>
