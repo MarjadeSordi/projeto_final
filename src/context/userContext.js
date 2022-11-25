@@ -81,8 +81,11 @@ export const UserContextProvider = ({ children }) => {
 		setLoading(true);
 		signInWithEmailAndPassword(auth, email, password)
 			.then((res) => {
-				if(res.ok)
+				console.log("logado " + res.ok);
+				if(res.ok) {
+					console.log("logado");
 				window.location.href = '/dashboard';
+			}
 			})
 			.catch((err) => setError(err.message))
 			.finally(() => setLoading(false));

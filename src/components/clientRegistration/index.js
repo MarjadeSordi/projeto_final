@@ -19,6 +19,7 @@ const ClientRegistration = () => {
   const [error, setError] = useState(false);
   const [listState, setState] = useState([]);
   const [exists, setExists] = useState(null);
+  const [isNewUser, setIsNewUser] = useState(false);
   const [uf, setUf] = useState('')
   const [listCity, setListCity] = useState([]);
   const [city, setCity] = useState('');
@@ -197,9 +198,12 @@ const ClientRegistration = () => {
     setEmail(e.target.value);
     if (email.indexOf('@') > 0) {
      let result = fetch(`http://whm.joao1866.c41.integrator.host:9206/usuario?email=${email}`, { mode: 'no-cors' })
+     .then(res => {
+       if (result.ok)
+         window.location.href = '/loggin';
+      else setIsNewUser(true);
+     })
      .catch(error => console.error(error));
-            if (result.ok)
-              window.location.href = '/loggin';
     }
   }
 
@@ -264,7 +268,8 @@ const ClientRegistration = () => {
 
   function handleRegister() {
     registerUser(email,firstName, confirmPassword).then(res => {
-      registerBackEnd(res);
+      registerBackEnd(res).then
+      (res => console.log(res));
   })
     .catch((err) => setError(err.message));
   }
@@ -365,7 +370,7 @@ const ClientRegistration = () => {
 
   useEffect(()=>{
     console.log(email);
-    if(!exists && email != null)
+    if(!isNewUser && email != null)
     {
       getUser(email);
   }

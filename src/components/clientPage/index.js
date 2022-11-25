@@ -16,7 +16,7 @@ const ClientPage = () =>{
 	let [statusSelecionado, setStatusSelecionado] = useState(null);
 	let [avaliacaoSelecionada, setAvaliacaoSelecionada] = useState(null);
     let [servico, setServico] = useState(null);
-    let [userRequisitante, setUserRequisitante] = useState(null);
+    let [userLogado, setUserLogado] = useState(null);
     let [uid, setUid] = useState(0);
 
     useEffect(() => {
@@ -55,7 +55,7 @@ const ClientPage = () =>{
 		try {
             const responseServices = await fetch(url);
             const jsonService = await responseServices.json();
-				setUserRequisitante(jsonService);
+				setUserLogado(jsonService);
             } catch (error) {
                 console.error(error);
               }
@@ -101,7 +101,8 @@ const ClientPage = () =>{
 				enderecoId : service.enderecoRequisitante.id,
 				serviceId : service.id,
 				categoria : service.categoria,
-				userRequisitado : service.userRequisitado
+				userRequisitado : service.userRequisitado,
+				userLogado: userLogado
 			};
 			console.log(includeService);
 			lastUid++;
@@ -183,7 +184,7 @@ const ClientPage = () =>{
 
 		handleSave = () => {
 			console.log("handleSave: " + this);
-			let { value } = this.input;
+			let value = this.comentario?.value;
 			let { start, end } = this.props;
 			let formattedStart = start.format("DD-MM-YYYY HH:mm");
 			let formatedEnd = end.format("DD-MM-YYYY HH:mm");
@@ -195,11 +196,11 @@ const ClientPage = () =>{
 			} :
 				{
 					enderecoRequisitante: {
-						id: userRequisitante.enderecos.length > 0 ? enderecoSelecionado : userRequisitante.enderecos[0].id
+						id: this.props.userLogado?.enderecos.length > 0 ? enderecoSelecionado : userLogado.enderecos[0].id
 
 					},
 					userRequisitado:  {
-						id: user.id
+						id: userId
 					},
 					inicio: formattedStart,
 					fim: formatedEnd,
@@ -238,9 +239,9 @@ const ClientPage = () =>{
 					</div>
 					{
 					/* tratamento para caso o usuário tenha mais de um endereço */
-					userRequisitante.enderecos.length > 0 &&
+					this.props.userLogado?.enderecos.length > 0 &&
                             <select name={"selecione"} value={""} onChange={handleChangeEndereco}>
-                                    { (userRequisitante.enderecos).map((endereco) =><>
+                                    { (this.props.userLogado.enderecos).map((endereco) =><>
                                         <option value={endereco.id}>{endereco.cidade} - {endereco.bairro} - {endereco.endereco}</option>
                                     </>)
                                     }
@@ -248,7 +249,7 @@ const ClientPage = () =>{
                                 }
                     {
 						/* tratamento para caso o usuário não tenha um endereço cadastradao */
-                        userRequisitante.enderecos.length == 0 && <Link to='/cadastro'>  <MenuText> Inserir Endereço </MenuText> </Link>
+                        this.props.userLogado?.enderecos.length == 0 && <Link to='/cadastro'>  <MenuText> Inserir Endereço </MenuText> </Link>
                     }
 					
 					<h2>
@@ -257,7 +258,7 @@ const ClientPage = () =>{
 					</h2>
 						{
 							/* tratamento para solicitação prestada pelo usuário logado */
-						this.props.userRequisitado.id ==  userRequisitante.id &&
+						(this.props.userRequisitado && this.props.userRequisitado.id ==  this.props.userLogado.id) &&
 										<select name={"selecione"} value={""} onChange={handleChangeStatus}>
 											<option value="INICIADO">Iniciado</option>
 											<option value="CANCELADO">Cancelado</option>
@@ -266,7 +267,7 @@ const ClientPage = () =>{
 						}
 						
 						{ /* tratamento para solicitação do usuário logado e concluída */
-							user.enderecos[0].id == this.props.enderecoId && <div>
+							(this.props.enderecoId && this.props.userLogado?.enderecos[0].id == this.props.enderecoId) && <div>
 							<label for="comentario">Comentário</label>
 							<input type="text" id="comentario"/>
 							</div>
