@@ -3,41 +3,51 @@ import {DivCapsule,MenuText} from './style';
 import { Link } from 'react-router-dom';
 import WeekCalendar from "react-week-calendar";
 import { useLocation } from "react-router-dom";
-import { auth } from "../../context/firebase";
+import { useUserContext } from "../../context/userContext";
 import * as moment from "moment";
 
 
 const ClientPage = () =>{
     const location = useLocation();
     let [userId, setUserId] = useState(null);
-	let [user, setUser] = useState(null);
     let [selecionado, setSelecionado] = useState([]);
 	let [enderecoSelecionado, setEnderecoSelecionado] = useState(null);
 	let [statusSelecionado, setStatusSelecionado] = useState(null);
 	let [avaliacaoSelecionada, setAvaliacaoSelecionada] = useState(null);
     let [servico, setServico] = useState(null);
     let [userLogado, setUserLogado] = useState(null);
+	let [userRequisitado, setUserRequisitado] = useState(null);
     let [uid, setUid] = useState(0);
+	const { user } = useUserContext();
 
     useEffect(() => {
-        console.log(auth._currentUser.uid);
-        const queryParams = new URLSearchParams(location.search);
+		if(!servico) {
+		const queryParams = new URLSearchParams(location.search);
         console.log(queryParams);
         const userId = queryParams.get("id");
         const servicoId = queryParams.get("servico");
         setUserId(userId);
         setServico(servicoId);
-        getUserByEmail(auth._currentUser.email);
-    }, []);
+        console.log(user);
+        getUserByEmail(user.email)
+		.then(res =>
+			console.log(res));
+    	}
+	}, []);
 
 
     
     useEffect(() => {
-        if (userId && user == null) {
+        if (userId && !userRequisitado) {
             getUserById(userId);
+        }
+    }, [userId]);
+
+	useEffect(() => {
+        if (userLogado) {
             getRequisicoesByUserId(userId);
         }
-    }, [user, userId]);
+    }, [userLogado]);
 
     const handleChangeEndereco = (e) => {
 		e.preventDefault();
@@ -49,13 +59,19 @@ const ClientPage = () =>{
         setStatusSelecionado(e.target.value);
     }
 
+	const handleChangeAvaliacao = (e) => {
+        e.preventDefault();
+        setAvaliacaoSelecionada(e.target.value);
+    }
+
     const getUserByEmail = async (userId) => {
 		console.log("getUserByEmail " + userId);
         let url = "http://whm.joao1866.c41.integrator.host:9206/usuario?email=" + userId;
 		try {
             const responseServices = await fetch(url);
             const jsonService = await responseServices.json();
-				setUserLogado(jsonService);
+			console.log(jsonService)
+			setUserLogado(jsonService);
             } catch (error) {
                 console.error(error);
               }
@@ -67,7 +83,7 @@ const ClientPage = () =>{
         try {
             const responseServices = await fetch(url);
             const jsonService = await responseServices.json();
-				setUser(jsonService);
+				setUserRequisitado(jsonService);
             } catch (error) {
                 console.error(error);
               }
@@ -239,7 +255,7 @@ const ClientPage = () =>{
 					</div>
 					{
 					/* tratamento para caso o usuário tenha mais de um endereço */
-					this.props.userLogado?.enderecos.length > 0 &&
+					(!this.props.serviceId && this.props.userLogado?.enderecos.length) > 0 &&
                             <select name={"selecione"} value={""} onChange={handleChangeEndereco}>
                                     { (this.props.userLogado.enderecos).map((endereco) =><>
                                         <option value={endereco.id}>{endereco.cidade} - {endereco.bairro} - {endereco.endereco}</option>
@@ -258,7 +274,8 @@ const ClientPage = () =>{
 					</h2>
 						{
 							/* tratamento para solicitação prestada pelo usuário logado */
-						(this.props.userRequisitado && this.props.userRequisitado.id ==  this.props.userLogado.id) &&
+						(this.props.userRequisitado && this.props.userLogado && this.props.userRequisitado.id ==  this.props.userLogado.id)
+							&&
 										<select name={"selecione"} value={""} onChange={handleChangeStatus}>
 											<option value="INICIADO">Iniciado</option>
 											<option value="CANCELADO">Cancelado</option>
@@ -267,10 +284,21 @@ const ClientPage = () =>{
 						}
 						
 						{ /* tratamento para solicitação do usuário logado e concluída */
-							(this.props.enderecoId && this.props.userLogado?.enderecos[0].id == this.props.enderecoId) && <div>
+							(this.props.value == 'CONCLUIDO' && this.props.enderecoId && this.props.userLogado?.enderecos[0].id == this.props.enderecoId) && <div>
 							<label for="comentario">Comentário</label>
 							<input type="text" id="comentario"/>
 							</div>
+					  	}
+
+					{ /* tratamento para solicitação do usuário logado e concluída */
+						(this.props.value == 'CONCLUIDO' && this.props.enderecoId && this.props.userLogado?.enderecos[0].id == this.props.enderecoId) &&
+						<select name={"selecione"} value={""} onChange={handleChangeAvaliacao}>
+							<option value="1">Péssimo</option>
+							<option value="2">Ruim</option>
+							<option value="3">Razoável</option>
+							<option value="4">Bom</option>
+							<option value="5">Ótimo</option>
+						  </select>
 					  	}
 					<button
 						className="customModal__button customModal__button_float_right"
