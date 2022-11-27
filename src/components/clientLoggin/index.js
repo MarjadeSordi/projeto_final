@@ -37,7 +37,8 @@ const ClientLoggin = () => {
       }
 
     const handleForm = () => {
-      signInUser(email,password)    
+      signInUser(email,password); 
+      setLogin(true);
     };
 
     const handleFormtwo = () => {

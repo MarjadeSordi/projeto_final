@@ -19,14 +19,15 @@ const ClientPage = () =>{
     let [uid, setUid] = useState(0);
 
     useEffect(() => {
-        console.log(auth._currentUser.uid);
+        console.log(auth.currentUser);
         const queryParams = new URLSearchParams(location.search);
         console.log(queryParams);
         const userId = queryParams.get("id");
         const servicoId = queryParams.get("servico");
         setUserId(userId);
         setServico(servicoId);
-        getUserByEmail(auth._currentUser.email);
+		if(auth._currentUser){ getUserByEmail(auth._currentUser.email)};
+       
     }, []);
 
 
@@ -204,7 +205,7 @@ const ClientPage = () =>{
 					<div className="customModal__text">
 						{`Das ${start.format("HH:mm")} as ${end.format("HH:mm")}`}
 					</div>
-					{ userRequisitante.enderecos.length > 0 &&
+					{ userRequisitante && userRequisitante.enderecos.length > 0 &&
                             <select name={"selecione"} value={""} onChange={handleChange}>
                                     { (userRequisitante.enderecos).map((endereco) =><>
                                         <option value={endereco.id}>{endereco.cidade} - {endereco.bairro} - {endereco.endereco}</option>
