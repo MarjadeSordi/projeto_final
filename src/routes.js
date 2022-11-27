@@ -40,6 +40,7 @@ export default function Routess() {
 					<Route path="/" element={<ClientWelcome />} />				
 					<Route path="/login" element={<ClientLoginPage />} />
 					{logado ?<Route path="/dashboard" element={<ClientDashboard />} /> : <Route path="/dashboard" element={<ClientDashboardWithoutLogin />} />}
+					<Route path='/requisicao/:id/servico/:servico' element={<ClientRequisicao />} />
 					<Route path="/prestadora/:id" element={<ProviderDetails />} />
 					<Route path="/cadastro" element={<ClientRegister />} />
 				</Routes>
