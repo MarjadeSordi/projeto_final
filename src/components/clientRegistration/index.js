@@ -42,7 +42,7 @@ const ClientRegistration = () => {
   const [categ2, setTrataCate2] = useState('');
   const [newUser, setNewUser] = useState(false);
   const [open, setOpen] = useState(false);
-  const { user, setPhoto, photoURL, handleChange, registerUser,handleClick} = useUserContext();
+  const { user, photoURL, handleChange, registerUser,handleClick} = useUserContext();
 
   const categorias= ['Babá','Babá por turno', 'Costura', 'Diarista', 'Manutenção Elétrica',
   'Manutenção Hidraulica', 'Pequenos Reparos','Pintora', 'Higiene Pessoal']
