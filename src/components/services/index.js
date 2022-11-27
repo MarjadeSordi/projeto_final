@@ -16,8 +16,8 @@ const Services = () =>{
     function setFilter(e) {
       e.preventDefault();
       setValue(e.target.value);
-      console.log(value == '');
-          if(value && value != '' && serviceState) {
+      console.log(value, 'aqui');
+          if(value && value !== " " && serviceState) {
             let serviceStateFilter = serviceState.filter(item => {
               let contemCategoria = false;
               item.categorias.forEach(element => {
@@ -26,11 +26,16 @@ const Services = () =>{
               });
               return contemCategoria || item.nome.toLowerCase().includes(value.toLowerCase());
             });
-            setServiceState(serviceStateFilter);
-        }
-         else if(!value || value == '') {
-          setServiceState(services);
-        }
+            setServiceState(serviceStateFilter);         
+
+        }      
+    } 
+
+    function setCleanFilter(){
+      if(!value && value === '')
+      {
+        SetServices()
+      }
     }
 
     async function SetServices() {
@@ -106,6 +111,7 @@ const Services = () =>{
        placeholder='Buscar'
        value={value}
        onChange={setFilter}
+       onBlur={setCleanFilter}
        />
        <ButtonSearch ><AiOutlineSearch />  </ButtonSearch>
        </LabelSerchBoxService>
@@ -121,8 +127,8 @@ const Services = () =>{
 
          </TitleForService> 
          <TextForService> Valor por hora: {`R$ ${(categoria.valor).toString().replace(".", ",")}0`} </TextForService>
-         <br /> 
-         <Link to={`/requisicao?id=${item.id}&servico=${categoria.categoria}`} style={{ textDecoration: 'none', color: '#FFF' }} > Requisitar! </Link>
+        
+
          </>)}    
          <br />  
          <TextForService> Prestadora: {item.nome}</TextForService>
