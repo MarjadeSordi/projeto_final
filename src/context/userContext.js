@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect } from "react";
+import React, { createContext, useState, useEffect, useContext } from "react";
 import {
 	createUserWithEmailAndPassword,
 	updateProfile,
@@ -9,7 +9,6 @@ import {
 } from "firebase/auth";
 import { auth, storage } from "../context/firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { useContext } from "react";
 
 const UserContext = createContext({});
 
@@ -55,7 +54,7 @@ export const UserContextProvider = ({ children }) => {
 	}
 
 	useEffect(() => {
-		if (user?.photoURL) {
+		if (user) {
 			setPhotoURL(user.photoURL);
 		}
 	}, [user]);
@@ -139,7 +138,7 @@ export const UserContextProvider = ({ children }) => {
 		handleChange,
 		handleClick,
 	};
-	return (
-		<UserContext.Provider value={contextValue}>{children}</UserContext.Provider>
+	return (		
+		<UserContext.Provider value={contextValue}>{children}</UserContext.Provider>	
 	);
 };
