@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import { DivCapsule, DivText } from '../clientLoggin/style';
 import MenuPage from '../menu';
-import { ButtonModal, ImageSelfie, InputForComent, InputForText, ModalText, ProfileBox,  ProfileText } from './style';
+import { ButtonModal, ImageSelfie, InputForComent, InputForText,ModalCapsule, ModalText,  ProfileBox,  ProfileText } from './style';
 import selfie from '../../assets/selfie.jpg'
 import Modal from 'react-modal';
 import Loading from 'react-fullscreen-loading';
@@ -106,6 +106,7 @@ const ProviderDetails = () =>{
         style={customStyles}
         contentLabel="Example Modal"
       >
+                <ModalCapsule>
         <ModalText> Olá! Fique a vontade para avaliar a {serviceProvider.nome} </ModalText>
         <ModalText> Vamos lá, de 1 a 10 como você avalia que foi o atendimento? </ModalText>
         <InputForText
@@ -126,6 +127,7 @@ const ProviderDetails = () =>{
            />
         <br />
         <ButtonModal> Enviar </ButtonModal>
+        </ModalCapsule>
       </Modal>
     <MenuPage/>
     <ProfileBox>
@@ -150,7 +152,7 @@ Avaliações:
      
      </ProfileBox> 
 <ButtonModal onClick={() => setModal(true)}> Avaliar </ButtonModal> <br/>
- {categoria? <ButtonModal > Solicitar {TrataCategoria(categoria[0].categoria)} <Link to={`/requisicao/${findId}/servico/${categoria[0].categoria}`} style={{ textDecoration: 'none', color: '#FFF' }}> {categ} </Link> </ButtonModal>  : ''} 
+{categoria ? <ButtonModal > Solicitar {TrataCategoria(categoria[0].categoria) } <Link to={`/requisicao/${findId}/servico/${categoria[0].categoria}`} style={{ textDecoration: 'none', color: '#FFF' }}> {categ}</Link> </ButtonModal> : '' }
 {categoria && categoria.length > 1 ? <ButtonModal > Solicitar {TrataCategoria(categoria[1].categoria) } <Link to={`/requisicao/${findId}/servico/${categoria[1].categoria}`} style={{ textDecoration: 'none', color: '#FFF' }}> {categ}</Link> </ButtonModal> : '' }
     
 </DivCapsule> : <Loading loading={loading} background="#2d3436" loaderColor= "rgb(216, 2, 134)"/> }

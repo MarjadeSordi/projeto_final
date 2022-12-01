@@ -6,7 +6,7 @@ import {  InputForEmail, InputForPassWord, FormForClient, InputButton, DivCapsul
 import MenuPage from '../menu';
 
 const ClientLoggin = () => {
-    const { signInUser, forgotPassword, logoutUser} = useUserContext();
+    const { signInUser, forgotPassword} = useUserContext();
     const [email, setEmail] = useState('');
     const [password, setPassWord] = useState('');
     const [errors, setError] = useState(false);
@@ -41,10 +41,8 @@ const ClientLoggin = () => {
       setLogin(true);
     };
 
-    const handleFormtwo = () => {
-      logoutUser();
-    }
 
+    
     return(    
 <DivCapsule>
         <MenuPage />  
@@ -80,12 +78,7 @@ const ClientLoggin = () => {
         {login === true ? <Navigate to='/dashboard'/> : ''}
         </InputButton>   
 
-          <InputButton
-        type="button"
-        value="LOGOUT"
-        onClick={handleFormtwo}> LOGOUT
-           </InputButton>  
-
+  
     </FormForClient> 
     </DivCapsule>
 
