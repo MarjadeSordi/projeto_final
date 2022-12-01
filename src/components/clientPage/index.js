@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {DivCapsule} from './style';
+import {DivCapsule, TitleCalendar} from './style';
 import ClientEndereco from '../clientEndereco'
 import WeekCalendar from "react-week-calendar";
 import { useLocation } from "react-router-dom";
@@ -233,9 +233,9 @@ const ClientPage = () =>{
     }
     return (
 		<>
-			{}
-				<h3>Consulte os horários disponível para o usuário</h3>
-                <DivCapsule>
+			{} <DivCapsule>
+				<TitleCalendar>Consulte os horários disponível para o usuário</TitleCalendar>
+               
                     <WeekCalendar
 						numberOfDays={7}
 						dayFormat={"DD/MM"}

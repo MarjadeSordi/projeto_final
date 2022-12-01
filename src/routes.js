@@ -9,6 +9,7 @@ import ClientRegister from "./routes/clientCadastro";
 import { auth } from "./context/firebase";
 import ClientDashboardWithoutLogin from './routes/clientDashboardWithoutLogin';
 import ProviderDetails from './components/providerDetails';
+import ClientContactPage from './routes/clientContactPage';
 
 
 export default function Routess() {
@@ -43,6 +44,7 @@ export default function Routess() {
 					<Route path='/requisicao/:id/servico/:servico' element={<ClientRequisicao />} />
 					<Route path="/prestadora/:id" element={<ProviderDetails />} />
 					<Route path="/cadastro" element={<ClientRegister />} />
+					<Route path="/faleconosco" element={<ClientContactPage />} />
 				</Routes>
 			</BrowserRouter>
 		</UserContextProvider>
