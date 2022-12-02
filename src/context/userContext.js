@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect, useContext } from "react";
+import React, { createContext, useState, useEffect } from "react";
 import {
 	createUserWithEmailAndPassword,
 	updateProfile,
@@ -9,6 +9,7 @@ import {
 } from "firebase/auth";
 import { auth, storage } from "../context/firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { useContext } from "react";
 
 const UserContext = createContext({});
 
@@ -25,15 +26,17 @@ export const UserContextProvider = ({ children }) => {
 
 	const [error, setError] = useState("");
 
-	async function upload(file, user, setLoading) {
+	async function upload(file, user) {
 		if (photo == null) return;
-		const fileRef = ref(storage, "images/users/" + user.uid);
+		const fileRef = ref(storage, "images/" + user.uid);
 
 		setLoading(true);
 
 		const snapshot = await uploadBytes(fileRef, file);
+		console.log(snapshot);
 
 		const photoURL = await getDownloadURL(fileRef);
+		console.log(photoURL);
 
 		updateProfile(user, {
 			photoURL,
@@ -43,17 +46,32 @@ export const UserContextProvider = ({ children }) => {
 		window.location.reload();
 	}
 
-	function handleChange(e) {
+	async function handleChange(e) {
+		e.preventDefault();
 		if (e.target.files[0]) {
+			console.log("handleChange");
 			setPhoto(e.target.files[0]);
+			const fileRef = ref(storage, "images/" + user.uid);
+			console.log(fileRef);
+			const snapshot = await uploadBytes(fileRef, photo);
+			console.log(snapshot);
+	
+			const photoURL = await getDownloadURL(fileRef);
+			console.log(photoURL);
+	
+			updateProfile(user, {
+				photoURL,
+			}).then(res => console.log(res));
+			//window.location.reload();
 		}
 	}
 
 	function handleClick() {
-		upload(photo, user, setLoading);
+		upload(photo, user);
 	}
 
 	useEffect(() => {
+		console.log(user);
 		if (user) {
 			setPhotoURL(user.photoURL);
 		}
@@ -79,8 +97,11 @@ export const UserContextProvider = ({ children }) => {
 		setLoading(true);
 		signInWithEmailAndPassword(auth, email, password)
 			.then((res) => {
-				if(res.ok)
+				console.log("logado " + res.ok);
+				if(res.ok) {
+					console.log("logado");
 				window.location.href = '/dashboard';
+			}
 			})
 			.catch((err) => setError(err.message))
 			.finally(() => setLoading(false));
@@ -138,7 +159,7 @@ export const UserContextProvider = ({ children }) => {
 		handleChange,
 		handleClick,
 	};
-	return (		
-		<UserContext.Provider value={contextValue}>{children}</UserContext.Provider>	
+	return (
+		<UserContext.Provider value={contextValue}>{children}</UserContext.Provider>
 	);
 };
