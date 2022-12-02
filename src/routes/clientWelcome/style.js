@@ -36,5 +36,30 @@ transition: ease-out 0.4s;
     box-shadow: inset 400px 0 0 0 #D80286;
 }
 `
+export const BoxForService = styled.div`
+color: #f6f4e6;
+width: 100%;
+border: 2px solid rgb(216, 2, 134);
+margin: 10px;
+padding: 5px;
+border-radius: 0px; 
 
+`
 
+export const CapsuleForBoxes = styled.div`
+display: flex;
+margin-top: 20px;
+flex-direction: row;
+padding: 10px; 
+width: 100%; 
+flex-wrap: wrap;
+`
+
+export const TitleForService = styled.h3`
+font-weight: 600;
+color: #f6f4e6;
+`
+
+export const TextForService = styled.span`
+font-weight: 300;
+`
