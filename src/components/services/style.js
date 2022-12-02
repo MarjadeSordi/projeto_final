@@ -4,6 +4,7 @@ export const CapsuleForService = styled.div`
 background-color: #2d3436;
 background-image: linear-gradient(315deg, #2d3436 0%, #000000 74%)
 width: 100%;
+min-height: 100vh; 
 `
 
 export const CapsuleForBoxes = styled.div`
