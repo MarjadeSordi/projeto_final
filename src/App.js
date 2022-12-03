@@ -1,3 +1,4 @@
+import React from 'react';
 import GlobalStyle from './theme/globalStyle';
 import Routess from './routes';
 

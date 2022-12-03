@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {DivCapsule,MenuText} from './style';
+import {DivCapsule,MenuText, TitleCalendar} from './style';
 import { Link } from 'react-router-dom';
 import WeekCalendar from "react-week-calendar";
 import { useLocation } from "react-router-dom";
@@ -42,6 +42,12 @@ const ClientPage = () =>{
             getUserById(userId);
         }
     }, [userId]);
+
+	useEffect(() => {
+        if (user && !userLogado) {
+            getUserById(user.email);
+        }
+    }, [user]);
 
 	useEffect(() => {
         if (userLogado) {
@@ -201,7 +207,7 @@ const ClientPage = () =>{
 
 		handleSave = () => {
 			console.log("handleSave: " + this);
-			let value = this.comentario?.value;
+			let value = this.comentario != null ? this.comentario.value : null;
 			let { start, end } = this.props;
 			let formattedStart = start.format("DD-MM-YYYY HH:mm");
 			let formatedEnd = end.format("DD-MM-YYYY HH:mm");
@@ -213,7 +219,7 @@ const ClientPage = () =>{
 			} :
 				{
 					enderecoRequisitante: {
-						id: this.props.userLogado?.enderecos.length > 0 ? enderecoSelecionado : userLogado.enderecos[0].id
+						id: this.props.userLogado != null &&  this.props.userLogado.enderecos.length > 0 ? enderecoSelecionado : userLogado.enderecos[0].id
 
 					},
 					userRequisitado:  {
@@ -256,7 +262,8 @@ const ClientPage = () =>{
 					</div>
 					{
 					/* tratamento para caso o usuário tenha mais de um endereço */
-					(!this.props.serviceId && this.props.userLogado?.enderecos.length) > 0 &&
+					
+					(!this.props.serviceId && this.props.userLogado != null && this.props.userLogado.enderecos.length) > 0 &&
                             <select name={"selecione"} value={""} onChange={handleChangeEndereco}>
                                     { (this.props.userLogado.enderecos).map((endereco) =><>
                                         <option value={endereco.id}>{endereco.cidade} - {endereco.bairro} - {endereco.endereco}</option>
@@ -266,8 +273,12 @@ const ClientPage = () =>{
                                 }
                     {
 						/* tratamento para caso o usuário não tenha um endereço cadastradao */
-                        this.props.userLogado?.enderecos.length == 0 && <Link to='/cadastro'>  <MenuText> Inserir Endereço </MenuText> </Link>
+                        (this.props.userLogado && this.props.userLogado.enderecos.length == 0) && <Link to='/cadastro'>  <MenuText> Inserir Endereço </MenuText> </Link>
                     }
+                    {
+						/* tratamento para caso o usuário não tenha um endereço cadastradao 
+                        this.props.userLogado?.enderecos.length == 0 && <Link to='/cadastro'>  <MenuText> Inserir Endereço </MenuText> </Link>
+                   */ }
 					
 					<h2>
 						{
@@ -283,16 +294,24 @@ const ClientPage = () =>{
 											<option value="CONCLUIDO">Concluído</option>
   										</select>
 						}
-						
+
 						{ /* tratamento para solicitação do usuário logado e concluída */
-							(this.props.value == 'CONCLUIDO' && this.props.userLogado?.id == this.props.userRequisitante.id) && <div>
+							(this.props.value == 'CONCLUIDO' &&this.props.userLogado && this.props.userLogado.id == this.props.userRequisitante.id) && <div>
 							<label for="comentario">Comentário</label>
 							<input type="text" id="comentario"/>
 							</div>
 					  	}
 
 					{ /* tratamento para solicitação do usuário logado e concluída */
-						(this.props.value == 'CONCLUIDO'  && this.props.userLogado?.id == this.props.userRequisitante.id) &&
+						(this.props.value == 'CONCLUIDO'  && this.props.userLogado != null && this.props.userLogado.id == this.props.userRequisitante.id) &&
+							(this.props.value == 'CONCLUIDO' && this.props.enderecoId && this.props.userLogado && this.props.userLogado.enderecos[0].id == this.props.enderecoId)
+							&& <div>
+							<label for="comentario">Comentário</label>
+							<input type="text" id="comentario"/>
+							</div>
+					}
+					{ /* tratamento para solicitação do usuário logado e concluída */
+						(this.props.value == 'CONCLUIDO' && this.props.enderecoId &&  this.props.userLogado && this.props.userLogado.enderecos[0].id == this.props.enderecoId) &&
 						<select name={"selecione"} value={""} onChange={handleChangeAvaliacao}>
 							<option value="1">Péssimo</option>
 							<option value="2">Ruim</option>
@@ -300,7 +319,9 @@ const ClientPage = () =>{
 							<option value="4">Bom</option>
 							<option value="5">Ótimo</option>
 						  </select>
+
 					  	}
+
 					<button
 						className="customModal__button customModal__button_float_right"
 						onClick={this.handleSave}
@@ -315,8 +336,9 @@ const ClientPage = () =>{
     return (
 		<>
 			{}
-				<h3>Consulte os horários disponível para o usuário</h3>
-                <DivCapsule>
+			<DivCapsule>
+				<TitleCalendar>Consulte os horários disponível para o usuário</TitleCalendar>
+                
                     <WeekCalendar
 						numberOfDays={7}
 						dayFormat={"DD/MM"}
@@ -334,3 +356,4 @@ const ClientPage = () =>{
 }
 
 export default ClientPage; 
+

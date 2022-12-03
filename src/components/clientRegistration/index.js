@@ -150,6 +150,10 @@ const ClientRegistration = () => {
     PopulateStates();
   }, []);
 
+  useEffect(()=>{
+    console.log(user);
+  },[user])
+
   const PopulateCity = async (uf) => {
     let url = 'https://servicodados.ibge.gov.br/api/v1/';
     url = url + `localidades/estados/${uf}/municipios`;

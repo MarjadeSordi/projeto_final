@@ -5,7 +5,6 @@ export const ProfileCapsule =styled.div`
 background-color: #2d3436;
 background-image: linear-gradient(315deg, #2d3436 0%, #000000 74%)
 width: 100%;
-height: 100vh;
 margin: 0px; 
 `
 
@@ -77,3 +76,12 @@ margin-left: 10px;
 color: #f6f4e6;
 font-size: 1.2em;
 font-weight: 300;`
+
+
+
+export const ModalCapsule = styled.div`
+display: flex;
+flex-direction: column; 
+justify-content: center;
+align-items: center; 
+`

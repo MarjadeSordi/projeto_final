@@ -48,7 +48,6 @@ export const InputForEmail = styled.input`
 background-color:  #111111;
 color: white; 
   margin: 2%;
-
   width: 40%;
   padding: 8px;
   :: placeholder {
@@ -61,7 +60,6 @@ export const InputForPassWord = styled.input`
 background-color:  #111111;
 color: white; 
   margin: 2%;
-
   width: 40%;
   padding: 8px;
   :: placeholder {
@@ -74,16 +72,13 @@ export const SelectedForState = styled.select`
 background-color:  #111111;
 color: white; 
   margin: 2%;
-
   width: 40%;
   padding: 8px;
-
 `
 export const SelectedForCity = styled.select`
 background-color:  #111111;
 color: white; 
   margin: 2%;
-
   width: 40%;
   padding: 8px;
 `
@@ -122,7 +117,6 @@ margin: 20%`
 export const DivModal = styled.div`
 color: #fff;
 width: 100%; 
-
 `
 
 export const Buttons = styled.div`
