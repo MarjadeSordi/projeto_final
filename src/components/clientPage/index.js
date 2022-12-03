@@ -115,6 +115,7 @@ const ClientPage = () =>{
 				end: moment(service.fim,"DD/MM/YYYY hh:mm"),
 				value: service.status,
 				enderecoId : service.enderecoRequisitante.id,
+				userRequisitante : service.userRequisitante,
 				serviceId : service.id,
 				categoria : service.categoria,
 				userRequisitado : service.userRequisitado,
@@ -284,14 +285,14 @@ const ClientPage = () =>{
 						}
 						
 						{ /* tratamento para solicitação do usuário logado e concluída */
-							(this.props.value == 'CONCLUIDO' && this.props.enderecoId && this.props.userLogado?.enderecos[0].id == this.props.enderecoId) && <div>
+							(this.props.value == 'CONCLUIDO' && this.props.userLogado?.id == this.props.userRequisitante.id) && <div>
 							<label for="comentario">Comentário</label>
 							<input type="text" id="comentario"/>
 							</div>
 					  	}
 
 					{ /* tratamento para solicitação do usuário logado e concluída */
-						(this.props.value == 'CONCLUIDO' && this.props.enderecoId && this.props.userLogado?.enderecos[0].id == this.props.enderecoId) &&
+						(this.props.value == 'CONCLUIDO'  && this.props.userLogado?.id == this.props.userRequisitante.id) &&
 						<select name={"selecione"} value={""} onChange={handleChangeAvaliacao}>
 							<option value="1">Péssimo</option>
 							<option value="2">Ruim</option>
