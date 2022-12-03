@@ -10,14 +10,18 @@ import { useUserContext } from "../../context/userContext";
 const ClientWelcome = () =>{
     const { user } = useUserContext();
 
-    
+
+  
+
   useEffect(() => {
     if (user && user.displayName) {
-      console.log("useEffect user" + user.displayName);
-    } else (console.log('error'))
+      console.log("useEffect user" + user.displayName)
+    
+    } else (console.log('error'))     
   }, [user]);
 
-    return(
+
+   return(
         <> 
         <BodyPage>
         <MenuPage />   

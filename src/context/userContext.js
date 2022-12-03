@@ -10,6 +10,7 @@ import {
 import { auth, storage } from "../context/firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { useContext } from "react";
+import { async } from "@firebase/util";
 
 const UserContext = createContext({});
 
@@ -17,6 +18,7 @@ export const useUserContext = () => useContext(UserContext);
 
 export const UserContextProvider = ({ children }) => {
 	const [user, setUser] = useState(null);
+	const [userInfo, setUserInfo] = useState([]);
 	const [awsUser, setAwsUser] = useState(null);
 	const [photo, setPhoto] = useState(null);
 	const [loading, setLoading] = useState(false);
@@ -95,6 +97,7 @@ export const UserContextProvider = ({ children }) => {
 
 	const signInUser = (email, password) => {
 		setLoading(true);
+		fetchUser(email); 
 		signInWithEmailAndPassword(auth, email, password)
 			.then((res) => {
 				console.log("logado " + res.ok);
@@ -107,18 +110,20 @@ export const UserContextProvider = ({ children }) => {
 			.finally(() => setLoading(false));
 	};
 
-	function fetchUser(email) {
-		fetch(`http://whm.joao1866.c41.integrator.host:9206/usuario?email=${email}`,{ mode: 'no-cors'}) 
-		.then(
-		  (result) => {
-			console.log(result);
-			this.setUser(result);
-		  },
-		  (error) => {
-			console.error(error)
-		  }
-		)
-	}
+	const  fetchUser = (email) => {
+
+			  fetch(`http://whm.joao1866.c41.integrator.host:9206/usuario?email=${email}`,{ mode: 'no-cors'})
+			  .then((res) => {
+				  console.log("AQUI" + res.body);			
+			  })
+			  .catch((err) => setError(err.message))
+			  .finally(() => setLoading(false));		
+	
+		}
+		
+  
+	
+	
 
 	async function doRegisterBackEnd(user) {
 		console.log("registrar " + JSON.stringify(user));
