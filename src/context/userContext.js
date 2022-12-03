@@ -47,12 +47,12 @@ export const UserContextProvider = ({ children }) => {
 
 	async function handleChange(e) {
 		e.preventDefault();
+		console.log("handleChange");
 		if (e.target.files[0]) {
 			console.log("handleChange");
-			setPhoto(e.target.files[0]);
 			const fileRef = ref(storage, "images/" + user.uid);
 			console.log(fileRef);
-			const snapshot = await uploadBytes(fileRef, photo);
+			const snapshot = await uploadBytes(fileRef, e.target.files[0]);
 			console.log(snapshot);
 	
 			const photoURL = await getDownloadURL(fileRef);
