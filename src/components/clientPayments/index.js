@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {DivCapsule,MenuText} from './style';
 import { Link } from 'react-router-dom';
-import WeekCalendar from "react-week-calendar";
 import { useLocation } from "react-router-dom";
 import { useUserContext } from "../../context/userContext";
 import * as moment from "moment";
@@ -40,10 +38,6 @@ const ClientPayments = () =>{
         }
     }, [userLogado]);
 
-    const handleChangeEndereco = (e) => {
-		e.preventDefault();
-        setEnderecoSelecionado(e.target.value);
-    }
 
 	const handleChangeStatus = (e) => {
         e.preventDefault();
@@ -93,32 +87,6 @@ const ClientPayments = () =>{
               }
 	};
 
-	const parseService = (requisicoes = []) => {
-		console.log("parseRequisicoes");
-		console.log(selecionado);
-		let lastUid = 0;
-		let parseRequisicoes = [];
-		requisicoes.forEach((service) => {
-			console.log(service);
-			let includeService = {
-				lastUid: lastUid,
-				start: moment(service.inicio,"DD/MM/YYYY hh:mm"),
-				end: moment(service.fim,"DD/MM/YYYY hh:mm"),
-				value: service.status,
-				enderecoId : service.enderecoRequisitante.id,
-				userRequisitante : service.userRequisitante,
-				serviceId : service.id,
-				categoria : service.categoria,
-				userRequisitado : service.userRequisitado,
-				userLogado: userLogado
-			};
-			console.log(includeService);
-			lastUid++;
-			parseRequisicoes.push(includeService);
-		});
-		setUid(lastUid);
-		setSelecionado(parseRequisicoes);
-	};
 
 	const handleEventRemove = (event) => {
 		const { selectedIntervals } = this.state;
@@ -306,22 +274,9 @@ const ClientPayments = () =>{
     return (
 		<>
 			{}
-				<h3>Consulte os horários disponível para o usuário</h3>
-                <DivCapsule>
-                    <WeekCalendar
-						numberOfDays={7}
-						dayFormat={"DD/MM"}
-						scaleUnit={60}
-						scaleFormat={"HH"}
-						selectedIntervals={selecionado}
-						onIntervalSelect={handleSelect}
-						onIntervalUpdate={handleEventUpdate}
-						onIntervalRemove={handleEventRemove}
-						modalComponent={ModalCalendar}
-					></WeekCalendar>
-                    </DivCapsule>
+				<h3>Consulte os pagamentos para o usuário</h3>
 		</>
 	);
 }
 
-export default ClientPage; 
+export default ClientPayments; 
