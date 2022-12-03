@@ -1,4 +1,7 @@
 import styled , { css } from 'styled-components';
+import {
+	IoCameraOutline,
+} from "react-icons/io5";
 
 
 export const DivCapsule = styled.div`
@@ -45,7 +48,6 @@ export const InputForEmail = styled.input`
 background-color:  #111111;
 color: white; 
   margin: 2%;
-
   width: 40%;
   padding: 8px;
   :: placeholder {
@@ -58,7 +60,6 @@ export const InputForPassWord = styled.input`
 background-color:  #111111;
 color: white; 
   margin: 2%;
-
   width: 40%;
   padding: 8px;
   :: placeholder {
@@ -71,16 +72,13 @@ export const SelectedForState = styled.select`
 background-color:  #111111;
 color: white; 
   margin: 2%;
-
   width: 40%;
   padding: 8px;
-
 `
 export const SelectedForCity = styled.select`
 background-color:  #111111;
 color: white; 
   margin: 2%;
-
   width: 40%;
   padding: 8px;
 `
@@ -119,8 +117,15 @@ margin: 20%`
 export const DivModal = styled.div`
 color: #fff;
 width: 100%; 
-
 `
+
+export const Buttons = styled.div`
+	width: 100%;
+	display: flex;
+	justify-content: space-around;
+	margin-top: 15px;
+`
+
 
 export const ButtonModal = styled.button`
 width: 20%; 
@@ -150,4 +155,64 @@ flex-direction: column;
 
 export const Ptext = styled.p`
 margin-left: 20px;
+`
+
+export const IoCamera = styled(IoCameraOutline)`
+	width: 20px;
+	height: 20px;
+	stroke: white;
+	&:hover {
+		opacity: 0.5;
+	}
+`
+export const Image = styled.div`
+	height: 220px;
+	width: 220px;
+	border-radius: 50%;
+	padding: 3px;
+	background: #94449e;
+`
+
+export const Logo = styled.img`
+	height: 100%;
+	width: 100%;
+	object-fit: cover;
+	border-radius: 50%;
+	border: 3px solid #fff;
+	&:hover {
+		opacity: 0.5;
+	}
+`
+
+export const InputImage = styled.input`
+	display: none;
+`;
+
+export const LabelImage = styled.label`
+	color: ${({ theme }) => theme.title};
+	cursor: pointer;
+	margin: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	&svg {
+		margin-left: 5%;
+	}
+`
+
+export const HireMe = styled.button`
+	background: #333;
+	outline: none;
+	border: 1px solid #94449e;
+	color: white;
+	padding: 8px 22px;
+	border-radius: 20px;
+	font-size: 1.5rem;
+	font-weight: 500;
+	transition: all 0.3s ease;
+	cursor: pointer;
+	&:hover {
+		background: #333;
+		opacity: 0.5;
+	}
 `
