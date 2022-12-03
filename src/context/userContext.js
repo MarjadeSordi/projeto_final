@@ -61,7 +61,7 @@ export const UserContextProvider = ({ children }) => {
 			updateProfile(user, {
 				photoURL,
 			}).then(res => console.log(res));
-			//window.location.reload();
+			window.location.reload();
 		}
 	}
 
