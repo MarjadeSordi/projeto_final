@@ -12,6 +12,7 @@ const ClientLoggin = () => {
     const [errors, setError] = useState(false);
     const [exists, setExists] = useState(false);
     const [login, setLogin] = useState(false); 
+    const [infos, setInfo] = useState([])
 
  
     const dispatch = useDispatch();

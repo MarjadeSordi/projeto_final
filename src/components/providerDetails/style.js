@@ -20,11 +20,10 @@ export const ProfileText = styled.div`
 margin-left: 10px; 
 color: #f6f4e6;
 font-size: 1.2em;
-text-transform: uppercase;
 font-weight: 300;`
 
 export const ImageSelfie = styled.img`
-width: 30%; `
+width: 80%; `
 
 export const ButtonModal = styled.button`
 width: 30%; 
@@ -84,4 +83,11 @@ display: flex;
 flex-direction: column; 
 justify-content: center;
 align-items: center; 
+`
+export const DivPicture = styled.div`
+width: 40%; 
+display: flex;
+justify-content: center;
+align-items: center; 
+border: 1px solid white; 
 `

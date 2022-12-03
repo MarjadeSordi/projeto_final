@@ -1,17 +1,17 @@
 import React, {useState, useEffect} from 'react';
 import { DivCapsule, DivText } from '../clientLoggin/style';
 import MenuPage from '../menu';
-import { ButtonModal, ImageSelfie, InputForComent, InputForText,ModalCapsule, ModalText,  ProfileBox,  ProfileText } from './style';
+import { ButtonModal, DivPicture, ImageSelfie, InputForComent, InputForText,ModalCapsule, ModalText,  ProfileBox,  ProfileText } from './style';
 import selfie from '../../assets/selfie.jpg'
 import Modal from 'react-modal';
 import Loading from 'react-fullscreen-loading';
-import {Link, Navigate} from 'react-router-dom'; 
+import {Link} from 'react-router-dom'; 
 
 const ProviderDetails = () =>{ 
     const [serviceProvider, setServiceProvider] = useState([]);
     const [enderecos, setEndereco] = useState([])
     const [categoria, setCategoria] = useState()
-    const [categoria2, setCategoria2] = useState()
+    const [avaliacao, setAvaliacao] = useState()
     const [modal, setModal] = useState(false);
     const [loading, setLoading] = useState(false);
     const urlParams = window.location.href;
@@ -34,6 +34,22 @@ const ProviderDetails = () =>{
       console.log(error);
     }
   };
+
+  const AvaliacaoProvider = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch(`http://whm.joao1866.c41.integrator.host:9206/avaliacao?userRequisitadoId=${findId}`);
+      const json = await response.json();
+      setAvaliacao(json);   
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  
+
+
 
   const customStyles = {
     content: {
@@ -93,6 +109,7 @@ const ProviderDetails = () =>{
 
           useEffect(() => {
             ServiceProvider();
+            AvaliacaoProvider();
           }, []);
      
           
@@ -131,22 +148,22 @@ const ProviderDetails = () =>{
       </Modal>
     <MenuPage/>
     <ProfileBox>
-     <ImageSelfie src={selfie} />  
+    <DivPicture> 
+     <ImageSelfie src={selfie} />  </DivPicture>
      <ProfileText> Nome :  {serviceProvider.nome} <br/>  
      Cidade: {enderecos.cidade ? enderecos.cidade : '' } |  {enderecos.uf ? enderecos.uf : '' }
 <br/>
 Endereço: {enderecos.bairro ? enderecos.bairro : '' } | {enderecos.logradouro ? enderecos.logradouro : '' }  
 <br/>
-Categoria: {categoria? TrataCategoria(categoria[0].categoria) : ''} {categ} <br/> 
-Valor por hora: {categoria? `R$ ${(categoria[0].valor).toString().replace(".", ",")}0` : ''} <br />
 
-{categoria && categoria.length > 1 ? TrataCategoria(categoria[1].categoria) : ''} 
-{categoria && categoria.length > 1 ? `Categoria: ${categ} `: ''} <br/> 
-{categoria && categoria.length > 1 ? `Valor por hora:R$ ${(categoria[1].valor).toString().replace(".", ",")}0` : ''} <br />
+{categoria? categoria.map((item) => <>{TrataCategoria(item.categoria)} {categ} <br/>
+Valor por hora: {`R$ ${(item.valor).toString().replace(".", ",")}0`} <br /> </>   ) : ''}
+
 
 Contato: {serviceProvider.email}
 <br/>
-Avaliações: 
+Avaliações: {avaliacao && avaliacao.length > 0 ? avaliacao.map((item) => <><p> Nota: {item.nota} </p>
+<p> Comentários: {item.comentario}</p> </>) : <p> Está usuária ainda não recebeu nenhuma avaliação.</p>}
 <br/>
  </ProfileText> 
      
