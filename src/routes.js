@@ -10,6 +10,7 @@ import { auth } from "./context/firebase";
 import ClientDashboardWithoutLogin from './routes/clientDashboardWithoutLogin';
 import ProviderDetails from './components/providerDetails';
 import ClientContactPage from './routes/clientContactPage';
+import ClientAvaliacao from './components/avaliacaoPrestadora';
 
 
 export default function Routess() {
@@ -43,6 +44,7 @@ export default function Routess() {
 					{logado ?<Route path="/dashboard" element={<ClientDashboard />} /> : <Route path="/dashboard" element={<ClientDashboardWithoutLogin />} />}
 					<Route path='/requisicao/:id/servico/:servico' element={<ClientRequisicao />} />
 					<Route path="/prestadora/:id" element={<ProviderDetails />} />
+					<Route path="/avaliacao/:id" element={<ClientAvaliacao />} />
 					<Route path="/cadastro" element={<ClientRegister />} />
 					<Route path="/faleconosco" element={<ClientContactPage />} />
 				</Routes>

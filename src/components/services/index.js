@@ -16,7 +16,7 @@ const Services = () =>{
     function setFilter(e) {
       e.preventDefault();
       setValue(e.target.value);
-      console.log(value, 'aqui');
+
           if(value && value !== " " && serviceState) {
             let serviceStateFilter = serviceState.filter(item => {
               let contemCategoria = false;
