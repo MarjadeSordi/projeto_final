@@ -12,7 +12,6 @@ const ProviderDetails = () =>{
     const [enderecos, setEndereco] = useState([])
     const [categoria, setCategoria] = useState()
     const [avaliacao, setAvaliacao] = useState()
-    const [modal, setModal] = useState(false);
     const [loading, setLoading] = useState(false);
     const urlParams = window.location.href;
     const urlSplit = urlParams.split('/')
@@ -47,30 +46,6 @@ const ProviderDetails = () =>{
     }
   };
 
-  
-
-
-
-  const customStyles = {
-    content: {
-      top: '50%',
-      left: '50%',
-      right: 'auto',
-      bottom: 'auto',
-      marginRight: '-50%',
-      transform: 'translate(-50%, -50%)',
-      backgroundColor: '#2d3436',
-      backgroundImage: 'linear-gradient(315deg, #2d3436 0%, #000000 74%)',
-      width: '60%'
-    },
-  };
-
-  function closeModal() {
-    setModal(false);
-  }
-
-      console.error(categoria, 'INFERNOOO')
-    
           let categ = ''
           const TrataCategoria = (categoria) => {
             switch(categoria){
@@ -117,35 +92,6 @@ const ProviderDetails = () =>{
 
 <>
 {loading === false? <DivCapsule>
-<Modal
-        isOpen={modal}
-        onRequestClose={closeModal}
-        style={customStyles}
-        contentLabel="Example Modal"
-      >
-                <ModalCapsule>
-        <ModalText> Olá! Fique a vontade para avaliar a {serviceProvider.nome} </ModalText>
-        <ModalText> Vamos lá, de 1 a 10 como você avalia que foi o atendimento? </ModalText>
-        <InputForText
-          id='inputNota'
-          type="number"
-          name="nota"    
-          placeholder="Nota"
-          maxLength={10}
-   
-        />
-
-<ModalText> Gostaria de deixar um comentário? </ModalText>
-<InputForComent
-          id='inputText'
-          type="textarea"
-          name="comentario"    
-          placeholder="Comentário"          
-           />
-        <br />
-        <ButtonModal> Enviar </ButtonModal>
-        </ModalCapsule>
-      </Modal>
     <MenuPage/>
     <ProfileBox>
     <DivPicture> 
@@ -162,13 +108,14 @@ Valor por hora: {`R$ ${(item.valor).toString().replace(".", ",")}0`} <br /> </> 
 
 Contato: {serviceProvider.email}
 <br/>
+<br/>
 Avaliações: {avaliacao && avaliacao.length > 0 ? avaliacao.map((item) => <><p> Nota: {item.nota} </p>
 <p> Comentários: {item.comentario}</p> </>) : <p> Está usuária ainda não recebeu nenhuma avaliação.</p>}
 <br/>
  </ProfileText> 
      
      </ProfileBox> 
-<ButtonModal onClick={() => setModal(true)}> Avaliar </ButtonModal> <br/>
+
 {categoria ? <ButtonModal > Solicitar {TrataCategoria(categoria[0].categoria) } <Link to={`/requisicao/${findId}/servico/${categoria[0].categoria}`} style={{ textDecoration: 'none', color: '#FFF' }}> {categ}</Link> </ButtonModal> : '' }
 {categoria && categoria.length > 1 ? <ButtonModal > Solicitar {TrataCategoria(categoria[1].categoria) } <Link to={`/requisicao/${findId}/servico/${categoria[1].categoria}`} style={{ textDecoration: 'none', color: '#FFF' }}> {categ}</Link> </ButtonModal> : '' }
     

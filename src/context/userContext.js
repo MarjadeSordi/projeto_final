@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect } from "react";
+import React, {useContext, createContext, useState, useEffect } from "react";
 import {
 	createUserWithEmailAndPassword,
 	updateProfile,
@@ -9,8 +9,6 @@ import {
 } from "firebase/auth";
 import { auth, storage } from "../context/firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { useContext } from "react";
-import { async } from "@firebase/util";
 
 const UserContext = createContext({});
 
@@ -18,7 +16,6 @@ export const useUserContext = () => useContext(UserContext);
 
 export const UserContextProvider = ({ children }) => {
 	const [user, setUser] = useState(null);
-	const [userInfo, setUserInfo] = useState([]);
 	const [awsUser, setAwsUser] = useState(null);
 	const [photo, setPhoto] = useState(null);
 	const [loading, setLoading] = useState(false);
@@ -50,12 +47,12 @@ export const UserContextProvider = ({ children }) => {
 
 	async function handleChange(e) {
 		e.preventDefault();
+		console.log("handleChange");
 		if (e.target.files[0]) {
 			console.log("handleChange");
-			setPhoto(e.target.files[0]);
 			const fileRef = ref(storage, "images/" + user.uid);
 			console.log(fileRef);
-			const snapshot = await uploadBytes(fileRef, photo);
+			const snapshot = await uploadBytes(fileRef, e.target.files[0]);
 			console.log(snapshot);
 	
 			const photoURL = await getDownloadURL(fileRef);
@@ -64,7 +61,7 @@ export const UserContextProvider = ({ children }) => {
 			updateProfile(user, {
 				photoURL,
 			}).then(res => console.log(res));
-			//window.location.reload();
+			window.location.reload();
 		}
 	}
 
@@ -74,7 +71,7 @@ export const UserContextProvider = ({ children }) => {
 
 	useEffect(() => {
 		console.log(user);
-		if (user) {
+		if (user && user.photoURL) {
 			setPhotoURL(user.photoURL);
 		}
 	}, [user]);
@@ -97,7 +94,6 @@ export const UserContextProvider = ({ children }) => {
 
 	const signInUser = (email, password) => {
 		setLoading(true);
-		fetchUser(email); 
 		signInWithEmailAndPassword(auth, email, password)
 			.then((res) => {
 				console.log("logado " + res.ok);
@@ -110,20 +106,18 @@ export const UserContextProvider = ({ children }) => {
 			.finally(() => setLoading(false));
 	};
 
-	const  fetchUser = (email) => {
-
-			  fetch(`http://whm.joao1866.c41.integrator.host:9206/usuario?email=${email}`,{ mode: 'no-cors'})
-			  .then((res) => {
-				  console.log("AQUI" + res.body);			
-			  })
-			  .catch((err) => setError(err.message))
-			  .finally(() => setLoading(false));		
-	
-		}
-		
-  
-	
-	
+	function fetchUser(email) {
+		fetch(`http://whm.joao1866.c41.integrator.host:9206/usuario?email=${email}`,{ mode: 'no-cors'}) 
+		.then(
+		  (result) => {
+			console.log(result);
+			this.setUser(result);
+		  },
+		  (error) => {
+			console.error(error)
+		  }
+		)
+	}
 
 	async function doRegisterBackEnd(user) {
 		console.log("registrar " + JSON.stringify(user));
