@@ -24,6 +24,7 @@ export const DivTextIntro = styled.div`
 
 export const ButtonFirstPage = styled.button`
 margin-top: 30px; 
+margin-left: 20%;
 background-color: transparent; 
 color: #FFF;
 border: 2px solid rgb(216, 2, 134);
@@ -63,6 +64,8 @@ flex-wrap: wrap;
 export const TitleForService = styled.h3`
 font-weight: 600;
 color: #f6f4e6;
+margin-left: 20%; 
+text-transform: uppercase;
 `
 
 export const TextForService = styled.span`

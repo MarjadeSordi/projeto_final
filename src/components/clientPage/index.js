@@ -19,6 +19,7 @@ const ClientPage = () =>{
 	let [userRequisitado, setUserRequisitado] = useState(null);
     let [uid, setUid] = useState(0);
 	const { user } = useUserContext();
+	console.log('aqui', user);
 
     useEffect(() => {
 		if(!servico) {
@@ -28,11 +29,10 @@ const ClientPage = () =>{
         const servicoId = queryParams.get("servico");
         setUserId(userId);
         setServico(servicoId);
-        console.log(user);
-        getUserByEmail(user.email)
-		.then(res =>
+        if(user){
+        getUserByEmail(user.email).then(res =>
 			console.log(res));
-    	}
+    	}}		
 	}, []);
 
 
@@ -64,9 +64,9 @@ const ClientPage = () =>{
         setAvaliacaoSelecionada(e.target.value);
     }
 
-    const getUserByEmail = async (userId) => {
+    const getUserByEmail = async (userEmail) => {
 		console.log("getUserByEmail " + userId);
-        let url = "http://whm.joao1866.c41.integrator.host:9206/usuario?email=" + userId;
+        let url = `http://whm.joao1866.c41.integrator.host:9206/solicitacao?userRequisitanteEmail=${userEmail}`
 		try {
             const responseServices = await fetch(url);
             const jsonService = await responseServices.json();
@@ -76,6 +76,8 @@ const ClientPage = () =>{
                 console.error(error);
               }
 	};
+
+	console.error(userLogado, 'AQUI');
 
     const getUserById = async (userId) => {
 		console.log("getUserById " + userId);
@@ -198,6 +200,7 @@ const ClientPage = () =>{
 
   }
 
+
 		/*handleSave = () => {
 			console.log("handleSave: " + this);
 			let value = this.comentario?.value;
@@ -244,9 +247,17 @@ const ClientPage = () =>{
 				});
 		};*/
 
+		
 
         render() {
 			const { value, start, end } = this.props;
+
+  useEffect(() => {
+    if (user) {
+      getUserByEmail(user.email);
+    } else (console.log('error'));
+
+  }, [user]);
 
 			return (
 				<div className="customModal">

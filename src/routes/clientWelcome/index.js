@@ -117,8 +117,8 @@ const ClientWelcome = () => {
         <MenuPage />
         <ImagemFirstPage />
         <DivTextIntro>
-          <p> Conectadas somos mais fortes! </p>
-          {user && usuario.length > 0 ?
+          <TitleForService> Conectadas somos mais fortes! </TitleForService>
+          {user ? ( usuario.length > 0 ?
             <CapsuleForBoxes>
               <TextForTitle> Minhas solitações: </TextForTitle> <br />
               {usuario.map((item) =>
@@ -132,20 +132,9 @@ const ClientWelcome = () => {
                  
                 </BoxForService>
 
-              )} </CapsuleForBoxes>
+              )} </CapsuleForBoxes>:<TitleForService> Você ainda não fez nenhuma solitação de Serviço </TitleForService> ) 
         
-        /*<> 
-            <CapsuleForBoxes>
-            <BoxForService> 
-            <TitleForService> MINHAS SOLICITAÇÕES:</TitleForService>
-           <TextForService>Data:   </TextForService> <br/>
-            <TextForService>Serviço:  </TextForService><br/>
-            <TextForService>Prestadora:  </TextForService><br/>
-           <TextForService> Status: </TextForService><br/>
-       
-          
-
-        </>*/ : <>
+  : <>
               <br />
               <br />
               <p> Somos um serviço virtual de contato para serviços gerais, que visa a sua segurança. <br />
