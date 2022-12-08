@@ -116,8 +116,8 @@ Avaliações: {avaliacao && avaliacao.length > 0 ? avaliacao.map((item) => <><p>
      
      </ProfileBox> 
 
-{categoria ? <ButtonModal > Solicitar {TrataCategoria(categoria[0].categoria) } <Link to={`/requisicao/${findId}/servico/${categoria[0].categoria}`} style={{ textDecoration: 'none', color: '#FFF' }}> {categ}</Link> </ButtonModal> : '' }
-{categoria && categoria.length > 1 ? <ButtonModal > Solicitar {TrataCategoria(categoria[1].categoria) } <Link to={`/requisicao/${findId}/servico/${categoria[1].categoria}`} style={{ textDecoration: 'none', color: '#FFF' }}> {categ}</Link> </ButtonModal> : '' }
+{categoria ? <ButtonModal key={categoria.id}> Solicitar {TrataCategoria(categoria[0].categoria) } <Link to={`/requisicao/${findId}/servico/${categoria[0].categoria}`} target ="_blank" style={{ textDecoration: 'none', color: '#FFF' }}> {categ}</Link> </ButtonModal> : '' }
+{categoria && categoria.length > 1 ? <ButtonModal  key={categoria.id} > Solicitar {TrataCategoria(categoria[1].categoria) } <Link to={`/requisicao/${findId}/servico/${categoria[1].categoria}`} style={{ textDecoration: 'none', color: '#FFF' }}> {categ}</Link> </ButtonModal> : '' }
     
 </DivCapsule> : <Loading loading={loading} background="#2d3436" loaderColor= "rgb(216, 2, 134)"/> }
 </>

@@ -10,9 +10,6 @@ const ClientAvaliacao = () => {
   const urlParams = window.location.href;
   const urlSplit = urlParams.split('/')
   const findId= Number(urlSplit[urlSplit.length - 1]);
-  console.error('aqui', findId);
-  console.error('aqui', nota);
-  console.error('teste', comment);
 
   const notas= [1,2,3,4,5,6,7,8,9,10]
 

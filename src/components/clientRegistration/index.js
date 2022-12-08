@@ -194,18 +194,12 @@ const ClientRegistration = () => {
   }
 
   function handleEmail(e) {
+    setIsNewUser(true)
     e.preventDefault();
-    setEmail(e.target.value);
-    if (email.indexOf('@') > 0) {
-     let result = fetch(`http://whm.joao1866.c41.integrator.host:9206/usuario?email=${email}`, { mode: 'no-cors' })
-     .then(res => {
-       if (result.ok)
-         window.location.href = '/loggin';
-      else setIsNewUser(true);
-     })
-     .catch(error => console.error(error));
-    }
-  }
+    setEmail(e.target.value)
+  ;}
+
+
 
   function handlePhone(e) {
     e.preventDefault();
@@ -274,6 +268,8 @@ const ClientRegistration = () => {
     .catch((err) => setError(err.message));
   }
 
+  console.error(exists, 'AQUI');
+
   async function getUser(email) {
     let result = await fetch(`http://whm.joao1866.c41.integrator.host:9206/usuario?email=${email}`);
     let jsonResult = await result.json();
@@ -302,6 +298,8 @@ const ClientRegistration = () => {
     }
 
   }
+
+
 
   function registerBackEnd(res) {
     console.log(res);
@@ -340,7 +338,7 @@ const ClientRegistration = () => {
         client: client   	
 
   }
-  if(exists && exists.id)
+  if(exists !== null  && exists.id)
     body.id = exists.id;
   const options = {
     method: exists? 'PUT' : 'POST',
@@ -350,12 +348,12 @@ const ClientRegistration = () => {
     body: JSON.stringify(body),
     }
     fetch('http://whm.joao1866.c41.integrator.host:9206/usuario', options).
-      then(data => {
-        if (!data.ok) {
-          throw Error(data.status);
+      then(data => {;
+        if (data.ok) {
+          setNewUser(true)
          }
          else (
-          setNewUser(true)
+          setNewUser(false)
          )
          return console.error(data.json());         
     }).catch(e => {
@@ -368,13 +366,14 @@ const ClientRegistration = () => {
     PopulateStates();
   }, []);
 
-  useEffect(()=>{
-    console.log(email);
-    if(!isNewUser && email != null)
+  console.error(isNewUser, 'USER')
+
+  /*useEffect(()=>{
+    if(!isNewUser)
     {
       getUser(email);
   }
-},[email])
+},[email])*/
 
 
   useEffect(() => {
@@ -386,6 +385,7 @@ const ClientRegistration = () => {
   useEffect(() => {
     if (!email && user && user.email) {
         setEmail(user.email);
+        setIsNewUser(false);
     }
       else (console.log('error'))
   }, [user]);
@@ -485,7 +485,7 @@ const ClientRegistration = () => {
         id='inputEmail'
         type="email"
         name="email"
-        onBlur={handleEmail}
+        onChange={handleEmail}
         placeholder="Email"
         maxLength="100"
       />
@@ -674,8 +674,7 @@ const ClientRegistration = () => {
         }
       
        
-       <Ptext>    O contato será feito pela cliente de acordo com o<b> telefone </b> informado no cadastro. </Ptext>
-      <br /> 
+   
        <Ptext>    Você pode oferecer até 2 atividades diferentes no cadastro inicial, mais categorias serão liberadas de acordo com o seu desempenho na plataforma.  </Ptext>
 
       
@@ -686,8 +685,8 @@ const ClientRegistration = () => {
         <InputButton
           type="button"
           value="ENVIAR"
-          onClick={exists? handleRegister : openModal}
-        > {exists? 'Cadastre-se!' : 'Salvar' }</InputButton>
+          onClick={exists === null?  openModal: handleRegister}
+        > {exists === null ? 'Cadastre-se!' : 'Salvar' }</InputButton>
 
         <br />
         {enterPageLogin ?
