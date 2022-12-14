@@ -87,7 +87,6 @@ const ClientEndereco = (usuario) =>{
       }
 
       const handleSave = () => {
-        console.log(user);
         let alterUser = {...user};
         let enderecoNovo = {
             uf: uf,
@@ -108,8 +107,7 @@ const ClientEndereco = (usuario) =>{
             },
             body: JSON.stringify(alterUser.usuario),
             }
-        console.log("put", alterUser.usuario);
-        fetch("http://whm.joao1866.c41.integrator.host:9206/usuario", options)
+           fetch("http://whm.joao1866.c41.integrator.host:9206/usuario", options)
             .then(({ data }) => {
                 console.log(data);
             })

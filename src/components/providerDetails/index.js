@@ -171,7 +171,6 @@ const ProviderDetails = (props) => {
     try {
       const responseServices = await fetch(url);
       const jsonService = await responseServices.json();
-      console.log(jsonService)
       setUserLogado(jsonService);
     } catch (error) {
       console.error(error);
@@ -204,7 +203,6 @@ const ProviderDetails = (props) => {
 
     fetch('http://whm.joao1866.c41.integrator.host:9206/solicitacao', options)
       .then(({ data }) => {
-        console.log(data);
         setNewSolicitacao(true);
       })
       .catch((error) => {

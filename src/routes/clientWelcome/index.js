@@ -66,8 +66,6 @@ const ClientWelcome = () => {
     }
   }
 
-  console.error(prestadora, 'AQUI');
-
 
   let categ = ''
 

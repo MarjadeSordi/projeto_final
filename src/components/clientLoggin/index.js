@@ -19,7 +19,6 @@ const ClientLoggin = () => {
 
     function handlePassWord(e){
         e.preventDefault();
-        console.log("handlePassWord");
         setPassWord(e.target.value);
       }
 
