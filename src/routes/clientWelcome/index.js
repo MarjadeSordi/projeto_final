@@ -10,6 +10,7 @@ import Modal from 'react-modal';
 const ClientWelcome = () => {
   const { user } = useUserContext();
   const [usuario, setUsuario] = useState([])
+  const [prestadora, setPrestadora] = useState([])
   const [id, setId] = useState()
 
 
@@ -53,14 +54,20 @@ const ClientWelcome = () => {
     }
   }
 
- function setAvaliacao(bodyAvaliacao) {
-  fetch('http://whm.joao1866.c41.integrator.host:9206/avaliacao', {
-    method: "POST",
-    body: JSON.stringify(bodyAvaliacao),
-    headers: {"Content-type": "application/json"}
-  }).then(response => response.json()) 
-  .then(json => console.error(json));
- }
+
+  async function SetPrestadora(userEmail) {
+    let url = `http://whm.joao1866.c41.integrator.host:9206/solicitacao?userRequisitadoEmail=${userEmail}`;
+    try {
+      const responseServices = await fetch(url);
+      const jsonService = await responseServices.json();
+      setPrestadora(jsonService);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  console.error(prestadora, 'AQUI');
+
 
   let categ = ''
 
@@ -106,6 +113,7 @@ const ClientWelcome = () => {
     if (user) {
       console.log(user, 'aqui')
       SetUser(user.email);
+      SetPrestadora(user.email);
     } else (console.log('error'));
 
   }, [user]);
@@ -118,10 +126,14 @@ const ClientWelcome = () => {
         <MenuPage />
         <ImagemFirstPage />
         <DivTextIntro>
+
           <TitleForService> Conectadas somos mais fortes! </TitleForService>
-          {user ? ( usuario.length > 0 ?
+          <br/>
+          {user ? 
+          
+          ( usuario.length > 0 ?
             <CapsuleForBoxes>
-              <TextForTitle> Minhas solitações: </TextForTitle> <br />
+              <TextForTitle> Minhas Solicitações: </TextForTitle> <br />
               {usuario.map((item) =>
                   <BoxForService key={item.id}>                  
                   <TextForService> Serviço: {TrataCategoria(item.categoria)} {categ} </TextForService> <br />
@@ -133,8 +145,14 @@ const ClientWelcome = () => {
                  
                 </BoxForService>
 
-              )} </CapsuleForBoxes>:<TitleForService> Você ainda não fez nenhuma solitação de Serviço </TitleForService> ) 
-        
+              )} </CapsuleForBoxes>
+              :              
+              <TitleForService> Você ainda não fez nenhuma solitação de Serviço </TitleForService>     
+              )
+              
+             
+
+              
   : <>
               <br />
               <br />
@@ -146,6 +164,22 @@ const ClientWelcome = () => {
               <Link to="/cadastro">
                 <ButtonFirstPage> CADASTRE-SE E CONHEÇA <AiOutlineArrowRight /> </ButtonFirstPage>
               </Link></>}
+
+        {user? prestadora.length > 0 ? 
+        <CapsuleForBoxes>
+              <TextForTitle> Minha Agenda: </TextForTitle> <br />
+              {prestadora.map((item) =>
+                  <BoxForService key={item.id}>   
+                   <TextForService> Serviço: {TrataCategoria(item.categoria)} {categ} </TextForService> <br />           
+                  <TextForService> Endereço: {item.enderecoRequisitante.logradouro} | {item.enderecoRequisitante.numero} | {item.enderecoRequisitante.bairro} | {item.enderecoRequisitante.cidade} | {item.enderecoRequisitante.uf} </TextForService><br />
+                  <TextForService> Agendamento: {item.inicio} </TextForService><br />
+                  <TextForService> Atendimento: {item.fim} </TextForService> <br />
+                  <TextForService> Status: {item.status} </TextForService>              
+                 
+                </BoxForService>
+
+              )} </CapsuleForBoxes>
+          :  <TitleForService> Você ainda não possui nenhuma agenda </TitleForService>   : ''}
 
         </DivTextIntro>
 
