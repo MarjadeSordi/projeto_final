@@ -91,3 +91,43 @@ justify-content: center;
 align-items: center; 
 border: 1px solid white; 
 `
+
+export const TitleCalendar = styled.h3`
+color: #f6f4e6;
+font-size: 1.2em;
+text-transform: uppercase;
+font-weight: 500;
+padding: 2%;
+`
+
+
+export const Label = styled.label`
+color: white; 
+
+`;
+
+export const Small = styled.small`
+color: white; 
+margin-bottom: 2%;
+
+`;
+
+
+export const Input = styled.input`
+background-color:  #111111;
+color: white; 
+  margin: 1%;
+  width: 20%;
+  padding: 8px;
+  :: placeholder {
+    color: white;
+    font-family: 'Roboto', sans-serif;
+  }
+`;
+
+export const DivSolicitacao = styled.div`
+visibility: ${props => (props.visible ? 'visible' : 'hidden')};`
+
+export const TextSolicitacao = styled.span`
+color: white; 
+`

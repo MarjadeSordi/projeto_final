@@ -103,13 +103,14 @@ const ClientWelcome = () => {
 
 
   useEffect(() => {
-    if (user && user.displayName) {
+    if (user) {
+      console.log(user, 'aqui')
       SetUser(user.email);
     } else (console.log('error'));
 
   }, [user]);
 
-  console.error(usuario, 'teste')
+
   return (
     <>
 
