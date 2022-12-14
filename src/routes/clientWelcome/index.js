@@ -15,11 +15,11 @@ const ClientWelcome = () => {
 
 
 
-  function setInfos(){
+  function setInfos() {
     console.error(id);
   }
 
-  function handleId(e){
+  function handleId(e) {
     e.preventDefault();
     setId(e.target.value);
     console.error('aqui', id);
@@ -65,6 +65,31 @@ const ClientWelcome = () => {
       console.error(error);
     }
   }
+
+  function handleConcluido(id) {
+       
+    const bodyRequest = {
+      id: id,       
+      status: 'CONCLUIDO '
+    }
+  
+    const options = {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(bodyRequest),
+    }
+
+    fetch('http://whm.joao1866.c41.integrator.host:9206/solicitacao', options)
+      .then(({ data }) => {
+         console.log(data); 
+      })
+      .catch((error) => {
+        console.error(error, error);
+      });
+  };
+
 
 
   let categ = ''
@@ -126,32 +151,32 @@ const ClientWelcome = () => {
         <DivTextIntro>
 
           <TitleForService> Conectadas somos mais fortes! </TitleForService>
-          <br/>
-          {user ? 
-          
-          ( usuario.length > 0 ?
-            <CapsuleForBoxes>
-              <TextForTitle> Minhas Solicitações: </TextForTitle> <br />
-              {usuario.map((item) =>
-                  <BoxForService key={item.id}>                  
-                  <TextForService> Serviço: {TrataCategoria(item.categoria)} {categ} </TextForService> <br />
-                  <TextForService> Agendamento: {item.inicio} </TextForService><br />
-                  <TextForService> Atendimento: {item.fim} </TextForService> <br />
-                  <TextForService> Prestadora: {item.userRequisitado.nome} </TextForService> <br />
-                  <TextForService> Status: {item.status} </TextForService>
-                  {item.status === 'CONCLUIDO' ?  <><br /> <ButtonModal > <Link to={`/avaliacao/${item.id}`} style={{ textDecoration: 'none', color: '#FFF' }} target="_blank"> Avaliar </Link> </ButtonModal> </> : ''}
-                 
-                </BoxForService>
+          <br />
+          {user ?
 
-              )} </CapsuleForBoxes>
-              :              
-              <TitleForService> Você ainda não fez nenhuma solitação de Serviço </TitleForService>     
-              )
-              
-             
+            (usuario.length > 0 ?
+              <CapsuleForBoxes>
+                <TextForTitle> Minhas Solicitações: </TextForTitle> <br />
+                {usuario.map((item) =>
+                  <BoxForService key={item.id}>
+                    <TextForService> Serviço: {TrataCategoria(item.categoria)} {categ} </TextForService> <br />
+                    <TextForService> Agendamento: {item.inicio} </TextForService><br />
+                    <TextForService> Atendimento: {item.fim} </TextForService> <br />
+                    <TextForService> Prestadora: {item.userRequisitado.nome} </TextForService> <br />
+                    <TextForService> Status: {item.status} </TextForService>
+                    {item.status === 'CONCLUIDO' ? <><br /> <ButtonModal > <Link to={`/avaliacao/${item.id}`} style={{ textDecoration: 'none', color: '#FFF' }} target="_blank"> Avaliar </Link> </ButtonModal> </> : ''}
 
-              
-  : <>
+                  </BoxForService>
+
+                )} </CapsuleForBoxes>
+              :
+              <TitleForService> Você ainda não fez nenhuma solitação de Serviço </TitleForService>
+            )
+
+
+
+
+            : <>
               <br />
               <br />
               <p> Somos um serviço virtual de contato para serviços gerais, que visa a sua segurança. <br />
@@ -163,21 +188,20 @@ const ClientWelcome = () => {
                 <ButtonFirstPage> CADASTRE-SE E CONHEÇA <AiOutlineArrowRight /> </ButtonFirstPage>
               </Link></>}
 
-        {user? prestadora.length > 0 ? 
-        <CapsuleForBoxes>
+          {user ? prestadora.length > 0 ?
+            <CapsuleForBoxes>
               <TextForTitle> Minha Agenda: </TextForTitle> <br />
               {prestadora.map((item) =>
-                  <BoxForService key={item.id}>   
-                   <TextForService> Serviço: {TrataCategoria(item.categoria)} {categ} </TextForService> <br />           
+                <BoxForService key={item.id}>
+                  <TextForService> Serviço: {TrataCategoria(item.categoria)} {categ} </TextForService> <br />
                   <TextForService> Endereço: {item.enderecoRequisitante.logradouro} | {item.enderecoRequisitante.numero} | {item.enderecoRequisitante.bairro} | {item.enderecoRequisitante.cidade} | {item.enderecoRequisitante.uf} </TextForService><br />
                   <TextForService> Agendamento: {item.inicio} </TextForService><br />
                   <TextForService> Atendimento: {item.fim} </TextForService> <br />
-                  <TextForService> Status: {item.status} </TextForService>              
-                 
+                  <TextForService> Status: {item.status} </TextForService>  { item.status === 'AGENDADO'?  <ButtonM onClick={()  => handleConcluido(item.id)}> Alterar para Status CONCLUIDO </ButtonM> : '' }
                 </BoxForService>
 
               )} </CapsuleForBoxes>
-          :  <TitleForService> Você ainda não possui nenhuma agenda </TitleForService>   : ''}
+            : <TitleForService> Você ainda não possui nenhuma agenda </TitleForService> : ''}
 
         </DivTextIntro>
 

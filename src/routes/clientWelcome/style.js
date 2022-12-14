@@ -130,11 +130,9 @@ font-size: 1.2em;
 font-weight: 300;`
 
 export const ButtonM= styled.button`
-width: 30%; 
-margin-top: 10px; 
 background-color: transparent; 
 color: #FFF;
-border: 2px solid rgb(216, 2, 134);
+border: none;
 border-radius: 0px;
 padding: 10px 10px;
 display: inline-block;
