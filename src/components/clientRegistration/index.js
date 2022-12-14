@@ -99,7 +99,7 @@ const ClientRegistration = () => {
   }
 
   function handleOpen() {
-		if (open == false) {
+		if (open === false) {
 			setOpen(true);
 		} else {
 			setOpen(false);
@@ -268,7 +268,6 @@ const ClientRegistration = () => {
     .catch((err) => setError(err.message));
   }
 
-  console.error(exists, 'AQUI');
 
   async function getUser(email) {
     let result = await fetch(`http://whm.joao1866.c41.integrator.host:9206/usuario?email=${email}`);
@@ -365,16 +364,6 @@ const ClientRegistration = () => {
   useEffect(() => {
     PopulateStates();
   }, []);
-
-  console.error(isNewUser, 'USER')
-
-  /*useEffect(()=>{
-    if(!isNewUser)
-    {
-      getUser(email);
-  }
-},[email])*/
-
 
   useEffect(() => {
     if (uf) {

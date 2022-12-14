@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import {Navigate} from 'react-router-dom'; 
-import { useDispatch } from 'react-redux';
 import { useUserContext } from '../../context/userContext';
 import {  InputForEmail, InputForPassWord, FormForClient, InputButton, DivCapsule, DivText } from './style';
 import MenuPage from '../menu';
@@ -15,11 +14,9 @@ const ClientLoggin = () => {
     const [infos, setInfo] = useState([])
 
  
-    const dispatch = useDispatch();
 
     function handlePassWord(e){
         e.preventDefault();
-        console.log("handlePassWord");
         setPassWord(e.target.value);
       }
 
